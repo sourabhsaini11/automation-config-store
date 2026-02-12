@@ -4,6 +4,7 @@ info:
   description: >-
     ONDC Protocol Core API specification. This is an adaptation of Beckn Core version 0.9.3
   version: 1.2.0
+  domain: nic2004:60232
 security:
 - SubscriberAuth: []
 - GatewaySubscriberAuth: []
@@ -2354,7 +2355,7 @@ components:
                 - short_desc
                 - long_desc
                 - additional_desc
-                - images    
+                - images  
       additionalProperties: false
     IssueResolution:
       description: Describes the issue resolution for the issue raised by a Complainant

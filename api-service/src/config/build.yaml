@@ -25385,7 +25385,7 @@ x-validations:
           - METRO
         _RETURN_: subTags all in validValues
       - _NAME_: VALID_VEHICLE_VARIANT
-        _SCOPE_: "$.message.catalog.providers[*].fulfillments[?(@.vehicle && @.vehicle.variant)]"
+        _SCOPE_: "$.message.catalog.providers[*].fulfillments[?(@.vehicle.variant)]"
         subTags: "$.vehicle.variant"
         validValues:
           - AC

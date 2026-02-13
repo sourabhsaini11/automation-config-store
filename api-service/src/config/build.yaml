@@ -19100,11 +19100,11 @@ x-validations:
                 _RETURN_: attr all in enumList
           - _NAME_: CONTEXT_REGEX
             _RETURN_:
-              - _NAME_: REGEX_CONTEXT_LOCATION_CITY_CODE
-                attr: $.context.location.city.code
-                reg:
-                  - '^std:\\d{3,5}$'
-                _RETURN_: attr follow regex reg
+              # - _NAME_: REGEX_CONTEXT_LOCATION_CITY_CODE
+              #   attr: $.context.location.city.code
+              #   reg:
+              #     - '^std:\\d{3,5}$'
+              #   _RETURN_: attr follow regex reg
               - _NAME_: REGEX_CONTEXT_TIMESTAMP
                 attr: $.context.timestamp
                 reg:

@@ -46,7 +46,7 @@ export class MockCancelTechMetro210Class extends MockAction {
       };
     }
 
-    if (descriptor?.code !== "CONFIRM_CANCEL") {
+    if (descriptor?.code !== "SOFT_CANCEL") {
       return {
         valid: false,
         message: "Incorrect descriptor code in the payload",

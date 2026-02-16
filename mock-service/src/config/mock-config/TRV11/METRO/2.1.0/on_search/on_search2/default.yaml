@@ -42,7 +42,7 @@ message:
               - F1
             time:
               label: Validity
-              duration: PT2D
+              duration: P2D
               timestamp: "2021-03-23T11:01:40.065Z"
           - id: I2
             category_ids:
@@ -62,7 +62,7 @@ message:
               - F1
             time:
               label: Validity
-              duration: PT2D
+              duration: P2D
               timestamp: "2021-03-23T11:01:40.065Z"
         fulfillments:
           - id: F1

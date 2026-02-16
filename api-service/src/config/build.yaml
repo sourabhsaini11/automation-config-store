@@ -104094,6 +104094,7 @@ x-validations:
             _RETURN_: attr are present
           - _NAME_: FULFILLMENTS_TRACKING
             attr: "$.message.order.fulfillments[*].tracking"
+            _CONTINUE_: "!(attr are present)"
             _RETURN_: attr are present
           - _NAME_: FULFILLMENTS_ONDC_ORG_TAT
             _CONTINUE_: "!(attr are present)"

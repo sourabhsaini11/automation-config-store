@@ -47211,13 +47211,6 @@ x-validations:
         useCode:
           - METRO
         _CONTINUE_: "!(useCasePath all in useCode)"
-      - _NAME_: REQUIRED_MESSAGE_NAME_212
-        attr: "$.message.catalog.providers[*].fulfillments[*].stops[*].location.descriptor.code"
-        _RETURN_: attr are present
-        useCasePath: "$.message.catalog.providers[*].fulfillments[*].vehicle.category"
-        useCode:
-          - METRO
-        _CONTINUE_: "!(useCasePath all in useCode)"  
       - _NAME_: REQUIRED_MESSAGE_ID_23
         attr: "$.message.catalog.providers[*].fulfillments[*].id"
         _RETURN_: attr are present

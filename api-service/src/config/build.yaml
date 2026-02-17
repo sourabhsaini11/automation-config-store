@@ -24509,7 +24509,7 @@ x-validations:
       tags: >-
         $.message.order.tags[?(@.code=='bap_terms')].list[?(@.code=='accept_bpp_terms')].value
       acceptance:
-      - "yes"
+      - "Y"
       _RETURN_: tags all in acceptance
     status:
     - _NAME_: REQUIRED_CONTEXT_DOMAIN
@@ -27900,6 +27900,9 @@ x-validations:
     - _NAME_: validate_tag_2
       validTags:
       - linked_provider
+      - state
+      - rto_action
+      - weather_check
       - linked_order
       - linked_order_item
       - cod_settlement_detail

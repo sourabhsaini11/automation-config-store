@@ -147,6 +147,13 @@ import { MockInitUnlimitedPassBus210Class } from "./BUS/2.1.0/init/init_unlimite
 import { MockOnInitUnlimitedPassBus210Class } from "./BUS/2.1.0/on_init/on_init_unlimited_pass/class";
 import { MockConfirmUnlimitedPassBus210Class } from "./BUS/2.1.0/confirm/confirm_unlimited_pass/class";
 import { MockOnConfirmUnlimitedPassBus210Class } from "./BUS/2.1.0/on_confirm/on_confirm_unlimited_pass/class";
+import { MockOnSearchMetro_UnlimitedPass210Class } from "./METRO/2.1.0/on_search/on_search_unlimitedpass/class";
+import { MockSelectMetroUnlimitedPass210Class } from "./METRO/2.1.0/select/select_unlimitedpass/class";
+import { MockOnSelectMetroUnlimitedPass210Class } from "./METRO/2.1.0/on_select/on_select_unlimitedpass/class";
+import { MockInitMetroUnlimitedPass210Class } from "./METRO/2.1.0/init/init_unlimitedpass/class";
+import { MockOnInitMetroUnlimitedPass210Class } from "./METRO/2.1.0/on_init/on_init_unlimitedpass/class";
+import { MockConfirmMetroUnlimitedPass210Class } from "./METRO/2.1.0/confirm/confirm_unlimitedpass/class";
+import { MockOnConfirmMetroUnlimitedPass210Class } from "./METRO/2.1.0/on_confirm/on_confirm_unlimitedpass/class";
 
 // helpers
 type Ctor<T> = new () => T;
@@ -284,6 +291,15 @@ const registry = {
   confirm_METRO_RECHARGE_210: MockConfirmMetroRecharge210Class,
   on_confirm_METRO_PURCHASE_210: MockOnConfirmMetroPurchase210Class,
   on_confirm_METRO_RECHARGE_210: MockOnConfirmMetroRecharge210Class,
+
+  // ***************METRO_UNLIMITED_PASS************
+  on_search_Metro_unlimitedpass_210: MockOnSearchMetro_UnlimitedPass210Class,
+  select_METRO_UNLIMITEDPASS_210: MockSelectMetroUnlimitedPass210Class,
+  on_select_METRO_UNLIMITEDPASS_210: MockOnSelectMetroUnlimitedPass210Class,
+  init_METRO_UNLIMITEDPASS_210: MockInitMetroUnlimitedPass210Class,
+  on_init_METRO_UNLIMITEDPASS_210: MockOnInitMetroUnlimitedPass210Class,
+  confirm_METRO_UNLIMITEDPASS_210: MockConfirmMetroUnlimitedPass210Class,
+  on_confirm_METRO_UNLIMITEDPASS_210: MockOnConfirmMetroUnlimitedPass210Class,
 
   // _____________________IGM BUS (2.1.0)____________________________
   issue_open: MockIssueOpenClass,

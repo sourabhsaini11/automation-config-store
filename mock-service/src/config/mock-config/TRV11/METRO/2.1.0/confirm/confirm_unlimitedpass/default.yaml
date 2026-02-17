@@ -1,0 +1,92 @@
+message:
+  order:
+    items:
+      - id: I5
+        quantity:
+          selected:
+            count: 1
+    fulfillments:
+      - id: F2
+        type: PASS
+        customer:
+          person:
+            creds:
+              - type: AADHAAR
+                id: "1234 5678 9193"
+    provider:
+      id: P1
+    billing:
+      name: John Doe
+      email: john.doe@example.com
+      phone: "+91-9897867564"
+    payments:
+      - id: PA1
+        collected_by: BAP
+        status: PAID
+        type: PRE-ORDER
+        params:
+          transaction_id: 34cc9b0b-6887-4c63-8397-2f4fcf03e50d
+          currency: INR
+          amount: "50"
+    tags:
+      - descriptor:
+          code: BAP_TERMS
+          name: BAP Terms of Engagemen
+        display: false
+        list:
+          - descriptor:
+              code: BUYER_FINDER_FEES_PERCENTAGE
+            value: "1"
+          - descriptor:
+              code: SETTLEMENT_AMOUNT
+            value: "59"
+          - descriptor:
+              code: SETTLEMENT_TYPE
+            value: NEFT
+          - descriptor:
+              code: DELAY_INTEREST
+            value: "2.5"
+          - descriptor:
+              code: STATIC_TERMS
+            value: https://api.example-bap.com/booking/terms
+          - descriptor:
+              code: MANDATORY_ARBITRATION
+            value: "true"
+          - descriptor:
+              code: COURT_JURISDICTION
+            value: New Delhi
+      - descriptor:
+          code: BPP_TERMS
+          name: BPP Terms of Engagement
+        display: false
+        list:
+          - descriptor:
+              code: BUYER_FINDER_FEES_PERCENTAGE
+            value: "1"
+          - descriptor:
+              code: SETTLEMENT_WINDOW
+            value: P30D
+          - descriptor:
+              code: SETTLEMENT_BASIS
+            value: INVOICE_RECEIPT
+          - descriptor:
+              code: MANDATORY_ARBITRATION
+            value: "TRUE"
+          - descriptor:
+              code: COURT_JURISDICTION
+            value: New Delhi
+          - descriptor:
+              code: STATIC_TERMS
+            value: https://api.example-bpp.com/booking/terms
+          - descriptor:
+              code: SETTLEMENT_AMOUNT
+            value: "59"
+          - descriptor:
+              code: SETTLEMENT_TYPE
+            value: NEFT
+          - descriptor:
+              code: SETTLEMENT_BANK_CODE
+            value: XXXXXXXX
+          - descriptor:
+              code: SETTLEMENT_BANK_ACCOUNT_NUMBER
+            value: xxxxxxxxxxxxxx

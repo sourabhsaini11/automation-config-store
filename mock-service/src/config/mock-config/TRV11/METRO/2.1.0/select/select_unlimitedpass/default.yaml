@@ -1,0 +1,17 @@
+message:
+  order:
+    items:
+      - id: I5
+        quantity:
+          selected:
+            count: 1
+    fulfillments:
+      - id: F2
+        type: PASS
+        customer:
+          person:
+            creds:
+              - type: AADHAAR
+                id: "1234 5678 9193"
+    provider:
+      id: P1

@@ -20,7 +20,7 @@ export const issueStatusGenerator_100 = async (
     case "issue_open":
       existingPayload.message.issue.id = "ISSUE-1";
       existingPayload.message.issue.category = "FULFILLMENT";
-      existingPayload.message.issue.sub_category = "FLM112";
+      existingPayload.message.issue.sub_category = "FLM101";
       existingPayload.message.issue.complainant_info = {
         person: {
           name: "John Doe",

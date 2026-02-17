@@ -1,0 +1,52 @@
+message:
+  order:
+    items:
+      - id: I5
+        quantity:
+          selected:
+            count: 1
+    fulfillments:
+      - id: F2
+        type: PASS
+        customer:
+          person:
+            creds:
+              - type: AADHAAR
+                id: "1234 5678 9193"
+    provider:
+      id: P1
+    billing:
+      name: John Doe
+      email: john.doe@example.com
+      phone: "+91-9897867564"
+    payments:
+      - collected_by: BAP
+        status: NOT-PAID
+        type: PRE-ORDER
+    tags:
+      - descriptor:
+          code: BAP_TERMS
+          name: BAP Terms of Engagemen
+        display: false
+        list:
+          - descriptor:
+              code: BUYER_FINDER_FEES_PERCENTAGE
+            value: "1"
+          - descriptor:
+              code: SETTLEMENT_AMOUNT
+            value: "59"
+          - descriptor:
+              code: SETTLEMENT_TYPE
+            value: NEFT
+          - descriptor:
+              code: DELAY_INTEREST
+            value: "2.5"
+          - descriptor:
+              code: STATIC_TERMS
+            value: https://api.example-bap.com/booking/terms
+          - descriptor:
+              code: MANDATORY_ARBITRATION
+            value: "true"
+          - descriptor:
+              code: COURT_JURISDICTION
+            value: New Delhi

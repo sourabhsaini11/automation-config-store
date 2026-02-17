@@ -25737,6 +25737,7 @@ x-validations:
       validValues:
       - static_terms
       - max_liability
+      - max_liability_cap
       - mandatory_arbitration
       - court_jurisdiction
       - delay_interest

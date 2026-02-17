@@ -1,8 +1,0 @@
-save-data:
-  transaction_id: $.context.transaction_id
-  message_id: $.context.message_id
-  quote: $.message.order.quote
-  selected_items: $.message.order.items
-  item: $.message.order.items[0]
-  selected_fulfillments: $.message.order.fulfillments
-  Ekyc_details_verification_status: $..form.url

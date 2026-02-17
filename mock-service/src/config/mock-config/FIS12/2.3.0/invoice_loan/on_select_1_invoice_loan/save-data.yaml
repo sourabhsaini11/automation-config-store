@@ -1,8 +1,0 @@
-save-data:
-  transaction_id: $.context.transaction_id
-  message_id: $.context.message_id
-  quote: $.message.order.quote
-  selected_items: $.message.order.items
-  item: $.message.order.items[0]
-  selected_fulfillments: $.message.order.fulfillments
-  down_payment_form: $..form.url

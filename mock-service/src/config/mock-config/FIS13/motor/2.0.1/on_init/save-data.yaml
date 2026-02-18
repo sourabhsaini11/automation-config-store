@@ -2,4 +2,7 @@ save-data:
     transaction_id: "$.context.transaction_id"
     message_id: "$.context.message_id"
     order: "$.message.order"
+    fullfillment_ids: "$.message.order.fulfillments[*].id"
+    quote_id: "$.message.order.quote.id"
+    form_id: "$.message.order.items[0].xinput.form.id"
     vehicle_nominee_details_form: "$..form.url"

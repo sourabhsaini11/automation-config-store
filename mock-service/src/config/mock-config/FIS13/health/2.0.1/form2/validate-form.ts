@@ -31,7 +31,7 @@ type ValidationResult = {
  *
  * Works in Node.js environments using Cheerio for HTML parsing.
  */
-export function validateFormHtml(html: string): ValidationResult {
+export function validateFormHtml(html: string, options?: { mimeType?: string }): ValidationResult {
 	try {
 	const $ = cheerio.load(html);
 
@@ -160,6 +160,16 @@ export function validateFormHtml(html: string): ValidationResult {
 
 	if (!hasSubmitControl) {
 		warnings.push("No visible submit control found.");
+	}
+
+	// --- Multi-submission checks ---
+	if (options?.mimeType === "text/html-multi") {
+		const hasRadio = fields.some((f) => f.type === "radio");
+		if (hasRadio) {
+			warnings.push(
+				'Form contains radio buttons which may not work correctly with "text/html-multi" (array-based) submissions.'
+			);
+		}
 	}
 
 	// --- Required business fields for consumer information form ---

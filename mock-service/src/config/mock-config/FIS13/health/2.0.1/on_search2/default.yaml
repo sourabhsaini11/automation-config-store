@@ -120,10 +120,10 @@ catalog:
                 - FAMILY_DETAILS
             form:
               id: F03
-              mime_type: text/html
+              mime_type: text/html-multi
               url: https://fis.test.bpp.io/form/family_dtls?formId=FO2
               resubmit: true
-              multiple_sumbissions: false
+              multiple_sumbissions: true
             required: true
       payments:
         - collected_by: BPP

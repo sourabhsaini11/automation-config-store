@@ -30,7 +30,7 @@ export class MockFamilyInformationFormClass extends MockAction {
 		}
 		const formRaw = await axios.get(formLink);
 		const formData = formRaw.data;
-		const r1 = validateFormHtml(formData);
+		const r1 = validateFormHtml(formData, { mimeType: "text/html-multi" });
 		if (r1.ok === false) {
 			return { valid: false, message: r1.errors.join("; ") };
 		}

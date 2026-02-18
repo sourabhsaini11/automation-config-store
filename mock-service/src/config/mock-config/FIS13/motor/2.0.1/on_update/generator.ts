@@ -29,6 +29,22 @@ export async function onUpdateDefaultGenerator(existingPayload: any, sessionData
       order.provider.id = sessionData.selected_provider.id;
     }
 
+    // Map item.id from session data
+    const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+    if (selectedItem?.id && order.items?.[0]) {
+      order.items[0].id = selectedItem.id;
+    }
+
+    // Map quote.id from session data
+    if (sessionData.quote_id && order.quote) {
+      order.quote.id = sessionData.quote_id;
+    }
+
+    // Map fulfillment.id from session data
+    if (sessionData.fullfillment_ids?.[0] && order.fulfillments?.[0]) {
+      order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+    }
+
       // Setupdated_at to current date
    if (existingPayload.message?.order) {
     const now = new Date().toISOString();

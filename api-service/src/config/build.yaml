@@ -23339,9 +23339,6 @@ x-validations:
     - _NAME_: REQUIRED_CONTEXT_BPP_URI_13
       attr: "$.context.bpp_uri"
       _RETURN_: attr are present
-    - _NAME_: REQUIRED_MESSAGE_ORDER_ID_14
-      attr: "$.message.order_id"
-      _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_CODE_15
       attr: "$.context.location.country.code"
       _RETURN_: attr are present

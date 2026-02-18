@@ -103203,12 +103203,15 @@ x-validations:
               _RETURN_: attr are present
             - _NAME_: ITEMS_RECOMMENDED
               attr: "$.message.catalog['bpp/providers'][*].items[*].recommended"
+              _CONTINUE_: "!(attr are present)"
               _RETURN_: attr are present
             - _NAME_: ITEMS_RETURNABLE
               attr: "$.message.catalog['bpp/providers'][*].items[*]['@ondc/org/returnable']"
+              _CONTINUE_: "!(attr are present)"
               _RETURN_: attr are present
             - _NAME_: ITEMS_CANCELLABLE
               attr: "$.message.catalog['bpp/providers'][*].items[*]['@ondc/org/cancellable']"
+              _CONTINUE_: "!(attr are present)"
               _RETURN_: attr are present
             # - _NAME_: ITEMS_RETURN_WINDOW
             #   _SCOPE_: "$.message.catalog['bpp/providers'][*].items[*]"
@@ -103219,12 +103222,14 @@ x-validations:
             #   _RETURN_: attr are present
             - _NAME_: ITEMS_SELLER_PICKUP_RETURN
               attr: "$.message.catalog['bpp/providers'][*].items[*]['@ondc/org/seller_pickup_return']"
+              _CONTINUE_: "!(attr are present)"
               _RETURN_: attr are present
             # - _NAME_: ITEMS_TIME_TO_SHIP
             #   attr: "$.message.catalog['bpp/providers'][*].items[*]['@ondc/org/time_to_ship']"
             #   _RETURN_: attr are present
             - _NAME_: ITEMS_AVAILABLE_ON_COD
               attr: "$.message.catalog['bpp/providers'][*].items[*]['@ondc/org/available_on_cod']"
+              _CONTINUE_: "!(attr are present)"
               _RETURN_: attr are present
             # - _NAME_: ITEMS_CONTACT_DETAILS_CONSUMER_CARE
             #   attr: "$.message.catalog['bpp/providers'][*].items[*]['@ondc/org/contact_details_consumer_care']"

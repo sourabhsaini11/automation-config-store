@@ -24946,16 +24946,16 @@ x-validations:
     #     - yes
     #     - no
     #   _RETURN_: subTags all in validValues
-    - _NAME_: VALIDATE_TAG_STATE_FOR_IMMEDIATE_DELIVERY
-      categoryPath: "$.message.order.items[*].category_id"
-      categoryList:
-      - "Immediate Delivery"
-      tagsPath: "$.message.order.fulfillments[*].tags[?(@.code=='state')].list[*].code"
-      requiredTags:
-      - "ready_to_ship"
-      - "order_ready"
-      _CONTINUE_: "!(categoryPath any in categoryList)" # Skip if not Immediate Delivery
-      _RETURN_: requiredTags all in tagsPath
+    # - _NAME_: VALIDATE_TAG_STATE_FOR_IMMEDIATE_DELIVERY
+    #   categoryPath: "$.message.order.items[*].category_id"
+    #   categoryList:
+    #   - "Immediate Delivery"
+    #   tagsPath: "$.message.order.fulfillments[*].tags[?(@.code=='state')].list[*].code"
+    #   requiredTags:
+    #   - "ready_to_ship"
+    #   - "order_ready"
+    #   _CONTINUE_: "!(categoryPath any in categoryList)" # Skip if not Immediate Delivery
+    #   _RETURN_: requiredTags all in tagsPath
     - _NAME_: VALIDATE_TAG_STATE_VALUES_FOR_IMMEDIATE_DELIVERY
       categoryPath: "$.message.order.items[*].category_id"
       categoryList:

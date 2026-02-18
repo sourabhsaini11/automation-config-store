@@ -52,7 +52,7 @@ export async function onStatusRidePaidGenerator(
     existingPayload.message.order,
     sessionData,
   );
-  existingPayload.message.order.status = "COMPLETE";
+  existingPayload.message.order.status = "COMPLETED";
   // existingPayload.message.order.fulfillments =
   //   existingPayload.message.order.fulfillments.map((fulfillment: any) => ({
   //     ...fulfillment,
@@ -68,6 +68,33 @@ export async function onStatusRidePaidGenerator(
   //         : stop,
   //     ),
   //   }));
+
+  if (sessionData?.flow_id === "OnDemand_journey_updation_flow") {
+    existingPayload.message.order.items =
+      existingPayload.message.order.items?.map((item: any, index: number) => {
+        return {
+          ...item,
+          price:
+            sessionData?.on_update_items_journey_updation?.flat()?.[index]
+              ?.price,
+        };
+      });
+
+    existingPayload.message.order.quote =
+      sessionData?.on_update_quote_journey_updation ?? {};
+    existingPayload.message.order.payments =
+      existingPayload.message.order.payments?.map((payment: any, index: number) => {
+        return {
+          ...payment,
+          params: {
+            ...payment.params,
+            amount:
+              existingPayload.message.order.quote?.price?.value.toString(),
+          },
+          tags: sessionData?.on_update_payments_journey_updation?.flat()?.[index]?.tags
+        };
+      });
+  }
 
   return existingPayload;
 }

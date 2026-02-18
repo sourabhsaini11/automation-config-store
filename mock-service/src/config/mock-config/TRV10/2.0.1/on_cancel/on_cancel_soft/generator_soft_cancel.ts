@@ -66,7 +66,11 @@ export async function onCancelSoftGenerator(
       title: "CANCELLATION_CHARGES",
       price: {
         currency: "INR",
-        value: "10",
+        value:
+          sessionData?.flow_id === "Technical_cancellation_flow" ||
+          sessionData?.flow_id === "OnDemand_Ride_cancellation_by_driver"
+            ? "0"
+            : "50",
       },
     },
     {
@@ -77,8 +81,55 @@ export async function onCancelSoftGenerator(
       },
     },
   );
-  existingPayload.message.order.quote.price = { currency: "INR", value: "10" };
+  existingPayload.message.order.quote.price = {
+    currency: "INR",
+    value:
+      sessionData?.flow_id === "Technical_cancellation_flow" ||
+      sessionData?.flow_id === "OnDemand_Ride_cancellation_by_driver"
+        ? "0"
+        : "50",
+  };
   const now = new Date().toISOString();
+  const payment0 = existingPayload?.message?.order?.payments?.[0];
+  if (!payment0) return;
+
+  const collectedBy = payment0?.collected_by; // "BAP" | "BPP"
+  const price = Number(
+    existingPayload?.message?.order?.quote?.price?.value ?? 0,
+  );
+
+  const buyerFinderFeesTag = payment0?.tags?.find(
+    (tag: any) => tag?.descriptor?.code === "BUYER_FINDER_FEES",
+  );
+
+  const feePercentage = Number(
+    buyerFinderFeesTag?.list?.find(
+      (item: any) => item?.descriptor?.code === "BUYER_FINDER_FEES_PERCENTAGE",
+    )?.value ?? 0,
+  );
+
+  const feeAmount = (price * feePercentage) / 100;
+
+  let settlementAmount = 0;
+  if (collectedBy === "BAP") {
+    settlementAmount = price - feeAmount;
+  } else if (collectedBy === "BPP") {
+    settlementAmount = feeAmount;
+  } else {
+    settlementAmount = price;
+  }
+
+  const settlementTermsTag = payment0?.tags?.find(
+    (tag: any) => tag?.descriptor?.code === "SETTLEMENT_TERMS",
+  );
+
+  const settlementAmountItem = settlementTermsTag?.list?.find(
+    (item: any) => item?.descriptor?.code === "SETTLEMENT_AMOUNT",
+  );
+
+  if (settlementAmountItem) {
+    settlementAmountItem.value = settlementAmount.toString();
+  }
   existingPayload.message.order.created_at = sessionData.created_at;
   existingPayload.message.order.updated_at = now;
   return existingPayload;

@@ -13,6 +13,12 @@ export async function confirmMultipleStopsGenerator(
   existingPayload: any,
   sessionData: SessionData,
 ) {
+  existingPayload.message.order.billing =
+    sessionData?.flow_id === "OnDemand_Female_driver_flow"
+      ? {
+          name: "Sophia",
+        }
+      : existingPayload.message.order.billing;
   existingPayload.message.order.fulfillments =
     sessionData.selected_fulfillments;
   existingPayload.message.order.fulfillments.forEach((fulfillment: any) => {
@@ -34,7 +40,17 @@ export async function confirmMultipleStopsGenerator(
     existingPayload.message.order.fulfillments[0].type = "SELF_PICKUP";
     delete existingPayload.message.order.fulfillments[0].vehicle.energy_type;
   }
-  existingPayload.message.order.fulfillments[0]["customer"] = customer;
+  existingPayload.message.order.fulfillments[0]["customer"] =
+    sessionData?.flow_id === "OnDemand_Female_driver_flow"
+      ? {
+          contact: {
+            phone: "9856798567",
+          },
+          person: {
+            name: "Sophia",
+          },
+        }
+      : customer;
   existingPayload.message.order.items[0] = {
     id: sessionData.selected_item_id,
   };

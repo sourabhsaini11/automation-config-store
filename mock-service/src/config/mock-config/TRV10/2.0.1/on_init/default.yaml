@@ -150,7 +150,7 @@ order:
               value: UPI
             - descriptor:
                 code: SETTLEMENT_WINDOW
-              value: PT2D
+              value: P2D
             - descriptor:
                 code: SETTLEMENT_BASIS
               value: DELIVERY

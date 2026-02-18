@@ -91,9 +91,10 @@ export async function onUpdateGenerator(
   existingPayload: any,
   sessionData: SessionData,
 ) {
+  existingPayload.message.order.id = sessionData?.order_id
   // Update payments if present
-  if (sessionData.updated_payments?.length > 0) {
-    existingPayload.message.order.payments = sessionData.updated_payments;
+  if (sessionData.payments?.length > 0) {
+    existingPayload.message.order.payments = sessionData.payments;
   }
 
   // Update items if present

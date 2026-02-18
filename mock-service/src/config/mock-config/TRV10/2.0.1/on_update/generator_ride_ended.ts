@@ -27,9 +27,12 @@ export async function onUpdateRideEndedGenerator(
   );
   existingPayload.message.order = updateFulfillmentStatus(
     existingPayload.message.order,
-    sessionData
+    sessionData,
   );
-  if (sessionData.flow_id === "OnDemand_Assign_driver_on_onconfirm") {
+  if (
+    sessionData.flow_id === "OnDemand_Assign_driver_on_onconfirm" ||
+    sessionData.flow_id === "OnDemand_journey_updation_flow"
+  ) {
     existingPayload.message.order.items =
       existingPayload?.message?.order?.items?.map((item: any) => {
         const filteredTags =
@@ -50,6 +53,89 @@ export async function onUpdateRideEndedGenerator(
           tags: filteredTags,
         };
       });
+  }
+
+  if (sessionData.flow_id === "OnDemand_journey_updation_flow") {
+    existingPayload.message.order.items =
+      existingPayload.message.order.items?.map((item: any) => {
+        return {
+          ...item,
+          price: {
+            ...item?.price,
+            value: (Number(item?.price?.value) + 4).toString(),
+          },
+        };
+      });
+
+    const updatedBreakup = existingPayload?.message?.order?.quote?.breakup.map(
+      (item: any) => {
+        if (item.title === "DISTANCE_FARE") {
+          return {
+            ...item,
+            price: {
+              ...item.price,
+              value: (Number(item.price.value) + 4).toString(),
+            },
+          };
+        }
+        return item;
+      },
+    );
+
+    const totalPrice = updatedBreakup.reduce((sum: any, item: any) => {
+      return sum + Number(item.price.value);
+    }, 0);
+
+    existingPayload.message.order.quote = {
+      ...existingPayload.message.order.quote,
+      breakup: updatedBreakup,
+      price: {
+        currency: "INR",
+        value: totalPrice.toString(),
+      },
+    };
+
+    const payment0 = existingPayload?.message?.order?.payments?.[0];
+    if (!payment0) return;
+
+    const collectedBy = payment0?.collected_by; // "BAP" | "BPP"
+    const price = Number(
+      existingPayload?.message?.order?.quote?.price?.value ?? 0,
+    );
+
+    const buyerFinderFeesTag = payment0?.tags?.find(
+      (tag: any) => tag?.descriptor?.code === "BUYER_FINDER_FEES",
+    );
+
+    const feePercentage = Number(
+      buyerFinderFeesTag?.list?.find(
+        (item: any) =>
+          item?.descriptor?.code === "BUYER_FINDER_FEES_PERCENTAGE",
+      )?.value ?? 0,
+    );
+
+    const feeAmount = (price * feePercentage) / 100;
+
+    let settlementAmount = 0;
+    if (collectedBy === "BAP") {
+      settlementAmount = price - feeAmount;
+    } else if (collectedBy === "BPP") {
+      settlementAmount = feeAmount;
+    } else {
+      settlementAmount = price;
+    }
+
+    const settlementTermsTag = payment0?.tags?.find(
+      (tag: any) => tag?.descriptor?.code === "SETTLEMENT_TERMS",
+    );
+
+    const settlementAmountItem = settlementTermsTag?.list?.find(
+      (item: any) => item?.descriptor?.code === "SETTLEMENT_AMOUNT",
+    );
+
+    if (settlementAmountItem) {
+      settlementAmountItem.value = settlementAmount.toString();
+    }
   }
 
   return existingPayload;

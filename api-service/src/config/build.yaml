@@ -3,6 +3,7 @@ info:
   title: ONDC Specification
   description: ONDC Specification
   version: 2.0.1
+  domain: ONDC:TRV10
 security:
   - SubscriberAuth: []
 paths:
@@ -22372,8 +22373,8 @@ x-validations:
                   - on_confirm
                 _NAME_: VALID_ENUM_context_action
       - _NAME_: VALID_TESTS
-        error: "$.error.code"
-        _CONTINUE_: error are present
+        error1: "$.error.code"
+        _CONTINUE_: error1 are present
         _RETURN_: 
           - _NAME_: fulfillments_Tests
             _RETURN_:

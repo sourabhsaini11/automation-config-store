@@ -4,3 +4,4 @@ save-data:
   payment_id: "$.message.order.payments[0].id"
   provider_id: "$.message.order.provider.id"
   bap_items: "$.message.order.items[*]"
+  ttl: "$.context.ttl"

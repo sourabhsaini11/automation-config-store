@@ -1,3 +1,6 @@
 save-data:
   status: "$.message.order.status"
   selected_fulfillments: "$.message.order.fulfillments[*]"
+  on_update_quote_journey_updation: "$.message.order.quote"
+  on_update_items_journey_updation: "$.message.order.items"
+  on_update_payments_journey_updation: "$.message.order.payments"

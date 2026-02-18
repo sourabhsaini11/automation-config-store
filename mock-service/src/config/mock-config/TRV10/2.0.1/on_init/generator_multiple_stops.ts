@@ -22,7 +22,17 @@ export async function onInitMultipleStopsGenerator(
   if (sessionData.selected_fulfillments.length > 0) {
     existingPayload.message.order.fulfillments =
       sessionData.selected_fulfillments;
-    existingPayload.message.order.fulfillments[0]["customer"] = customer;
+    existingPayload.message.order.fulfillments[0]["customer"] =
+      sessionData?.flow_id === "OnDemand_Female_driver_flow"
+        ? {
+            contact: {
+              phone: "9856798567",
+            },
+            person: {
+              name: "Sophia",
+            },
+          }
+        : customer;
     existingPayload.message.order.fulfillments[0]["type"] =
       sessionData?.flow_id === "OnDemand_Assign_driver_post_onconfirmSelfPickup"
         ? "SELF_PICKUP"
@@ -36,6 +46,9 @@ export async function onInitMultipleStopsGenerator(
   if (sessionData.quote != null) {
     existingPayload.message.order.quote = sessionData.quote;
   }
+
+  existingPayload.message.order.payments = sessionData.payments?.flat()
+  existingPayload.message.order.payments[0].id = randomPaymentId
   existingPayload.message.order.provider.id = sessionData.provider_id;
   return existingPayload;
 }

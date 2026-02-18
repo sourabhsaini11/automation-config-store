@@ -26,6 +26,22 @@ function generateOTP(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
+
+function delay(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function isoDurationToSeconds(duration: string): number {
+  const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if (!match) return 0; // Invalid format, return 0
+
+  const hours = parseInt(match[1] || "0", 10);
+  const minutes = parseInt(match[2] || "0", 10);
+  const seconds = parseInt(match[3] || "0", 10);
+
+  return hours * 3600 + minutes * 60 + seconds;
+}
+
 const generateRandomToken = (length = 6): string =>
   Math.random()
     .toString(36)
@@ -66,7 +82,7 @@ function updateFulfillmentWithDriverInfo(
   }
 }
 
-export async function onConfirmGenerator(
+export async function onConfirmDelayGenerator(
   existingPayload: any,
   sessionData: SessionData,
 ) {
@@ -179,5 +195,7 @@ export async function onConfirmGenerator(
   if (existingPayload.message.order.payments[0]["_EXTERNAL"]) {
     delete existingPayload.message.order.payments[0]["_EXTERNAL"];
   }
+  const delay_duration = isoDurationToSeconds(sessionData?.ttl as string) + 2;
+  await delay(delay_duration * 1000);
   return existingPayload;
 }

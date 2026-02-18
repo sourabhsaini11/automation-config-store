@@ -59,6 +59,9 @@ export interface SessionData {
 	issue_level: any
 	issue_resolution: any
 	fulfillment_id: any
+	on_update_items_journey_updation: any
+	on_update_quote_journey_updation: any
+	on_update_payments_journey_updation: any
 }
 
 export type BecknContext = {

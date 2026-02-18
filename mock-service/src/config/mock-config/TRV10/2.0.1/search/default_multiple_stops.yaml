@@ -8,7 +8,7 @@ intent:
           gps: "12.971186, 77.586812"
         type: END
   payment:
-    collected_by: BPP
+    collected_by: BAP
     tags:
       - descriptor:
           code: BUYER_FINDER_FEES

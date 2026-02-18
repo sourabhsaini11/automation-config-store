@@ -1,4 +1,9 @@
 codes:
+  - code: 115
+    action_id: on_status_ride_assigned
+    action: on_status
+    default: TRV10/2.0.1/on_status/default.yaml
+    message_id: false
   - code: 100
     action_id: search
     action: search
@@ -178,6 +183,11 @@ codes:
     action: on_confirm
     default: TRV10/2.0.1/on_confirm/on_confirm_driver_assigned/default.yaml
     message_id: false
+  - code: 1355
+    action_id: on_confirm_ride_delay
+    action: on_confirm
+    default: TRV10/2.0.1/on_confirm/on_confirm_driver_assigned/default.yaml
+    message_id: false  
   - code: 136
     action_id: track_ride
     action: track

@@ -111,6 +111,8 @@ import { MockIssueOpenTRV10_201_100_Class } from "./2.0.1/issue/issue_100/issue_
 import { MockIssueCloseTRV10_201_100_Class } from "./2.0.1/issue/issue_100/issue_close/class";
 import { MockOnIssueProcessingTRV10_201_100_Class } from "./2.0.1/on_issue/on_issue_100/on_issue_processing/class";
 import { MockOnIssueResolvedTRV10_201_100_Class } from "./2.0.1/on_issue/on_issue_100/on_issue_resolved/class";
+import { MockDelayOnConfirmClass } from "./2.0.1/on_confirm/delay-on-confirm";
+import { MockOnStatusRideAssignedClass } from "./2.0.1/on_status/class_ride_assigned";
 
 type Ctor<T> = new () => T;
 
@@ -130,6 +132,7 @@ const registry = {
   on_cancel: MockOnCancelSoftClass2,
 
   // status variants
+  on_status_ride_assigned: MockOnStatusRideAssignedClass,
   on_status_unsolicited: MockOnStatusRideEnrouteGenerator,
   on_status_solicited: MockOnStatusRidePaidGenerator,
   on_status_ride_arrived: MockOnStatusRideArrivedGenerator,
@@ -174,6 +177,7 @@ const registry = {
   on_init_ride: MockOnInitClass,
   confirm_ride: MockConfirmClass,
   on_confirm_ride: MockOnConfirmClass,
+  on_confirm_ride_delay: MockDelayOnConfirmClass,
   track_ride: MockTrackClass2,
   on_track_ride: MockOnTrackMultipleStopsGenerator,
   status_ride: MockStatusClass,

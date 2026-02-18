@@ -100,8 +100,8 @@ export async function onConfirmDriverNotAssignedGenerator(
   }
 
   // Update payments if present
-  if (sessionData.updated_payments?.length > 0) {
-    existingPayload.message.order.payments = sessionData.updated_payments;
+  if (sessionData.payments?.length > 0) {
+    existingPayload.message.order.payments = sessionData.payments;
   }
 
   // Add cancellation terms

@@ -19,9 +19,9 @@ export const issueStatusGenerator_100 = async (
   switch (sessionData.igm_action) {
     case "issue_open":
       existingPayload.message.issue.id = "ISSUE-1";
-      existingPayload.message.issue.category = "ITEM";
-      existingPayload.message.issue.sub_category = "ITM04";
-      existingPayload.message.issue.complainant_info = {
+      existingPayload.message.issue.category = "FULFILLMENT";
+      existingPayload.message.issue.sub_category = "FLM112";
+      existingPayload.message.issue.complainant_info = sessionData?.fulfillments?.flat()?.[0]?.customer ?? {
         person: {
           name: "Sam Manuel",
         },
@@ -42,15 +42,15 @@ export const issueStatusGenerator_100 = async (
         fulfillments: [
           {
             id: fulfillment ?? "Fulfillment1",
-            state: "Order-delivered",
+            state: "CLAIMED",
           },
         ],
         provider_id: provider ?? "P1",
       };
       existingPayload.message.issue.description = {
-        short_desc: "Issue with product quality",
+        short_desc: "Issue with Fare Policy",
         long_desc:
-          "product quality is not correct. facing issues while using the product",
+          "Fare Policy is too high it should be calculated based on distance",
         additional_desc: {
           url: "https://buyerapp.com/additonal-details/desc.txt",
           content_type: "text/plain",
@@ -61,7 +61,7 @@ export const issueStatusGenerator_100 = async (
         ],
       };
       existingPayload.message.issue.source = {
-        network_participant_id: "buyerapp.com/ondc",
+        network_participant_id: existingPayload?.context?.bap_id ?? "buyerapp.com/ondc",
         type: "CONSUMER",
       };
       existingPayload.message.issue.expected_response_time = {

@@ -1,6 +1,5 @@
 import { SessionData } from "../../session-types";
 
-
 const customer = {
   contact: {
     phone: "9876556789",
@@ -10,7 +9,10 @@ const customer = {
   },
 };
 
-export async function initGenerator(existingPayload: any, sessionData: SessionData) {
+export async function initGenerator(
+  existingPayload: any,
+  sessionData: SessionData,
+) {
   existingPayload.message.order.fulfillments =
     sessionData.selected_fulfillments;
   existingPayload.message.order.fulfillments[0]["customer"] = {
@@ -18,7 +20,10 @@ export async function initGenerator(existingPayload: any, sessionData: SessionDa
       phone: "9876556789",
     },
     person: {
-      name: "Joe Adams",
+      name:
+        sessionData?.flow_id === "OnDemand_Female_driver_flow"
+          ? "Sophia"
+          : "Joe Adams",
     },
   };
   delete existingPayload.message.order.fulfillments[0].type;
@@ -26,4 +31,4 @@ export async function initGenerator(existingPayload: any, sessionData: SessionDa
     id: sessionData.selected_item_id,
   };
   return existingPayload;
-} 
+}

@@ -4,7 +4,7 @@ order:
         percentage: "0"
       fulfillment_state:
         descriptor:
-          code: RIDE_ASSIGNED
+          code: RIDE_CANCELLED
       reason_required: true
     - cancellation_fee:
         amount:

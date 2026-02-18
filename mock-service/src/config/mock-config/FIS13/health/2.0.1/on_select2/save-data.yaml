@@ -5,6 +5,9 @@ save-data:
   selected_provider: "$.message.order.provider"
   selected_items: "$.message.order.items[*]"
   selected_fulfillments: "$.message.order.fulfillments[*]"
-  quote: "$.message.quote" 
+  fullfillment_ids: "$.message.order.fulfillments[*].id"
+  quote: "$.message.order.quote"
+  quote_id: "$.message.order.quote.id"
+  form_id: "$.message.order.items[0].xinput.form.id"
   Ekyc_details_form: "$..form.url"
   

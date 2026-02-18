@@ -30,15 +30,21 @@ export async function initDefaultGenerator(existingPayload: any, sessionData: an
     console.log("Updated provider.id:", sessionData.selected_provider.id);
   }
   
-  // Update item.id if available from session data (carry-forward from previous flows)
-  // const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  // if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
-  //   existingPayload.message.order.items[0].id = selectedItem.id;
-  //   console.log("Updated item.id:", selectedItem.id);
-  // }
-  
-  // Update form ID from session data (carry-forward from previous flows)
+  // Carry forward item.id from session data
+  const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = selectedItem.id;
+  }
 
+  // Carry forward fulfillment.id from session data
+  if (sessionData.fullfillment_ids?.[0] && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+  }
+
+  // Carry forward quote.id from session data
+  if (sessionData.quote_id && existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = sessionData.quote_id;
+  }
 
    if (existingPayload.message?.order?.items?.[0]) {
     const item = existingPayload.message.order.items[0];

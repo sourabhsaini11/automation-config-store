@@ -24,12 +24,24 @@ export async function confirmDefaultGenerator(existingPayload: any, sessionData:
   // Update provider.id if available from session data (carry-forward from previous flows)
   if (sessionData.selected_provider?.id && existingPayload.message?.order?.provider) {
     existingPayload.message.order.provider.id = sessionData.selected_provider.id;
-    console.log("Updated provider.id:", sessionData.selected_provider.id);
   }
-  
- 
-  
-   
+
+  // Carry forward item.id from session data
+  const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = selectedItem.id;
+  }
+
+  // Carry forward fulfillment.id from session data
+  if (sessionData.fullfillment_ids?.[0] && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+  }
+
+  // Carry forward quote.id from session data
+  if (sessionData.quote_id && existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = sessionData.quote_id;
+  }
+
    if (existingPayload.message?.order?.items?.[0]) {
     const item = existingPayload.message.order.items[0];
     if (item.xinput?.form) {

@@ -33,11 +33,22 @@ export async function searchDefaultGenerator(
 	  const form_status = sessionData?.form_data?.individual_information_form?.idType;	
 
 	 
+	// Carry forward provider.id from session data
+	if (sessionData.selected_provider?.id && existingPayload.message?.intent?.provider) {
+		existingPayload.message.intent.provider.id = sessionData.selected_provider.id;
+	}
+
+	// Carry forward item.id from session data
+	const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+	if (selectedItem?.id && existingPayload.message?.intent?.provider?.items?.[0]) {
+		existingPayload.message.intent.provider.items[0].id = selectedItem.id;
+	}
+
 	// Update the form_response submission_id in the payload
 	if (submissionId && existingPayload.message?.intent?.provider?.items?.[0]?.xinput?.form_response) {
 		existingPayload.message.intent.provider.items[0].xinput.form_response.submission_id = submissionId;
 		existingPayload.message.intent.provider.items[0].xinput.form_response.status = form_status;
-		existingPayload.message.intent.provider.items[0].xinput.form.id = "F01";
+		existingPayload.message.intent.provider.items[0].xinput.form.id = sessionData.form_id || "F01";
 	}
 
 

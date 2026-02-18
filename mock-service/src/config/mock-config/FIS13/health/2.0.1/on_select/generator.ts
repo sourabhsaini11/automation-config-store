@@ -38,13 +38,27 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
   //     console.log("Updated item.id:", selectedItem.id);
   //   }
   // }
+  // Carry forward item.id from session data
+  const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = selectedItem.id;
+  }
+
+  // Carry forward fulfillment.id from session data
+  if (sessionData.fullfillment_ids?.[0] && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+  }
+
+  // Generate dynamic quote ID (replace hardcoded OFFER_ID/PROPOSAL_ID)
+  if (existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = crypto.randomUUID();
+  }
+
   // redirection to be done
  if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
     const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/verification_status?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
-    // existingPayload.message.order.items[0].xinput.form.id = "EKYC01";
     existingPayload.message.order.items[0].xinput.form.url = url;
-    // console.log("Updated xinput form to eKYC form");
   }
-  
+
   return existingPayload;
 } 

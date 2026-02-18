@@ -5,6 +5,6 @@ save-data:
   items: "$.message.catalog.providers[*].items[*]"
   provider_id: "$.message.catalog.providers[0].id"
   item: "$.message.catalog.providers[0].items[0]"
-  # fulfillments: "$.message.catalog.fulfillments[*]"
+  fulfillments: "$.message.catalog.providers[0].fulfillments[*]"
+  fullfillment_ids: "$.message.catalog.providers[0].fulfillments[*].id"
   selected_provider: "$.message.catalog.providers[0]"
-  # consumer_information_form: "$..form.url"

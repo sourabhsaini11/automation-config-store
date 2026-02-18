@@ -28,19 +28,20 @@ export async function initDefaultGenerator(existingPayload: any, sessionData: an
     console.log("Updated provider.id:", sessionData.selected_provider.id);
   }
   
-  // Update item.id if available from session data (carry-forward from previous flows)
-  // const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  // if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
-  //   existingPayload.message.order.items[0].id = selectedItem.id;
-  //   console.log("Updated item.id:", selectedItem.id);
-  // }
-  
-  // Update form ID from session data (carry-forward from previous flows)
-  if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
-    // Use form ID from session data or default to FO3 (from on_select_2/on_status_unsolicited)
-    const formId = sessionData.form_id || "FO5";
-    existingPayload.message.order.items[0].xinput.form.id = formId;
-    console.log("Updated form ID:", formId);
+  // Carry forward item.id from session data
+  const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = selectedItem.id;
+  }
+
+  // Carry forward fulfillment.id from session data
+  if (sessionData.fullfillment_ids?.[0] && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+  }
+
+  // Carry forward quote.id from session data
+  if (sessionData.quote_id && existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = sessionData.quote_id;
   }
 
    if (existingPayload.message?.order?.items?.[0]) {

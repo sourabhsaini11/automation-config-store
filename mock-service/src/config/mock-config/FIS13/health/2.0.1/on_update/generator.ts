@@ -47,6 +47,11 @@ export async function onUpdateDefaultGenerator(existingPayload: any, sessionData
     if (sessionData.quote_id && order.quote) {
       order.quote.id = sessionData.quote_id;
     }
+
+    // Map fulfillment.id from session data
+    if (sessionData.fullfillment_ids?.[0] && order.fulfillments?.[0]) {
+      order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+    }
   }
 
 

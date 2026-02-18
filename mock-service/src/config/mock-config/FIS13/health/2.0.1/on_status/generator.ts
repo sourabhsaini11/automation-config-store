@@ -19,22 +19,33 @@ export async function onStatusGenerator(existingPayload: any, sessionData: any) 
   }
   
   // Update provider information from session data (carry-forward from previous flows)
-  if (sessionData.provider_id) {
+  if (sessionData.selected_provider?.id || sessionData.provider_id) {
     existingPayload.message = existingPayload.message || {};
     existingPayload.message.order = existingPayload.message.order || {};
     existingPayload.message.order.provider = existingPayload.message.order.provider || {};
-    existingPayload.message.order.provider.id = sessionData.provider_id;
+    existingPayload.message.order.provider.id = sessionData.selected_provider?.id || sessionData.provider_id;
+  }
+
+  // Carry forward fulfillment.id from session data
+  if (sessionData.fullfillment_ids?.[0] && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+  }
+
+  // Carry forward quote.id from session data
+  if (sessionData.quote_id && existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = sessionData.quote_id;
   }
 
   // Fix items: ensure ID consistency and form status
   if (existingPayload.message?.order?.items?.[0]) {
     const item = existingPayload.message.order.items[0];
-    
+
     // Ensure item ID matches previous calls (carry-forward from previous flows)
-    if (sessionData.item_id) {
+    const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+    if (selectedItem?.id) {
+      item.id = selectedItem.id;
+    } else if (sessionData.item_id) {
       item.id = sessionData.item_id;
-    } else {
-      item.id = "ITEM_ID_GOLD_LOAN_2"; // Consistent ID
     }
     
     // Update location_ids from session data (carry-forward from previous flows)

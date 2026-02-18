@@ -27,18 +27,32 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
   }
 
   // Update provider information from session data (carry-forward from on_select_2)
-  if (sessionData.provider_id) {
+  if (sessionData.selected_provider?.id || sessionData.provider_id) {
     existingPayload.message = existingPayload.message || {};
     existingPayload.message.order = existingPayload.message.order || {};
     existingPayload.message.order.provider = existingPayload.message.order.provider || {};
-    existingPayload.message.order.provider.id = sessionData.provider_id;
+    existingPayload.message.order.provider.id = sessionData.selected_provider?.id || sessionData.provider_id;
   }
 
-  
-  
+  // Carry forward item.id from session data
+  const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = selectedItem.id;
+  }
+
+  // Carry forward fulfillment.id from session data
+  if (sessionData.fullfillment_ids?.[0] && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+  }
+
+  // Carry forward quote.id from session data
+  if (sessionData.quote_id && existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = sessionData.quote_id;
+  }
+
   // Update form ID to FO3 (carry-forward from on_select_2)
   if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
-    existingPayload.message.order.items[0].xinput.form.id = "FO3";
+    existingPayload.message.order.items[0].xinput.form.id = sessionData.form_id || "FO3";
     console.log("Updated form ID to FO3");
   }
 

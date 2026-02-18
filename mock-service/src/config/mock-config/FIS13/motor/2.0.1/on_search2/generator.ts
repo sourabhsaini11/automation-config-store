@@ -25,5 +25,24 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
   //   });
   // }
 
+  // Generate dynamic provider ID (replace hardcoded placeholder)
+  if (existingPayload.message?.catalog?.providers?.[0]) {
+    existingPayload.message.catalog.providers[0].id = crypto.randomUUID();
+  }
+
+  // Generate dynamic item IDs (replace hardcoded placeholders)
+  if (existingPayload.message?.catalog?.providers?.[0]?.items) {
+    existingPayload.message.catalog.providers[0].items.forEach((item: any) => {
+      item.id = crypto.randomUUID();
+    });
+  }
+
+  // Generate dynamic fulfillment IDs (replace hardcoded placeholders)
+  if (existingPayload.message?.catalog?.providers?.[0]?.fulfillments) {
+    existingPayload.message.catalog.providers[0].fulfillments.forEach((f: any) => {
+      f.id = crypto.randomUUID();
+    });
+  }
+
   return existingPayload;
-} 
+}

@@ -23339,9 +23339,6 @@ x-validations:
     - _NAME_: REQUIRED_CONTEXT_BPP_URI_13
       attr: "$.context.bpp_uri"
       _RETURN_: attr are present
-    - _NAME_: REQUIRED_MESSAGE_ORDER_ID_14
-      attr: "$.message.order_id"
-      _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_CODE_15
       attr: "$.context.location.country.code"
       _RETURN_: attr are present
@@ -24210,10 +24207,6 @@ x-validations:
       useCode:
       - METRO
       _CONTINUE_: "!(useCasePath all in useCode)"
-    - _NAME_: REQUIRED_VEHICLE_CATEGORY
-      attr: "$.message.order.fulfillments[*].vehicle.category"
-      _RETURN_: attr are present
-
     - _NAME_: REQUIRED_MESSAGE_TYPE_26
       attr: "$.message.order.fulfillments[*].type"
       _RETURN_: attr are present && attr all in enumList
@@ -24712,9 +24705,6 @@ x-validations:
       useCode:
       - METRO
       _CONTINUE_: "!(useCasePath all in useCode)"
-    - _NAME_: REQUIRED_VEHICLE_CATEGORY
-      attr: "$.message.order.fulfillments[*].vehicle.category"
-      _RETURN_: attr are present
     - _NAME_: REQUIRED_MESSAGE_ID_14
       attr: "$.message.order.items[*].id"
       _RETURN_: attr are present
@@ -25400,10 +25390,6 @@ x-validations:
       useCode:
       - METRO
       _CONTINUE_: "!(useCasePath all in useCode)"
-    - _NAME_: REQUIRED_VEHICLE_CATEGORY
-      attr: "$.message.order.fulfillments[*].vehicle.category"
-      _RETURN_: attr are present
-
     - _NAME_: REQUIRED_MESSAGE_ID_14
       attr: "$.message.order.id"
       _RETURN_: attr are present
@@ -26211,9 +26197,6 @@ x-validations:
       useCode:
       - BUS
       _CONTINUE_: "!(useCasePath all in useCode)"
-    - _NAME_: REQUIRED_VEHICLE_CATEGORY
-      attr: "$.message.order.fulfillments[*].vehicle.category"
-      _RETURN_: attr are present
     - _NAME_: REQUIRED_MESSAGE_CODE_18
       attr: "$.message.order.items[*].descriptor.code"
       _RETURN_: attr are present && attr all in enumList
@@ -26536,9 +26519,6 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_MESSAGE_ID_14
       attr: "$.message.order.id"
-      _RETURN_: attr are present
-    - _NAME_: REQUIRED_VEHICLE_CATEGORY
-      attr: "$.message.order.fulfillments[*].vehicle.category"
       _RETURN_: attr are present
     - _NAME_: REQUIRED_MESSAGE_ID_15
       attr: "$.message.order.items[*].id"

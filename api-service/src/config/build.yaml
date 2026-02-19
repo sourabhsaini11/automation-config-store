@@ -47475,6 +47475,7 @@ x-validations:
         validValues:
           - AC
           - NON_AC
+        _CONTINUE_: "!(subTags are present)"  
         _RETURN_: subTags all in validValues
       - _NAME_: VALID_ITEM_DESCRIPTOR_CODE
         _SCOPE_: "$.message.catalog.providers[*].items[*]"

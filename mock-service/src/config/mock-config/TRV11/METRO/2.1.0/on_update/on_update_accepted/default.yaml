@@ -377,7 +377,7 @@ message:
         duration: PT60M
       cancellation_fee:
         percentage: '0'
-    - external_ref:
+      external_ref:
         mimetype: text/html
         url: https://transitsolutions.com/mf/tnc.html
     tags:

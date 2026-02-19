@@ -26,10 +26,6 @@ message:
         name: Delhi Metro Rail Limited
         images:
           - url: "https://delhimetrorail.com/logos/logo.ico"
-      time:
-        range:
-          start: "2023-09-14T05:30:00.000Z"
-          end: "2023-09-14T23:30:00.000Z"
     payments:
       - id: PA1
         collected_by: BAP

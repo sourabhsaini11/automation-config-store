@@ -41,7 +41,7 @@ function updateOrderTimestamps(payload: any) {
   }
 
 function updateFulfillmentsWithParentInfo(fulfillments: any[]): void {
-  const validTo = "2024-07-23T23:59:59.999Z";
+  const validTo = new Date(Date.now()+ 6*60*60*60).toISOString();
 
   fulfillments.forEach((fulfillment) => {
     // Generate a random QR token
@@ -61,6 +61,7 @@ function updateFulfillmentsWithParentInfo(fulfillments: any[]): void {
         valid_to: validTo,
         status: "UNCLAIMED",
       };
+      fulfillment.stops[0].type = "START";
     } else {
       fulfillment.stops.push({
         type: "START",
@@ -121,7 +122,7 @@ export async function onConfirmDelayedGenerator(
   existingPayload.message.order.id = order_id;
   const delay_duration = isoDurationToSeconds(sessionData.ttl) + 2
   const now = new Date().toISOString();
-  await delay(delay_duration*1000); 
+  await delay(delay_duration*1000);
   existingPayload = updateOrderTimestamps(existingPayload)
   return existingPayload;
 }

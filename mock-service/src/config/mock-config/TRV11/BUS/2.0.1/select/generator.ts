@@ -39,7 +39,6 @@ const transformToItemFormat = (userInputItems: any[]): any => {
 	}
 };
 export async function selectGenerator(existingPayload: any, sessionData: any) {
-// Note: commits should be uncommits
 	const userInputItems = sessionData?.user_inputs?.items;
 	const items_min_max = transformToItemFormat(userInputItems);
 	const items_chosen = items_min_max;

@@ -164,8 +164,18 @@ export async function onCancelGenerator(
     }
   }
 }
+  existingPayload.message.order.cancellation_terms = [
+    {
+      "cancel_by": {
+        "duration": "PT60M"
+      },
+      "cancellation_fee": {
+        "percentage": "0"
+      }
+    }
+  ]
   existingPayload.message.order.cancellation.reason.descriptor.code = sessionData.cancellation_reason_id || "000";
-  const now = new Date().toISOString();  // Current Timestamp
+  const now = new Date().toISOString();
   existingPayload.message.order.created_at = sessionData.created_at;
   existingPayload.message.order.updated_at = now;
   return existingPayload;

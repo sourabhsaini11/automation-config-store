@@ -80,7 +80,6 @@ export async function onCancelHardGenerator(existingPayload: any,sessionData: Se
 
 	if (sessionData.fulfillments.length > 0) {
 	existingPayload.message.order.fulfillments = sessionData.fulfillments;
-  existingPayload.message.order = stripTicketAuthorizations(existingPayload.message.order)
 	}
 	if (sessionData.order_id) {
 	existingPayload.message.order.id = sessionData.order_id;
@@ -93,7 +92,6 @@ export async function onCancelHardGenerator(existingPayload: any,sessionData: Se
     }
   
 	existingPayload.message.order.status = "CANCELLED"
-  existingPayload.message.order = updateSettlementAmount(existingPayload.message.order, sessionData);
 	const now = new Date().toISOString();
     existingPayload.message.order.created_at = sessionData.created_at
     existingPayload.message.order.updated_at = now

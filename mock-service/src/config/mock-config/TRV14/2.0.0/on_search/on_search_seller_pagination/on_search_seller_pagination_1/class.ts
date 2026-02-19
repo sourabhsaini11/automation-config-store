@@ -8,7 +8,7 @@ import { onSearchSellerPagination1Generator } from "./generator";
 export class MockOnSearchSellerPagination1Class extends MockAction {
     get saveData(): saveType {
         return yaml.load(
-            readFileSync(path.resolve(__dirname, "../../save-data.yaml"), "utf8")
+            readFileSync(path.resolve(__dirname, "./save-data.yaml"), "utf8")
         ) as saveType;
     }
     get defaultData(): any {
@@ -16,7 +16,7 @@ export class MockOnSearchSellerPagination1Class extends MockAction {
             readFileSync(path.resolve(__dirname, "./default.yaml"), "utf8")
         );
     }
-    
+
     get inputs(): any {
         // Sample input structure for this mock
         return {

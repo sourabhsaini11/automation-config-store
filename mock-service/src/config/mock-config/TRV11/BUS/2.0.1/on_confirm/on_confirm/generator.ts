@@ -47,6 +47,7 @@ function updateFulfillmentsWithParentInfo(fulfillments: any[],sessionData:Sessio
 				valid_to: validTo,
 				status: "UNCLAIMED",
 			};
+			fulfillment.stops[0].type = "START";
 		} else {
 			fulfillment.stops.push({
 				type: "START",

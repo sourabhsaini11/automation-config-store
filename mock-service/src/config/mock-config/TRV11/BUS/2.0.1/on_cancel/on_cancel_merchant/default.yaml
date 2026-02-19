@@ -236,7 +236,7 @@ message:
       cancelled_by: MERCHANT
       reason:
         descriptor:
-          code: '002'
+          code: '007'
     tags:
       - descriptor:
           code: SCHEDULED_INFO

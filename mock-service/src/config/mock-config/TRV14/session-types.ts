@@ -13,11 +13,19 @@ export interface SessionData {
 	buyer_app_fee: string | undefined;
 	vehicle_type: string | undefined;
 	fulfillments: any[] | undefined;
+	fulfillments_search_1: any[] | undefined;
+	fulfillments_search_2: any[] | undefined;
 	category_ids: string[]; // Assuming these are strings; adjust if needed
+	category_ids_search_1: string[]; // Assuming these are strings; adjust if needed
+	category_ids_search_2: string[]; // Assuming these are strings; adjust if needed
+
 	provider_id: string | undefined;
+
 	fullfillment_ids: string[]; // Assuming these are strings; adjust if needed
 	item_ids: string[]; // Assuming these are strings; adjust if needed
 	items: any[] | undefined;
+	items_search_1: any[] | undefined;
+	items_search_2: any[] | undefined;
 	selected_items: any[] | undefined;
 	billing: any | undefined;
 	payments: any[] | undefined;

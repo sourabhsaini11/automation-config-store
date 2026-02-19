@@ -8,7 +8,7 @@ import { onSearchIncrementalPull1Generator } from "./generator";
 export class MockOnSearchIncrementalPull1Class extends MockAction {
     get saveData(): saveType {
         return yaml.load(
-            readFileSync(path.resolve(__dirname, "../../save-data.yaml"), "utf8")
+            readFileSync(path.resolve(__dirname, "./save-data.yaml"), "utf8")
         ) as saveType;
     }
     get defaultData(): any {

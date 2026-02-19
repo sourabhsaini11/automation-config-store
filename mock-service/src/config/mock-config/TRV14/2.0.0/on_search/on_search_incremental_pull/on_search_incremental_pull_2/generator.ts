@@ -11,17 +11,17 @@ function getRandomDateBetween(start: any, end: any) {
 
 export async function onSearchIncrementalPull2Generator(existingPayload: any, sessionData: any) {
   const provider = existingPayload.message.catalog.providers[0];
-  
+
   // Set collected_by from session data
   if (sessionData.collected_by && provider.payments && provider.payments[0]) {
     provider.payments[0].collected_by = sessionData.collected_by;
   }
-  
+
   // Set tags (includes business terms and pagination info)
   // if (sessionData.tags) {
   //   existingPayload.message.catalog.tags .push( sessionData.tags);
   // }
-  
+
   // Set dynamic timerange using session start and end times directly
   if (sessionData.start_time && sessionData.end_time) {
     // const randomDate = getRandomDateBetween(sessionData.start_time, sessionData.end_time);
@@ -33,7 +33,7 @@ export async function onSearchIncrementalPull2Generator(existingPayload: any, se
         end: sessionData.end_time
       }
     };
-    
+
     // ADVANCED: Set fulfillments stops time fields to match provider time window
     // Handles both timestamp and range formats for maximum compatibility
     if (Array.isArray(provider.fulfillments)) {
@@ -63,10 +63,10 @@ export async function onSearchIncrementalPull2Generator(existingPayload: any, se
       });
     }
   }
-  
+
   // NOTE: Items come from existingPayload (default.yaml template), NOT from sessionData
   // sessionData.items doesn't exist yet during on_search generation
   // Items will be saved to session AFTER this response is generated
-  
+
   return existingPayload;
 } 

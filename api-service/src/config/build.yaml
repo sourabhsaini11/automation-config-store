@@ -19314,6 +19314,9 @@ x-validations:
           - _NAME_: REQUIRED_MESSAGE_PROVIDERS_LOCATIONS_NAME
             attr: $.message.catalog.providers[*].locations[*].descriptor.name
             _RETURN_: attr are present
+          - _NAME_: REQUIRED_MESSAGE_PROVIDERS_LOCATIONS_DESCRIPTOR_IMAGES
+            attr: $.message.catalog.providers[*].locations[*].descriptor.images[*].url
+            _RETURN_: attr are present
           - _NAME_: REQUIRED_MESSAGE_PROVIDERS_LOCATIONS_DESC
             attr: >-
               $.message.catalog.providers[*].locations[*].descriptor.short_desc

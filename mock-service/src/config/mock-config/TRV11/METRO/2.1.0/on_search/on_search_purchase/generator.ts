@@ -37,7 +37,7 @@ export async function onSearch1Generator(
         provider.items?.map((item: any) => {
           if (item.time && item.time.duration) {
             // Parse duration (e.g., PT2D = 2 days)
-            const durationMatch = item.time.duration.match(/PT(\d+)D/);
+            const durationMatch = item.time.duration.match(/P(\d+)D/);
             if (durationMatch) {
               const days = parseInt(durationMatch[1], 10);
               const futureDate = new Date(today);

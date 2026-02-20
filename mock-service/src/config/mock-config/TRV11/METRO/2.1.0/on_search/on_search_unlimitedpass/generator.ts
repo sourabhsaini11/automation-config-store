@@ -1,4 +1,4 @@
-import { Input, SessionData } from "../../../../session-types";
+import { SessionData } from "../../../../session-types";
 import { createFullfillment } from "../fullfillment-generator";
 
 // Helper function to format date as local ISO string with Z suffix
@@ -14,9 +14,9 @@ function toLocalISOStringWithZ(date: Date): string {
   return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
 }
 
-export async function onSearchMasterGenerator(
+export async function onSearchUnlimitedPassGenerator(
   existingPayload: any,
-  sessionData: SessionData,
+  sessionData: any,
 ) {
   delete existingPayload.context.location.city.code
   // Get current date

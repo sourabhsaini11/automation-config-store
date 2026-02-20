@@ -1,41 +1,48 @@
 message:
   order:
-    id: 077b248f
-    status: CANCELLED
     items:
-      - id: I1
-        category_ids:
-          - C1
+      - id: I5
         descriptor:
-          name: Single Journey Ticket
-          code: SJT
+          name: Daily Pass
+          code: PASS
+          images:
+            - url: "https://delhimetrorail.com/logos/logo.ico'"
+              size_type: xs
+        category_ids:
+          - C2
+        fulfillment_ids:
+          - F2
         price:
           currency: INR
-          value: "60"
+          value: "50"
         quantity:
           selected:
-            count: 2
-        fulfillment_ids:
-          - F1
-          - F3
-          - F4
+            count: 1
         time:
           label: Validity
-          duration: P2D
-          timestamp: "2021-03-23T11:01:40.065Z"
+          duration: P1D
+          timestamp: "2026-01-23T11:01:40.065Z"
+          range:
+            start: "2026-01-23T11:01:40.065Z"
+            end: "2026-01-24T11:01:40.065Z"
     provider:
       id: P1
       descriptor:
         name: Delhi Metro Rail Limited
         images:
-          - url: "https://delhimetrorail.com/logos/logo.ico"
+          - url: https://delhimetrorail.com/logos/logo.ico
       time:
         range:
-          start: "2023-09-14T05:30:00.000Z"
-          end: "2023-09-14T23:30:00.000Z"
+          start: "2026-01-14T05:30:00.000Z"
+          end: "2026-01-14T23:30:00.000Z"
     fulfillments:
-      - id: F1
-        type: TRIP
+      - id: F2
+        type: PASS
+        customer:
+          person:
+            creds:
+              - type: AADHAAR
+                id: "1234 5678 9193"
         stops:
           - type: START
             location:
@@ -246,150 +253,110 @@ message:
               - descriptor:
                   code: ROUTE_NAME
                 value: Yellow Line
-      - id: F3
-        type: TICKET
-        stops:
-          - type: START
-            authorization:
-              type: QR
-              token: >-
-                aMOPw0KGgoAAAANSUhEUgAAAH0AAAB9AQAAAACn+1GINAAApklEQVR4Xu2UMQ4EMQgD/QP+/0vK6zjsvayUMmavWxQpMAUBkwS12wcveAAkgNSCD3rR5Lkgoai3GUCMgWqbAEYR3HxAkZlzU/0MyBisYRsgI1ERFfcpBpA+ze6k56Cj7KTdXNigFWZvSOpsgqLfd18i2aAukXh9TXBNmdWt5gzA/oqzWkkN8HtA7G8CNOwYAiZt3wZixUfkA32OHNQq7Bxs9oI/gC/9fV8AVCkPjQAAAABJRU5ErkJggg==
-              valid_to: "2024-07-23T23:59:59.999Z"
-              status: UNCLAIMED
-        tags:
-          - descriptor:
-              code: INFO
-            list:
-              - descriptor:
-                  code: PARENT_ID
-                value: F1
-          - descriptor:
-              code: TICKET_INFO
-            list:
-              - descriptor:
-                  code: NUMBER
-                value: 7ed21b6f
-      - id: F4
-        type: TICKET
-        stops:
-          - type: START
-            authorization:
-              type: QR
-              token: >-
-                iNCORw0KGgoAAAANSUhEUgAAAH0AAAB9AQAAAACn+1GIAAAApklEQVR4Xu2UMQ4EMQgD/QP+/0vK6zjsvayUMmavWxQpMAUBkwS12wcveAAkgNSCD3rR5Lkgoai3GUCMgWqbAEYR3HxAkZlzU/0MyBisYRsgI1ERFfcpBpA+ze6k56Cj7KTdXNigFWZvSOpsgqLfd18i2aAukXh9TXBNmdWt5gzA/oqzWkkN8HtA7G8CNOwYAiZt3wZixUfkA32OHNQq7Bxs9oI/gC/9fV8AVCkPjQAAAABJRU5ErkJggg==
-              valid_to: "2024-07-23T23:59:59.999Z"
-              status: UNCLAIMED
-        tags:
-          - descriptor:
-              code: INFO
-            list:
-              - descriptor:
-                  code: PARENT_ID
-                value: F1
-          - descriptor:
-              code: TICKET_INFO
-            list:
-              - descriptor:
-                  code: NUMBER
-                value: 5xd31b8f
     billing:
       name: John Doe
       email: john.doe@example.com
-      phone: +91-9897867564
+      phone: "+91-9897867564"
+    payments:
+      - id: PA1
+        collected_by: BAP
+        status: NOT-PAID
+        type: PRE-ORDER
+    cancellation_terms:
+      - external_ref:
+          mimetype: text/html
+          url: https://transitsolutions.com/mf/tnc.html
     quote:
       price:
-        value: "0"
+        value: "50"
         currency: INR
       breakup:
         - title: BASE_FARE
           item:
-            id: I1
+            id: I5
             price:
               currency: INR
-              value: "60"
+              value: "50"
             quantity:
               selected:
-                count: 2
+                count: 1
           price:
             currency: INR
-            value: "120"
-        - title: REFUND
-          item:
-            id: I1
-            price:
-              currency: INR
-              value: "-60"
-            quantity:
-              selected:
-                count: 2
-          price:
-            currency: INR
-            value: "-120"
-        - title: CANCELLATION_CHARGES
+            value: "50"
+        - title: TAX
           price:
             currency: INR
             value: "0"
-    payments:
-      - id: PA1
-        collected_by: BAP
-        status: PAID
-        type: PRE-ORDER
-        params:
-          transaction_id: 34cc9b0b-6887-4c63-8397-2f4fcf03e50d
-          currency: INR
-          amount: "120"
-          bank_code: XXXXXXXX
-          bank_account_number: xxxxxxxxxxxxxx
-        tags:
-          - descriptor:
-              code: BUYER_FINDER_FEES
-            display: false
-            list:
+          item:
+            tags:
               - descriptor:
-                  code: BUYER_FINDER_FEES_PERCENTAGE
-                value: "1"
-          - descriptor:
-              code: SETTLEMENT_TERMS
-            display: false
-            list:
+                  code: TAX
+                list:
+                  - descriptor:
+                      code: CGST
+                    value: "0"
+                  - descriptor:
+                      code: SGST
+                    value: "0"
+        - title: OTHER_CHARGES
+          price:
+            currency: INR
+            value: "0"
+          item:
+            tags:
               - descriptor:
-                  code: SETTLEMENT_WINDOW
-                value: P30D
-              - descriptor:
-                  code: SETTLEMENT_BASIS
-                value: INVOICE_RECEIPT
-              - descriptor:
-                  code: MANDATORY_ARBITRATION
-                value: "TRUE"
-              - descriptor:
-                  code: COURT_JURISDICTION
-                value: New Delhi
-              - descriptor:
-                  code: STATIC_TERMS
-                value: "https://api.example-bpp.com/booking/terms"
-              - descriptor:
-                  code: SETTLEMENT_AMOUNT
-                value: "59"
-              - descriptor:
-                  code: SETTLEMENT_TYPE
-                value: NEFT
-    cancellation_terms:
-      - external_ref:
-          mimetype: text/html
-          url: "https://transitsolutions.com/mf/tnc.html"
+                  code: OTHER_CHARGES
+                list:
+                  - descriptor:
+                      code: SURCHARGE
+                    value: "0"
     tags:
       - descriptor:
-          code: SCHEDULED_INFO
+          code: BPP_TERMS
+          name: BPP Terms of Engagement
         display: false
         list:
           - descriptor:
-              code: GTFS
-            value: "https://metro-transit/gtfs-realtime"
-    cancellation:
-      cancelled_by: CONSUMER
-      reason:
-        descriptor:
-          code: "000"
-          short_desc: Cancelled by the provider
-    created_at: "2021-03-23T10:00:40.065Z"
-    updated_at: "2021-03-23T10:05:49.061Z"
+              code: BUYER_FINDER_FEES_PERCENTAGE
+            value: "1"
+          - descriptor:
+              code: SETTLEMENT_WINDOW
+            value: P30D
+          - descriptor:
+              code: SETTLEMENT_BASIS
+            value: INVOICE_RECEIPT
+          - descriptor:
+              code: MANDATORY_ARBITRATION
+            value: "TRUE"
+          - descriptor:
+              code: COURT_JURISDICTION
+            value: New Delhi
+          - descriptor:
+              code: STATIC_TERMS
+            value: https://api.example-bpp.com/booking/terms
+          - descriptor:
+              code: SETTLEMENT_AMOUNT
+            value: "59"
+          - descriptor:
+              code: SETTLEMENT_TYPE
+            value: NEFT
+          - descriptor:
+              code: SETTLEMENT_BANK_CODE
+            value: XXXXXXXX
+          - descriptor:
+              code: SETTLEMENT_BANK_ACCOUNT_NUMBER
+            value: xxxxxxxxxxxxxx
+      - descriptor:
+          code: ADDITIONAL_APIS
+        display: false
+        list:
+          - descriptor:
+              code: GTFS_RT
+            value: https://metro-transit/gtfs-realtime
+          - descriptor:
+              code: GTFS_ST
+            value: https://metro-transit/gtfs-static
+          - descriptor:
+              code: WALLET_BALANCE_CHECK
+              name: The CARD_NUMBER represents the Metro card number and is used to check the wallet balance via the API.
+            value: https://metro-transit/wallet/balance/{CARD_NUMBER}

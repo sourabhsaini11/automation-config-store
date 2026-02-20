@@ -8,13 +8,13 @@ message:
       - id: P1
         categories:
           - descriptor:
-              name: Ticket
-              code: TICKET
-            id: C1
-          - descriptor:
               name: Pass
               code: PASS
             id: C2
+        locations:
+          - id: L1
+            city:
+              code: "std:011"
         time:
           range:
             start: "2023-09-14T05:30:00.000Z"
@@ -24,49 +24,38 @@ message:
           images:
             - url: https://delhimetrorail.com/logos/logo.ico
         items:
-          - id: I1
-            category_ids:
-              - C1
+          - id: I5
             descriptor:
-              name: Single Journey Ticket
-              code: SJT
+              name: Daily Pass
+              code: PASS
+              images:
+                - url: "https://delhimetrorail.com/logos/logo.ico'"
+                  size_type: xs
+            category_ids:
+              - C2
+            fulfillment_ids:
+              - F2
             price:
               currency: INR
-              value: "60"
+              value: "50"
             quantity:
               maximum:
-                count: 6
+                count: 1
               minimum:
                 count: 1
-            fulfillment_ids:
-              - F1
             time:
               label: Validity
-              duration: P2D
-              timestamp: "2021-03-23T11:01:40.065Z"
-          - id: I2
-            category_ids:
-              - C1
-            descriptor:
-              name: Round Journey Ticket
-              code: RJT
-            price:
-              currency: INR
-              value: "110"
-            quantity:
-              maximum:
-                count: 6
-              minimum:
-                count: 1
-            fulfillment_ids:
-              - F1
-            time:
-              label: Validity
-              duration: P2D
-              timestamp: "2021-03-23T11:01:40.065Z"
+              duration: P1D
         fulfillments:
-          - id: F1
-            type: TRIP
+          - id: F2
+            type: PASS
+            customer:
+              person:
+                creds:
+                  - type: PAN
+                  - type: AADHAAR
+                  - type: DL
+                  - type: VOTER_ID
             stops:
               - type: START
                 location:
@@ -91,6 +80,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_3
+                    code: MOCK_STATION_3
                   gps: "28.181276, 77.442332"
                 id: "3"
                 parent_stop_id: "2"
@@ -100,6 +90,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_4
+                    code: MOCK_STATION_4
                   gps: "28.981276, 77.772332"
                 id: "4"
                 parent_stop_id: "3"
@@ -109,6 +100,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_5
+                    code: MOCK_STATION_5
                   gps: "28.620976, 77.046732"
                 id: "5"
                 parent_stop_id: "4"
@@ -118,6 +110,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_6
+                    code: MOCK_STATION_6
                   gps: "28.120976, 77.946732"
                 id: "6"
                 parent_stop_id: "5"
@@ -127,6 +120,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_7
+                    code: MOCK_STATION_7
                   gps: "28.677076, 77.346632"
                 id: "7"
                 parent_stop_id: "6"
@@ -136,6 +130,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_8
+                    code: MOCK_STATION_8
                   gps: "28.617076, 77.146632"
                 id: "8"
                 parent_stop_id: "7"
@@ -145,6 +140,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_9
+                    code: MOCK_STATION_9
                   gps: "28.917076, 77.146632"
                 id: "9"
                 parent_stop_id: "8"
@@ -154,6 +150,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_10
+                    code: MOCK_STATION_10
                   gps: "28.897076, 77.146632"
                 id: "10"
                 parent_stop_id: "9"
@@ -163,6 +160,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_11
+                    code: MOCK_STATION_11
                   gps: "28.117076, 77.116632"
                 id: "11"
                 parent_stop_id: "10"
@@ -172,6 +170,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_12
+                    code: MOCK_STATION_12
                   gps: "28.127076, 77.416632"
                 id: "12"
                 parent_stop_id: "11"
@@ -181,6 +180,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_13
+                    code: MOCK_STATION_13
                   gps: "28.217076, 77.216632"
                 id: "13"
                 parent_stop_id: "12"
@@ -190,6 +190,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_14
+                    code: MOCK_STATION_14
                   gps: "28.327076, 77.416632"
                 id: "14"
                 parent_stop_id: "13"
@@ -199,6 +200,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_15
+                    code: MOCK_STATION_15
                   gps: "28.427076, 77.446632"
                 id: "15"
                 parent_stop_id: "14"
@@ -209,6 +211,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_16
+                    code: MOCK_STATION_16
                   gps: "28.738426, 77.139922"
                 id: "16"
                 parent_stop_id: "15"
@@ -218,6 +221,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_17
+                    code: MOCK_STATION_17
                   gps: "28.627076, 77.646632"
                 id: "17"
                 parent_stop_id: "16"
@@ -227,6 +231,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_18
+                    code: MOCK_STATION_18
                   gps: "28.727076, 77.746632"
                 id: "18"
                 parent_stop_id: "17"
@@ -236,6 +241,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_19
+                    code: MOCK_STATION_19
                   gps: "28.827076, 77.846632"
                 id: "19"
                 parent_stop_id: "18"
@@ -245,6 +251,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_20
+                    code: MOCK_STATION_20
                   gps: "28.927076, 77.946632"
                 id: "20"
                 parent_stop_id: "19"
@@ -254,6 +261,7 @@ message:
                 location:
                   descriptor:
                     name: mock_station_21
+                    code: MOCK_STATION_21
                   gps: "28.217076, 77.496632"
                 id: "21"
                 parent_stop_id: "20"

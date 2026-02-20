@@ -6,3 +6,5 @@ save-data:
   buyer_side_fulfillment_ids: "$.message.order.fulfillments[*]"
   selected_fulfillment_ids: "$.message.order.fulfillments[*].id"
   select_city_code: "$.context.location.city.code"
+  selected_unlimitedpass_item: "$.message.order.items"
+  selected_unlimitedpass_fulfillments: "$.message.order.fulfillments"

@@ -50,6 +50,41 @@ codes:
     default: METRO/2.1.0/on_confirm/on_confirm_purchase/default.yaml
     message_id: false 
   - code: 144
+    action_id: on_search_Metro_unlimitedpass_210
+    action: on_search
+    default: METRO/2.1.0/on_search/on_search_unlimitedpass/default.yaml
+    message_id: false  
+  - code: 144
+    action_id: select_METRO_UNLIMITEDPASS_210
+    action: select
+    default: METRO/2.1.0/select/select_unlimitedpass/default.yaml
+    message_id: true
+  - code: 144
+    action_id: on_select_METRO_UNLIMITEDPASS_210
+    action: on_select
+    default: METRO/2.1.0/on_select/on_select_unlimitedpass/default.yaml
+    message_id: false
+  - code: 144
+    action_id: init_METRO_UNLIMITEDPASS_210
+    action: init
+    default: METRO/2.1.0/init/init_unlimitedpass/default.yaml
+    message_id: true
+  - code: 144
+    action_id: on_init_METRO_UNLIMITEDPASS_210
+    action: on_init
+    default: METRO/2.1.0/on_init/on_init_unlimitedpass/default.yaml
+    message_id: false
+  - code: 144
+    action_id: confirm_METRO_UNLIMITEDPASS_210
+    action: confirm
+    default: METRO/2.1.0/confirm/confirm_unlimitedpass/default.yaml
+    message_id: true  
+  - code: 144
+    action_id: on_confirm_METRO_UNLIMITEDPASS_210
+    action: on_confirm
+    default: METRO/2.1.0/on_confirm/on_confirm_unlimitedpass/default.yaml
+    message_id: false  
+  - code: 144
     action_id: select_METRO_RECHARGE_210
     action: select
     default: METRO/2.1.0/select/select_recharge/default.yaml

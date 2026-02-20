@@ -2,5 +2,5 @@ message:
   cancellation_reason_id: '000'
   descriptor:
     name: Ride Cancellation
-    code: CONFIRM_CANCEL
+    code: SOFT_CANCEL
   order_id: O1

@@ -70,7 +70,11 @@ export async function onInitGenerator(
       },
       display: false,
       list: [
-        ...sessionData?.init_tags?.flat()[0]?.list,
+        ...(sessionData?.init_tags
+          ?.flat()[0]
+          ?.list?.filter(
+            (item: any) => item?.descriptor?.code !== "DELAY_INTEREST",
+          ) || []),
         {
           descriptor: {
             code: "SETTLEMENT_WINDOW",
@@ -88,6 +92,12 @@ export async function onInitGenerator(
             code: "SETTLEMENT_BANK_ACCOUNT_NUMBER",
           },
           value: "xxxxxxxxxxxxxx",
+        },
+        {
+          descriptor: {
+            code: "SETTLEMENT_BASIS",
+          },
+          value: "INVOICE_RECEIPT",
         },
       ],
     },

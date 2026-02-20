@@ -2,7 +2,8 @@ openapi: 3.0.0
 info:
   title: ONDC Specification
   description: ONDC Specification
-  version: 2.0.0
+  version: 2.1.0
+  domain: ONDC:TRV11
 security:
   - SubscriberAuth: []
 paths:
@@ -47210,13 +47211,6 @@ x-validations:
         useCode:
           - METRO
         _CONTINUE_: "!(useCasePath all in useCode)"
-      - _NAME_: REQUIRED_MESSAGE_NAME_212
-        attr: "$.message.catalog.providers[*].fulfillments[*].stops[*].location.descriptor.code"
-        _RETURN_: attr are present
-        useCasePath: "$.message.catalog.providers[*].fulfillments[*].vehicle.category"
-        useCode:
-          - METRO
-        _CONTINUE_: "!(useCasePath all in useCode)"  
       - _NAME_: REQUIRED_MESSAGE_ID_23
         attr: "$.message.catalog.providers[*].fulfillments[*].id"
         _RETURN_: attr are present
@@ -47481,6 +47475,7 @@ x-validations:
         validValues:
           - AC
           - NON_AC
+        _CONTINUE_: "!(subTags are present)"  
         _RETURN_: subTags all in validValues
       - _NAME_: VALID_ITEM_DESCRIPTOR_CODE
         _SCOPE_: "$.message.catalog.providers[*].items[*]"
@@ -47658,6 +47653,7 @@ x-validations:
           - ROUTE
           - TRIP
           - TICKET
+          - PASS
         useCasePath: "$.message.order.fulfillments[*].vehicle.category"
         useCode:
           - METRO
@@ -48213,6 +48209,7 @@ x-validations:
           - ROUTE
           - TRIP
           - TICKET
+          - PASS
         useCasePath: "$.message.order.fulfillments[*].vehicle.category"
         useCode:
           - METRO
@@ -48882,6 +48879,7 @@ x-validations:
           - ROUTE
           - TRIP
           - TICKET
+          - PASS
         useCasePath: "$.message.order.fulfillments[*].vehicle.category"
         useCode:
           - METRO

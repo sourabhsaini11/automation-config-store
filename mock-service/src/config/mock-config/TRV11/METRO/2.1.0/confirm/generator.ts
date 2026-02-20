@@ -41,6 +41,14 @@ export async function confirmGenerator(existingPayload: any, sessionData: any) {
     (tag: any) => tag?.descriptor?.code === "BAP_TERMS",
   );
 
+  const onInitBapTerms = sessionData.on_init_tags.flat()?.find(
+    (tag: any) => tag?.descriptor?.code === "BPP_TERMS",
+  );
+
+  const settlementWindowValue = onInitBapTerms?.list?.find(
+    (item: any) => item?.descriptor?.code === "SETTLEMENT_WINDOW",
+  )?.value;
+
   if (bapTermsTag && bapTermsTag.list) {
     const hasSettlementWindow = bapTermsTag.list.some(
       (item: any) => item?.descriptor?.code === "SETTLEMENT_WINDOW",
@@ -52,7 +60,7 @@ export async function confirmGenerator(existingPayload: any, sessionData: any) {
           descriptor: {
             code: "SETTLEMENT_WINDOW",
           },
-          value: "PT60M",
+          value: settlementWindowValue ?? "P30D",
         },
         {
           descriptor: {

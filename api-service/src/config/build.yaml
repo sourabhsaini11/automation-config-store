@@ -3,6 +3,7 @@ info:
   title: ONDC Specification
   description: ONDC Specification
   version: 2.3.0
+  domain: ONDC:FIS12
 security:
   - SubscriberAuth: []
 paths:
@@ -130007,7 +130008,7 @@ x-validations:
             _RETURN_:
               - _NAME_: SET_LOAN_AMOUNT_FORM
                 attrForm: $.message.order.items[*].xinput.head.descriptor.code
-                formHeading: 
+                formHeading:
                   - SET_LOAN_AMOUNT
                 _CONTINUE_: '!(attrForm equal to formHeading)'
                 _RETURN_: 

@@ -7811,9 +7811,13 @@ x-validations:
           - _NAME_: REQUIRED_ITEM_ID
             attr: $.message.order.items[*].id
             _RETURN_: attr are present
-          - _NAME_: REQUIRED_ITEM_ADDS_ON_IDS
-            attr: $.message.order.items[*].add_ons[*].id
-            _RETURN_: attr are present
+          - _NAME_: ITEM_ADDON_VALIDATION
+            attr: $.message.order.items[*].add_ons
+            _CONTINUE_: "!(attr are present)"
+            _RETURN_:
+              - _NAME_: REQUIRED_ITEM_ADDS_ON_IDS
+                attr: $.message.order.items[*].add_ons[*].id
+                _RETURN_: attr are present
 
       - _NAME_: ON_SELECT_ORDER_QUOTE
         action:
@@ -7941,9 +7945,13 @@ x-validations:
           - _NAME_: REQUIRED_ITEM_QUANTITY
             attr: $.message.order.items[*].quantity.selected.count
             _RETURN_: attr are present
-          - _NAME_: REQUIRED_ADDS_ON_IDS
-            attr: $.message.order.items[*].add_ons[*].id
-            _RETURN_: attr are present  
+          - _NAME_: ITEM_ADDON_VALIDATION
+            attr: $.message.order.items[*].add_ons
+            _CONTINUE_: "!(attr are present)"
+            _RETURN_:
+              - _NAME_: REQUIRED_ADDS_ON_IDS
+                attr: $.message.order.items[*].add_ons[*].id
+                _RETURN_: attr are present
 
       - _NAME_: INIT_ORDER_PAYMENTS
         action:

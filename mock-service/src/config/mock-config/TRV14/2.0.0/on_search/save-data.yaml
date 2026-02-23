@@ -6,3 +6,4 @@ save-data:
   provider_id: "$.message.catalog.providers[0].id"
   item: "$.message.catalog.providers[0].items[0]"
   fulfillments: "$.message.catalog.providers[0].fulfillments[*]"
+  category_ids: "$.message.catalog.providers[*].items[*].category_ids[*]"

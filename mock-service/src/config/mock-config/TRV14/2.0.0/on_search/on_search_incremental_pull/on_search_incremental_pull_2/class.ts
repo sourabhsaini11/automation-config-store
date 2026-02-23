@@ -8,7 +8,7 @@ import { onSearchIncrementalPull2Generator } from "./generator";
 export class MockOnSearchIncrementalPull2Class extends MockAction {
     get saveData(): saveType {
         return yaml.load(
-            readFileSync(path.resolve(__dirname, "../../save-data.yaml"), "utf8")
+            readFileSync(path.resolve(__dirname, "./save-data.yaml"), "utf8")
         ) as saveType;
     }
     get defaultData(): any {
@@ -28,7 +28,26 @@ export class MockOnSearchIncrementalPull2Class extends MockAction {
     generator(existingPayload: any, sessionData: SessionData): Promise<any> {
         return onSearchIncrementalPull2Generator(existingPayload, sessionData);
     }
-    async validate(targetPayload: any): Promise<MockOutput> {
+    async validate(targetPayload: any, sessionData: SessionData): Promise<MockOutput> {
+        const provider = targetPayload?.message?.catalog?.providers?.[0];
+        if (!provider) return { valid: false, message: "Provider not found", code: "MISSING_PROVIDER" };
+
+        if (sessionData.provider_id && provider.id !== sessionData.provider_id)
+            return { valid: false, message: `Provider ID mismatch: ${sessionData.provider_id}`, code: "ID_MISMATCH" };
+
+        if (sessionData.fulfillments_search_1 && provider.fulfillments) {
+            const ids = (f: any[]) => f.map(x => x.id).sort().join();
+            if (ids(sessionData.fulfillments_search_1) !== ids(provider.fulfillments))
+                return { valid: false, message: "Fulfillment IDs changed", code: "FULFILLMENT_MISMATCH" };
+        }
+
+        const prevCats = sessionData.category_ids_search_1;
+        if (prevCats?.length) {
+            const currCats = new Set(provider.items?.flatMap((i: any) => i.category_ids || []));
+            const missing = prevCats.filter(id => !currCats.has(id));
+            if (missing.length) return { valid: false, message: `Missing categories: ${missing}`, code: "CATEGORY_MISMATCH" };
+        }
+
         return { valid: true };
     }
     async meetRequirements(sessionData: SessionData): Promise<MockOutput> {
@@ -48,4 +67,4 @@ export class MockOnSearchIncrementalPull2Class extends MockAction {
         }
         return { valid: true };
     }
-} 
+}

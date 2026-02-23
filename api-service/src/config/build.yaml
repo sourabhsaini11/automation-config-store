@@ -100228,7 +100228,7 @@ x-validations:
         - _NAME_: CONTEXT_ENUM
           _RETURN_:
           - _NAME_: CONTEXT_ENUM_DOMAIN
-            domain: ["ONDC:RET14"]
+            domain: ["ONDC:RETINVL"]
             attr: "$.context.domain"
             _RETURN_: attr equal to domain
           - _NAME_: CONTEXT_ENUM_ACTION
@@ -100599,33 +100599,23 @@ x-validations:
               attr: "$.message.catalog['bpp/providers'][*].fulfillments[*].type"
               var_enum: ["Delivery", "Self-Pickup", "Buyer-Delivery"]
               _RETURN_: attr all in var_enum
-            - _NAME_: FULFILLMENTS_CONTACT
-              _RETURN_:
-              - _NAME_: FULFILLMENTS_CONTACT_PHONE
-                attr: "$.message.catalog['bpp/providers'][*].fulfillments[*].contact.phone"
-                reg: ['^[0-9]{10}$']
-                _RETURN_: attr follow regex reg
-              - _NAME_: FULFILLMENTS_CONTACT_EMAIL
-                attr: "$.message.catalog['bpp/providers'][*].fulfillments[*].contact.email"
-                reg: ['^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$']
-                _RETURN_: attr follow regex reg
-          - _NAME_: PROVIDERS_DESCRIPTOR
-            _RETURN_:
-            - _NAME_: PROVIDERS_DESCRIPTOR_NAME
-              attr: "$.message.catalog['bpp/providers'][*].descriptor.name"
-              _RETURN_: attr are present
-            - _NAME_: PROVIDERS_DESCRIPTOR_SYMBOL
-              attr: "$.message.catalog['bpp/providers'][*].descriptor.symbol"
-              _RETURN_: attr are present
-            - _NAME_: PROVIDERS_DESCRIPTOR_SHORT_DESC
-              attr: "$.message.catalog['bpp/providers'][*].descriptor.short_desc"
-              _RETURN_: attr are present
-            - _NAME_: PROVIDERS_DESCRIPTOR_LONG_DESC
-              attr: "$.message.catalog['bpp/providers'][*].descriptor.long_desc"
-              _RETURN_: attr are present
-            - _NAME_: PROVIDERS_DESCRIPTOR_IMAGES
-              attr: "$.message.catalog['bpp/providers'][*].descriptor.images[*]"
-              _RETURN_: attr are present
+          # - _NAME_: PROVIDERS_DESCRIPTOR
+          #   _RETURN_:
+          #   - _NAME_: PROVIDERS_DESCRIPTOR_NAME
+          #     attr: "$.message.catalog['bpp/providers'][*].descriptor.name"
+          #     _RETURN_: attr are present
+          #   - _NAME_: PROVIDERS_DESCRIPTOR_SYMBOL
+          #     attr: "$.message.catalog['bpp/providers'][*].descriptor.symbol"
+          #     _RETURN_: attr are present
+          #   - _NAME_: PROVIDERS_DESCRIPTOR_SHORT_DESC
+          #     attr: "$.message.catalog['bpp/providers'][*].descriptor.short_desc"
+          #     _RETURN_: attr are present
+          #   - _NAME_: PROVIDERS_DESCRIPTOR_LONG_DESC
+          #     attr: "$.message.catalog['bpp/providers'][*].descriptor.long_desc"
+          #     _RETURN_: attr are present
+          #   - _NAME_: PROVIDERS_DESCRIPTOR_IMAGES
+          #     attr: "$.message.catalog['bpp/providers'][*].descriptor.images[*]"
+          #     _RETURN_: attr are present
           - _NAME_: PROVIDERS_TTL
             attr: "$.message.catalog['bpp/providers'][*].ttl"
             reg: ['^P(?=\\d|T)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+S)?)?$']
@@ -100658,15 +100648,15 @@ x-validations:
               _RETURN_: attr follow regex reg
             - _NAME_: LOCATIONS_ADDRESS
               _RETURN_: 
-              - _NAME_: LOCATIONS_ADDRESS_LOCALITY
-                attr: "$.message.catalog['bpp/providers'][*].locations[*].address.locality"
-                _RETURN_: attr are present
-              - _NAME_: LOCATIONS_ADDRESS_STREET
-                attr: "$.message.catalog['bpp/providers'][*].locations[*].address.street"
-                _RETURN_: attr are present
-              - _NAME_: LOCATIONS_ADDRESS_CITY
-                attr: "$.message.catalog['bpp/providers'][*].locations[*].address.city"
-                _RETURN_: attr are present
+              # - _NAME_: LOCATIONS_ADDRESS_LOCALITY
+              #   attr: "$.message.catalog['bpp/providers'][*].locations[*].address.locality"
+              #   _RETURN_: attr are present
+              # - _NAME_: LOCATIONS_ADDRESS_STREET
+              #   attr: "$.message.catalog['bpp/providers'][*].locations[*].address.street"
+              #   _RETURN_: attr are present
+              # - _NAME_: LOCATIONS_ADDRESS_CITY
+              #   attr: "$.message.catalog['bpp/providers'][*].locations[*].address.city"
+              #   _RETURN_: attr are present
               - _NAME_: LOCATIONS_ADDRESS_AREA_CODE
                 attr: "$.message.catalog['bpp/providers'][*].locations[*].address.area_code"
                 reg: ['^[0-9]{6}$']
@@ -100710,10 +100700,10 @@ x-validations:
                 attr: "$.message.catalog['bpp/providers'][*].payments[?(@.type=='PART-PAYMENT')].tags[*].list[?(@.code=='ALLOWED-FULFILLMENTS')].value"
                 reg: ['^([0-9a-zA-Z/-_]+)(,[0-9a-zA-Z/-_]+)*$']
                 _RETURN_: attr follow regex reg
-              - _NAME_: PART_PAYMENT_FULFILLMENT_REFERENCE
-                attr: "$.message.catalog['bpp/providers'][*].payments[?(@.type=='PART-PAYMENT')].tags[*].list[?(@.code=='ALLOWED-FULFILLMENTS')].value"
-                ref: "$.message.catalog['bpp/providers'][*].fulfillments[*].id"
-                _RETURN_: attr all in ref
+              # - _NAME_: PART_PAYMENT_FULFILLMENT_REFERENCE
+              #   attr: "$.message.catalog['bpp/providers'][*].payments[?(@.type=='PART-PAYMENT')].tags[*].list[?(@.code=='ALLOWED-FULFILLMENTS')].value"
+              #   ref: "$.message.catalog['bpp/providers'][*].fulfillments[*].id"
+              #   _RETURN_: attr all in ref
               
           - _NAME_: PROVIDERS_CATEGORIES
             _RETURN_:
@@ -105052,37 +105042,18 @@ x-validations:
             _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS
             _RETURN_:
-            - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_NAME
-              attr: "$.message.order.fulfillments[*].end.location.address.name"
-              _RETURN_: attr are present
-            - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_BUILDING
-              attr: "$.message.order.fulfillments[*].end.location.address.building"
-              _CONTINUE_: "!(attr are present)"
-              _RETURN_: attr are present
-            - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_LOCALITY
-              attr: "$.message.order.fulfillments[*].end.location.address.locality"
-              _RETURN_: attr are present
-            - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_CITY
-              attr: "$.message.order.fulfillments[*].end.location.address.city"
-              _RETURN_: attr are present
-            - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_STATE
-              attr: "$.message.order.fulfillments[*].end.location.address.state"
-              _RETURN_: attr are present
-            - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_COUNTRY
-              attr: "$.message.order.fulfillments[*].end.location.address.country"
-              _RETURN_: attr are present
             - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_AREA_CODE
               attr: "$.message.order.fulfillments[*].end.location.address.area_code"
               reg: ['^[0-9]{6}$']
               _RETURN_: attr follow regex reg
-          - _NAME_: FULFILLMENTS_END_CONTACT_PHONE
-            attr: "$.message.order.fulfillments[*].end.contact.phone"
-            reg: ['^[0-9]{10}$']
-            _RETURN_: attr follow regex reg
-          - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_NAME_LOCALITY_INEQUALITY_SPF
-            name: "$.message.order.fulfillments[*].end.location.address.name"
-            locality: "$.message.order.fulfillments[*].end.location.address.locality"
-            _RETURN_: "!(name equal to locality)"
+          # - _NAME_: FULFILLMENTS_END_CONTACT_PHONE
+          #   attr: "$.message.order.fulfillments[*].end.contact.phone"
+          #   reg: ['^[0-9]{10}$']
+          #   _RETURN_: attr follow regex reg
+          # - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_NAME_LOCALITY_INEQUALITY_SPF
+          #   name: "$.message.order.fulfillments[*].end.location.address.name"
+          #   locality: "$.message.order.fulfillments[*].end.location.address.locality"
+          #   _RETURN_: "!(name equal to locality)"
     on_init:
       - _NAME_: ON_INIT_CONTEXT
         _DESCRIPTION_: Validate on_init context

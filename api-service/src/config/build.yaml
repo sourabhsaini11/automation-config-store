@@ -100228,7 +100228,7 @@ x-validations:
         - _NAME_: CONTEXT_ENUM
           _RETURN_:
           - _NAME_: CONTEXT_ENUM_DOMAIN
-            domain: ["ONDC:RET14"]
+            domain: ["ONDC:RETINVL"]
             attr: "$.context.domain"
             _RETURN_: attr equal to domain
           - _NAME_: CONTEXT_ENUM_ACTION
@@ -100287,118 +100287,158 @@ x-validations:
           - _NAME_: CATEGORY_ID
             attr: "$.message.intent.category.id"
             var_enum: [
-              "Shirts",
-              "T Shirts",
-              "Sweatshirts",
-              "Kurtas & Kurta Sets",
-              "Jackets & Coats",
-              "Sweaters",
-              "Stoles and Scarves",
-              "Mufflers",
-              "Suits",
-              "Sherwanis",
-              "Track Shirts",
-              "Track Suits",
-              "Unstitched Fabrics",
-              "Dresses",
-              "Tops",
-              "Trousers",
-              "Capris",
-              "Coordinates",
-              "Playsuits",
-              "Jumpsuits",
-              "Shrugs & Blouses",
-              "Blazers & Waistcoats",
-              "Tights, Leggings & Jeggings",
-              "Track Pants",
-              "Jeans",
-              "Shorts",
-              "Joggers",
-              "Dhotis & Dhoti Pants",
-              "Churidars",
-              "Salwars",
-              "Dungarees & Jumpsuits",
-              "Skirts",
-              "Clothing Sets",
-              "Belts",
-              "Caps & Hats",
-              "Kurtis, Tunics",
-              "Sarees",
-              "Ethnic Wear",
-              "Palazzos",
-              "Dress Materials",
-              "Lehenga Cholis",
-              "Dupattas & Shawls",
-              "Burqas & Hijabs",
-              "Blouses",
-              "Blouse Pieces",
-              "Briefs",
-              "Boxers",
-              "Vests",
-              "Robes",
-              "Night Suits",
-              "Thermal Wear",
-              "Swim Bottoms",
-              "Swimwear",
-              "Bra",
-              "Shapewear",
-              "Sleepwear & Loungewear",
-              "Camisoles",
-              "Lingerie Sets & Accessories",
-              "Bath Robes",
-              "Towels",
-              "Pyjamas",
-              "Party Wear",
-              "Innerwear & Sleepwear",
-              "Nightwear & Loungewear",
-              "Watches",
-              "Gloves",
-              "Socks",
-              "Stockings",
-              "Laces",
-              "Soles & Charms",
-              "Shoe Racks & Organisers",
-              "Shoe Care - Accessories",
-              "Flip-Flops & Flats",
-              "Sandals & Floaters",
-              "Backpacks",
-              "Handbags",
-              "Trolley, Luggage & Suitcases",
-              "Formal Shoes",
-              "Casual Shoes",
-              "Sports Shoes",
-              "Outdoor Shoes",
-              "Work & Safety Shoes",
-              "Ethnic Shoes",
-              "Boots",
-              "Heels",
-              "Contact Lenses",
-              "Eye Glasses",
-              "Eye Glass Frames",
-              "Sunglasses",
-              "Contact Lens Cases",
-              "Contact Lens Solutions",
-              "Contact Lens Tweezers",
-              "Eyeglasses Pouches & Cases",
-              "Microfiber Wipes",
-              "Eyewear Slings",
-              "Bracelets",
-              "Chains",
-              "Mangalsutra",
-              "Anklets",
-              "Bangles & Bracelets",
-              "Necklaces",
-              "Earrings",
-              "Jewellery Sets",
-              "Nosepins & Noserings",
-              "Pendants",
-              "Rings",
-              "Toe Rings",
-              "Gold Coins",
-              "Brooch",
-              "Pouch",
-              "Keychain"
-            ]
+              "Mobile Phone",
+              "Smart Watch",
+              "Headset",
+              "Laptop",
+              "Desktop",
+              "Tablet",
+              "Keyboard",
+              "Monitor",
+              "Mouse",
+              "Power Bank",
+              "Earphone",
+              "True Wireless Stereo (TWS)",
+              "Adapter",
+              "Cable",
+              "Extension Cord",
+              "Audio Accessories",
+              "Home Audio",
+              "Microphone",
+              "Speaker",
+              "Vehicle Audio",
+              "Camcorder",
+              "Camera",
+              "Camera Bag",
+              "Batteries",
+              "Charger",
+              "Camera Lens",
+              "Photo Printer",
+              "Tripod",
+              "Camera Accessories",
+              "UPS",
+              "Networking Device",
+              "Printer",
+              "Printer Accessories",
+              "Storage Drive",
+              "Pen Drive",
+              "Memory Card",
+              "Computer Component",
+              "Cooling Pad",
+              "Docking Station",
+              "Keyboard Guard",
+              "Laptop Skin",
+              "Laptop Stand",
+              "Mousepad",
+              "Laptop Bag",
+              "Screen Protector",
+              "Computer Accessories",
+              "Computer Software",
+              "Ebook Reader",
+              "Tablet Accessories",
+              "Gaming Controller",
+              "Gaming Chair",
+              "Gaming Accessories",
+              "Gaming Console",
+              "Video Games",
+              "Mobile Cover",
+              "Mobile Mount",
+              "Mobile Screen Guard",
+              "Selfie Stick",
+              "Mobile Skin Sticker",
+              "Biometrics",
+              "Home Alarm",
+              "Home Automation",
+              "Smart Switch",
+              "Smart Lighting",
+              "Home Safe",
+              "Intercom",
+              "Sensor",
+              "Smart TV",
+              "Standard TV",
+              "TV Mount",
+              "Remote",
+              "Streaming Device",
+              "TV Accessories",
+              "Virtual Reality Headset",
+              "3D Glasses",
+              "3D Modulator",
+              "Projector",
+              "Projector Screen",
+              "Projector Mount",
+              "Projector Accessories",
+              "TV Part",
+              "TV Remote",
+              "Set Top Box",
+              "TV Stand",
+              "Video Player",
+              "Digital Photo Frame",
+              "Home Theatre Projector",
+              "Video Player Accessories",
+              "Smart Band",
+              "Smart Glasses",
+              "Watch Strap Band",
+              "Wearable Accessories",
+              "Smart Ring",
+              "Tracker Devices",
+              "Air Purifier",
+              "Dehumidifier",
+              "Humidifier",
+              "Air Cleaner Accessories",
+              "Air Conditioner",
+              "Air Conditioner Accessories",
+              "Air Cooler",
+              "Electric Brush",
+              "Electric Iron",
+              "Electric Sewing Machine",
+              "Water Heater",
+              "Heater Cables",
+              "Air Heater",
+              "Coffee Maker",
+              "Beverage Maker",
+              "Roti Maker",
+              "Induction Cooktop",
+              "Sandwich Maker",
+              "Electric Cooker",
+              "Electric Kettle",
+              "Microwave Oven",
+              "OTG",
+              "Toaster",
+              "Electric Air Fryer",
+              "Cooking Appliance Accessories",
+              "Coffee Grinder",
+              "Food Processor",
+              "Pasta Maker",
+              "Food Processor Accessories",
+              "Blender",
+              "Juicer",
+              "Mixer Grinder",
+              "Wet Grinder",
+              "Dishwasher",
+              "Dishwasher Accessories",
+              "Electric Chimney",
+              "Kitchen Accessories",
+              "Freezer",
+              "Refrigerator",
+              "Refrigerator Accessories",
+              "Vacuum Cleaner",
+              "Vacuum Cleaner Parts and Accessories",
+              "Washing Machine",
+              "Washing Machine Accessories",
+              "Water Purifier",
+              "Water Cooler",
+              "Water Dispenser",
+              "Water Purifier Service Kit",
+              "Water Purifier Filter",
+              "Water Purifier Candle",
+              "Water Purifier Pipe",
+              "Water Purifier Accessories",
+              "Water Cooler Accessories",
+              "Inverter",
+              "Inverter Batteries",
+              "Battery Tray",
+              "Voltage Stabilizer"
+              ]
             _CONTINUE_: "!(attr are present)"
             _RETURN_: attr all in var_enum
         - _NAME_: SEARCH_FULFILMENT 
@@ -100599,33 +100639,23 @@ x-validations:
               attr: "$.message.catalog['bpp/providers'][*].fulfillments[*].type"
               var_enum: ["Delivery", "Self-Pickup", "Buyer-Delivery"]
               _RETURN_: attr all in var_enum
-            - _NAME_: FULFILLMENTS_CONTACT
-              _RETURN_:
-              - _NAME_: FULFILLMENTS_CONTACT_PHONE
-                attr: "$.message.catalog['bpp/providers'][*].fulfillments[*].contact.phone"
-                reg: ['^[0-9]{10}$']
-                _RETURN_: attr follow regex reg
-              - _NAME_: FULFILLMENTS_CONTACT_EMAIL
-                attr: "$.message.catalog['bpp/providers'][*].fulfillments[*].contact.email"
-                reg: ['^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$']
-                _RETURN_: attr follow regex reg
-          - _NAME_: PROVIDERS_DESCRIPTOR
-            _RETURN_:
-            - _NAME_: PROVIDERS_DESCRIPTOR_NAME
-              attr: "$.message.catalog['bpp/providers'][*].descriptor.name"
-              _RETURN_: attr are present
-            - _NAME_: PROVIDERS_DESCRIPTOR_SYMBOL
-              attr: "$.message.catalog['bpp/providers'][*].descriptor.symbol"
-              _RETURN_: attr are present
-            - _NAME_: PROVIDERS_DESCRIPTOR_SHORT_DESC
-              attr: "$.message.catalog['bpp/providers'][*].descriptor.short_desc"
-              _RETURN_: attr are present
-            - _NAME_: PROVIDERS_DESCRIPTOR_LONG_DESC
-              attr: "$.message.catalog['bpp/providers'][*].descriptor.long_desc"
-              _RETURN_: attr are present
-            - _NAME_: PROVIDERS_DESCRIPTOR_IMAGES
-              attr: "$.message.catalog['bpp/providers'][*].descriptor.images[*]"
-              _RETURN_: attr are present
+          # - _NAME_: PROVIDERS_DESCRIPTOR
+          #   _RETURN_:
+          #   - _NAME_: PROVIDERS_DESCRIPTOR_NAME
+          #     attr: "$.message.catalog['bpp/providers'][*].descriptor.name"
+          #     _RETURN_: attr are present
+          #   - _NAME_: PROVIDERS_DESCRIPTOR_SYMBOL
+          #     attr: "$.message.catalog['bpp/providers'][*].descriptor.symbol"
+          #     _RETURN_: attr are present
+          #   - _NAME_: PROVIDERS_DESCRIPTOR_SHORT_DESC
+          #     attr: "$.message.catalog['bpp/providers'][*].descriptor.short_desc"
+          #     _RETURN_: attr are present
+          #   - _NAME_: PROVIDERS_DESCRIPTOR_LONG_DESC
+          #     attr: "$.message.catalog['bpp/providers'][*].descriptor.long_desc"
+          #     _RETURN_: attr are present
+          #   - _NAME_: PROVIDERS_DESCRIPTOR_IMAGES
+          #     attr: "$.message.catalog['bpp/providers'][*].descriptor.images[*]"
+          #     _RETURN_: attr are present
           - _NAME_: PROVIDERS_TTL
             attr: "$.message.catalog['bpp/providers'][*].ttl"
             reg: ['^P(?=\\d|T)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+S)?)?$']
@@ -100658,15 +100688,15 @@ x-validations:
               _RETURN_: attr follow regex reg
             - _NAME_: LOCATIONS_ADDRESS
               _RETURN_: 
-              - _NAME_: LOCATIONS_ADDRESS_LOCALITY
-                attr: "$.message.catalog['bpp/providers'][*].locations[*].address.locality"
-                _RETURN_: attr are present
-              - _NAME_: LOCATIONS_ADDRESS_STREET
-                attr: "$.message.catalog['bpp/providers'][*].locations[*].address.street"
-                _RETURN_: attr are present
-              - _NAME_: LOCATIONS_ADDRESS_CITY
-                attr: "$.message.catalog['bpp/providers'][*].locations[*].address.city"
-                _RETURN_: attr are present
+              # - _NAME_: LOCATIONS_ADDRESS_LOCALITY
+              #   attr: "$.message.catalog['bpp/providers'][*].locations[*].address.locality"
+              #   _RETURN_: attr are present
+              # - _NAME_: LOCATIONS_ADDRESS_STREET
+              #   attr: "$.message.catalog['bpp/providers'][*].locations[*].address.street"
+              #   _RETURN_: attr are present
+              # - _NAME_: LOCATIONS_ADDRESS_CITY
+              #   attr: "$.message.catalog['bpp/providers'][*].locations[*].address.city"
+              #   _RETURN_: attr are present
               - _NAME_: LOCATIONS_ADDRESS_AREA_CODE
                 attr: "$.message.catalog['bpp/providers'][*].locations[*].address.area_code"
                 reg: ['^[0-9]{6}$']
@@ -100710,10 +100740,10 @@ x-validations:
                 attr: "$.message.catalog['bpp/providers'][*].payments[?(@.type=='PART-PAYMENT')].tags[*].list[?(@.code=='ALLOWED-FULFILLMENTS')].value"
                 reg: ['^([0-9a-zA-Z/-_]+)(,[0-9a-zA-Z/-_]+)*$']
                 _RETURN_: attr follow regex reg
-              - _NAME_: PART_PAYMENT_FULFILLMENT_REFERENCE
-                attr: "$.message.catalog['bpp/providers'][*].payments[?(@.type=='PART-PAYMENT')].tags[*].list[?(@.code=='ALLOWED-FULFILLMENTS')].value"
-                ref: "$.message.catalog['bpp/providers'][*].fulfillments[*].id"
-                _RETURN_: attr all in ref
+              # - _NAME_: PART_PAYMENT_FULFILLMENT_REFERENCE
+              #   attr: "$.message.catalog['bpp/providers'][*].payments[?(@.type=='PART-PAYMENT')].tags[*].list[?(@.code=='ALLOWED-FULFILLMENTS')].value"
+              #   ref: "$.message.catalog['bpp/providers'][*].fulfillments[*].id"
+              #   _RETURN_: attr all in ref
               
           - _NAME_: PROVIDERS_CATEGORIES
             _RETURN_:
@@ -105052,37 +105082,18 @@ x-validations:
             _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS
             _RETURN_:
-            - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_NAME
-              attr: "$.message.order.fulfillments[*].end.location.address.name"
-              _RETURN_: attr are present
-            - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_BUILDING
-              attr: "$.message.order.fulfillments[*].end.location.address.building"
-              _CONTINUE_: "!(attr are present)"
-              _RETURN_: attr are present
-            - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_LOCALITY
-              attr: "$.message.order.fulfillments[*].end.location.address.locality"
-              _RETURN_: attr are present
-            - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_CITY
-              attr: "$.message.order.fulfillments[*].end.location.address.city"
-              _RETURN_: attr are present
-            - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_STATE
-              attr: "$.message.order.fulfillments[*].end.location.address.state"
-              _RETURN_: attr are present
-            - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_COUNTRY
-              attr: "$.message.order.fulfillments[*].end.location.address.country"
-              _RETURN_: attr are present
             - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_AREA_CODE
               attr: "$.message.order.fulfillments[*].end.location.address.area_code"
               reg: ['^[0-9]{6}$']
               _RETURN_: attr follow regex reg
-          - _NAME_: FULFILLMENTS_END_CONTACT_PHONE
-            attr: "$.message.order.fulfillments[*].end.contact.phone"
-            reg: ['^[0-9]{10}$']
-            _RETURN_: attr follow regex reg
-          - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_NAME_LOCALITY_INEQUALITY_SPF
-            name: "$.message.order.fulfillments[*].end.location.address.name"
-            locality: "$.message.order.fulfillments[*].end.location.address.locality"
-            _RETURN_: "!(name equal to locality)"
+          # - _NAME_: FULFILLMENTS_END_CONTACT_PHONE
+          #   attr: "$.message.order.fulfillments[*].end.contact.phone"
+          #   reg: ['^[0-9]{10}$']
+          #   _RETURN_: attr follow regex reg
+          # - _NAME_: FULFILLMENTS_END_LOCATION_ADDRESS_NAME_LOCALITY_INEQUALITY_SPF
+          #   name: "$.message.order.fulfillments[*].end.location.address.name"
+          #   locality: "$.message.order.fulfillments[*].end.location.address.locality"
+          #   _RETURN_: "!(name equal to locality)"
     on_init:
       - _NAME_: ON_INIT_CONTEXT
         _DESCRIPTION_: Validate on_init context

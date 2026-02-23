@@ -1,7 +1,7 @@
 import { SessionData } from "../../../../session-types";
 
 function updateItemTimestamps(payload: any) {
-  const now = new Date().toISOString();
+  const twoDaysFromNow = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString();
 
   const providers = payload?.message?.catalog?.providers;
   if (!Array.isArray(providers)) return payload;
@@ -11,7 +11,7 @@ function updateItemTimestamps(payload: any) {
 
     provider.items.forEach((item: any) => {
       if (item?.time && typeof item.time === "object" && "timestamp" in item.time) {
-        item.time.timestamp = now;
+        item.time.timestamp = twoDaysFromNow;
       }
     });
   });

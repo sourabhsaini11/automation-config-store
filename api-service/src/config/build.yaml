@@ -25384,12 +25384,6 @@ x-validations:
           - BUS
           - METRO
         _RETURN_: subTags all in validValues
-      - _NAME_: VALID_VEHICLE_VARIANT
-        attr: "$.message.catalog.providers[*].fulfillments[*].vehicle.variant"
-        validValues:
-          - AC
-          - NON_AC
-        _RETURN_: attr all in validValues
       - _NAME_: VALID_ITEM_DESCRIPTOR_CODE
         _SCOPE_: "$.message.catalog.providers[*].items[*]"
         subTags: "$.descriptor.code"

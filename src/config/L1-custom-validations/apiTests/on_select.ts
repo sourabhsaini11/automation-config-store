@@ -707,7 +707,7 @@ const onSelect = async (data: any) => {
                         onSelectItemsPrice += parseFloat(element.price.value);
                     }
                 }
-                if (titleType === "tax" || titleType === "discount") {
+                if (titleType === "discount") {
                     if (!(element["@ondc/org/item_id"] in itemFlfllmnts)) {
                         result.push({
                             valid: false,
@@ -716,20 +716,42 @@ const onSelect = async (data: any) => {
                         });
                     }
                 }
+                if (titleType === "tax") {
+                    const refId = element["@ondc/org/item_id"];
+
+                    const fulfillmentIds = on_select.fulfillments.map(
+                        (f: any) => f.id
+                    );
+
+                    const isValidItemLevel = refId in itemFlfllmnts;
+                    const isValidFulfillmentLevel = fulfillmentIds.includes(refId);
+
+                    if (!isValidItemLevel && !isValidFulfillmentLevel) {
+                        result.push({
+                            valid: false,
+                            code: 20006,
+                            description: `invalid id: ${refId} in tax line item (should be a valid item_id or fulfillment_id)`,
+                        });
+                    }
+                }
                 if (
                     titleType === "packing" ||
                     titleType === "delivery" ||
                     titleType === "misc"
                 ) {
-                    // if (
-                    //     !Object.values(itemFlfllmnts).includes(element["@ondc/org/item_id"])
-                    // ) {
-                    //     result.push({
-                    //         valid: false,
-                    //         code: 20000,
-                    //         description: `invalid  id: ${element["@ondc/org/item_id"]} in ${titleType} line item (should be a valid fulfillment_id as provided in message.items for the items)`,
-                    //     });
-                    // }
+                    const fulfillmentIds = on_select.fulfillments.map(
+                        (f: any) => f.id
+                    );
+
+                    const fulfillmentId = element["@ondc/org/item_id"];
+
+                    if (!fulfillmentIds.includes(fulfillmentId)) {
+                        result.push({
+                            valid: false,
+                            code: 20006,
+                            description: `invalid id: ${fulfillmentId} in ${titleType} line item (should be a valid fulfillment_id)`,
+                        });
+                    }
                 }
             });
             await RedisService.setKey(

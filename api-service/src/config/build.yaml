@@ -2,7 +2,8 @@ openapi: 3.0.0
 info:
   title: ONDC Specification
   description: ONDC Specification
-  version: 2.0.0
+  version: 2.0.1
+  domain: ONDC:TRV13
 security:
   - SubscriberAuth: []
 paths:
@@ -10779,7 +10780,7 @@ x-validations:
                   - SOFT_CANCEL
                   - CONFIRM_CANCEL
                   - ACTIVE
-                  - COMPLETE
+                  - COMPLETED
                   - CANCELLED
                 _RETURN_: attr any in enumList
               - _NAME_: REGEX_ON_CONFIRM_UPDATED_AT
@@ -11007,8 +11008,10 @@ x-validations:
                   - SOFT_CANCEL
                   - CONFIRM_CANCEL
                   - ACTIVE
-                  - COMPLETE
+                  - SOFT-UPDATE
+                  - CONFIRM-UPDATE
                   - CANCELLED
+                  - COMPLETED
                 _RETURN_: attr any in enumList
               - _NAME_: REGEX_ON_STATUS_UPDATED_AT
                 attr: $.message.order.updated_at
@@ -11326,7 +11329,7 @@ x-validations:
                   - SOFT-UPDATE
                   - CONFIRM-UPDATE
                   - ACTIVE
-                  - COMPLETE
+                  - COMPLETED
                   - CANCELLED
                 _RETURN_: attr any in enumList
               - _NAME_: REGEX_ON_UPDATE_UPDATED_AT

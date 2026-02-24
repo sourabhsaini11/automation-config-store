@@ -105002,6 +105002,7 @@ x-validations:
             _RETURN_: attr are present
           - _NAME_: ITEM_DESCRIPTOR_CODE
             attr: "$.message.order.items[*].descriptor.code"
+            _CONTINUE_: "!(attr are present)"
             _RETURN_: attr are present
           - _NAME_: ITEMS_QUANTITY_COUNT
             attr: "$.message.order.items[*].quantity.count"
@@ -105116,52 +105117,48 @@ x-validations:
         #   _RETURN_: *INIT_BILLING
         - _NAME_: ORDER_FULFILLMENTS
           _RETURN_: *INIT_FULFILLMENTS
-        - _NAME_: ORDER_QUOTE
-          _RETURN_: &ON_INIT_QUOTE
-          - _NAME_: QUOTE_PRICE_CURRENCY
-            attr: "$.message.order.quote.price.currency"
-            reg: ['^[A-Z]{3}$']
-            _RETURN_: attr are present && attr follow regex reg
-          - _NAME_: QUOTE_PRICE_VALUE
-            attr: "$.message.order.quote.price.value"
-            reg: ['^-?(\\d+\\.\\d{1,2}|\\d+)$']
-            _RETURN_: attr are present && attr follow regex reg
-          - _NAME_: QUOTE_BREAKUP_PRESENT
-            attr: "$.message.order.quote.breakup[*]['@ondc/org/item_id']"
-            _RETURN_: attr are present
-          - _NAME_: BREAKUP_ITEM_ID
-            attr: "$.message.order.quote.breakup[*]['@ondc/org/item_id']"
-            _RETURN_: attr are present
-          - _NAME_: BREAKUP_TITLE
-            attr: "$.message.order.quote.breakup[*].title"
-            _RETURN_: attr are present
-          - _NAME_: BREAKUP_TITLE_TYPE
-            attr: "$.message.order.quote.breakup[*]['@ondc/org/title_type']"
-            var_enum:
-              - item
-              - tax
-              - delivery
-              - packing
-              - discount
-              - misc
-            _RETURN_: attr are present && attr all in var_enum
-          - _NAME_: BREAKUP_PRICE_CURRENCY
-            attr: "$.message.order.quote.breakup[*].price.currency"
-            var_enum: ["INR"]
-            _RETURN_: attr are present && attr all in var_enum
-          - _NAME_: BREAKUP_PRICE_VALUE
-            attr: "$.message.order.quote.breakup[*].price.value"
-            reg: ['^-?(\\d+\\.\\d{1,2}|\\d+)$']
-            _RETURN_: attr are present && attr follow regex reg
-          - _NAME_: BREAKUP_ITEM_QUANTITY_COUNT
-            attr: "$.message.order.quote.breakup[*]['@ondc/org/item_quantity'].count"
-            # reg: ['^[1-9][0-9]*$']
-            # _CONTINUE_: "!(attr are present)"
-            _RETURN_: attr are present
-          - _NAME_: QUOTE_TTL
-            attr: "$.message.order.quote.ttl"
-            reg: ['^P(?=\\d|T)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+S)?)?$']
-            _RETURN_: attr are present && attr follow regex reg
+        # - _NAME_: ORDER_QUOTE
+        #   _RETURN_: &ON_INIT_QUOTE
+        #   - _NAME_: QUOTE_PRICE_CURRENCY
+        #     attr: "$.message.order.quote.price.currency"
+        #     reg: ['^[A-Z]{3}$']
+        #     _RETURN_: attr are present && attr follow regex reg
+        #   - _NAME_: QUOTE_PRICE_VALUE
+        #     attr: "$.message.order.quote.price.value"
+        #     reg: ['^-?(\\d+\\.\\d{1,2}|\\d+)$']
+        #     _RETURN_: attr are present && attr follow regex reg
+        #   - _NAME_: QUOTE_BREAKUP_PRESENT
+        #     attr: "$.message.order.quote.breakup[*]['@ondc/org/item_id']"
+        #     _RETURN_: attr are present
+        #   - _NAME_: BREAKUP_ITEM_ID
+        #     attr: "$.message.order.quote.breakup[*]['@ondc/org/item_id']"
+        #     _RETURN_: attr are present
+        #   - _NAME_: BREAKUP_TITLE
+        #     attr: "$.message.order.quote.breakup[*].title"
+        #     _RETURN_: attr are present
+        #   - _NAME_: BREAKUP_TITLE_TYPE
+        #     attr: "$.message.order.quote.breakup[*]['@ondc/org/title_type']"
+        #     var_enum:
+        #       - item
+        #       - tax
+        #       - delivery
+        #       - packing
+        #       - discount
+        #       - misc
+        #     _RETURN_: attr are present && attr all in var_enum
+        #   - _NAME_: BREAKUP_PRICE_CURRENCY
+        #     attr: "$.message.order.quote.breakup[*].price.currency"
+        #     var_enum: ["INR"]
+        #     _RETURN_: attr are present && attr all in var_enum
+        #   - _NAME_: BREAKUP_PRICE_VALUE
+        #     attr: "$.message.order.quote.breakup[*].price.value"
+        #     reg: ['^-?(\\d+\\.\\d{1,2}|\\d+)$']
+        #     _RETURN_: attr are present && attr follow regex reg
+        #   - _NAME_: BREAKUP_ITEM_QUANTITY_COUNT
+        #     attr: "$.message.order.quote.breakup[*]['@ondc/org/item_quantity'].count"
+        #     # reg: ['^[1-9][0-9]*$']
+        #     # _CONTINUE_: "!(attr are present)"
+        #     _RETURN_: attr are present
         - _NAME_: ORDER_PAYMENTS
           _RETURN_:
           - _NAME_: PAYMENTS_ID
@@ -105235,7 +105232,7 @@ x-validations:
         _RETURN_: &CONFIRM_ORDER
         - _NAME_: ORDER_ID
           attr: "$.message.order.id"
-          reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+          reg: ['^.{1,128}$']
           _RETURN_: attr follow regex reg
         - _NAME_: ORDER_STATE
           attr: "$.message.order.state"
@@ -105254,6 +105251,7 @@ x-validations:
             _RETURN_: attr are present
           - _NAME_: ITEM_DESCRIPTOR_CODE
             attr: "$.message.order.items[*].descriptor.code"
+            _CONTINUE_: "!(attr are present)"
             _RETURN_: attr are present
           - _NAME_: ITEMS_QUANTITY_COUNT
             attr: "$.message.order.items[*].quantity.count"
@@ -105336,10 +105334,6 @@ x-validations:
             attr: "$.message.order.fulfillments[*].type"
             var_enum: ["Delivery", "Self-Pickup", "Buyer-Delivery"]  
             _RETURN_: attr all in var_enum
-          - _NAME_: FULFILLMENTS_ONDC_ORG_TAT
-            attr: "$.message.order.fulfillments[*]['@ondc/org/TAT']"
-            reg: ['^P(?=\\d|T)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+S)?)?$']
-            _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_TRACKING
             attr: "$.message.order.fulfillments[*].tracking"
             _RETURN_: attr are present
@@ -105385,14 +105379,12 @@ x-validations:
             condition: ["Self-Pickup"]
             _CONTINUE_: "!(attr_condition all in condition)"
             _RETURN_: attr are present
-        - _NAME_: ORDER_QUOTE
-          _RETURN_: *ON_INIT_QUOTE
         - _NAME_: ORDER_PAYMENTS
           _RETURN_: &CONFIRM_PAYMENT
 
-          - _NAME_: PAYMENT_ID
+          - _NAME_: PAYMENTS_ID
             attr: "$.message.order.payments[*].id"
-            reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+            reg: ['^[0-9a-zA-Z/_-]{1,36}$']
             _RETURN_: attr follow regex reg
 
           - _NAME_: PAYMENT_ID_UNIQUE
@@ -105446,7 +105438,7 @@ x-validations:
 
           - _NAME_: PAYMENT_TRANSACTION_ID_IF_PAID
             attr: "$.message.order.payments[?(@.status=='PAID')].params.transaction_id"
-            reg: ['^[0-9a-zA-Z/-_]{1,50}$']
+            reg: ['^.{1,100}$']
             _RETURN_: attr are present && attr follow regex reg
 
           - _NAME_: ADV_DEPOSIT_MUST_BE_ON_ORDER
@@ -105500,7 +105492,13 @@ x-validations:
       - _NAME_: ON_CONFIRM_ORDER
         _RETURN_:
         - _NAME_: CONFIRM_ORDER
-          _RETURN_: *CONFIRM_ORDER 
+          _RETURN_: *CONFIRM_ORDER
+        - _NAME_: ORDER_QUOTE
+          _RETURN_: *ON_INIT_QUOTE
+        - _NAME_: QUOTE_TTL
+          attr: "$.message.order.quote.ttl"
+          reg: ['^P(?=\\d|T)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+S)?)?$']
+          _RETURN_: attr are present && attr follow regex reg
         - _NAME_: ORDER_FULFILLMENTS
           _RETURN_:
           - _NAME_: FULFILLMENTS_STATE_DESCRIPTOR_CODE

@@ -25,9 +25,6 @@ message:
               code: "BUYER_FINDER_FEES_PERCENTAGE"
             value: "1"
           - descriptor:
-              code: "SETTLEMENT_AMOUNT"
-            value: "5"
-          - descriptor:
               code: "SETTLEMENT_TYPE"
             value: "NEFT"
           - descriptor:

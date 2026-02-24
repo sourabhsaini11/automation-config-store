@@ -9896,9 +9896,6 @@ x-validations:
           - _NAME_: REQUIRED_ITEM_QUANTITY_SELECTED
             attr: $.message.order.items[*].quantity.selected.count
             _RETURN_: attr are present
-          - _NAME_: REQUIRED_ITEM_ADDON_ID
-            attr: $.message.order.items[*].add_ons[*].id
-            _RETURN_: attr are present
 
       - _NAME_: SELECT_ORDER_FULFILLMENTS
         action:

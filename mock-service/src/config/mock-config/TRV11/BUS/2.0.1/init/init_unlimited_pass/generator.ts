@@ -93,22 +93,29 @@ export async function initUnlimitedPassGenerator(existingPayload: any, sessionDa
     const uniqueFulfillmentIds = [
       ...new Set(filteredItems.flatMap((item: any) => item.fulfillment_ids || [])),
     ];
-    const formattedFulfillmentIds = uniqueFulfillmentIds.map((id) => ({ id }));
+    const formattedFulfillmentIds = uniqueFulfillmentIds.map((id) => ({
+  id,
+  type: "PASS",
+  customer: {
+    person: {
+      creds: [
+        {
+          type: "PAN",
+          id: sessionData.pan_id || "DEFAULT_PAN_ID"
+        }
+      ]
+    }
+  }
+}));
 
     const fulfillmentType = sessionData.fulfillments.find(
       (fulfillment: any) => fulfillment.type === "PASS"
     )?.type;
 
     existingPayload.message.order.fulfillments = formattedFulfillmentIds;
-
-    // If needed later
-    // if (fulfillmentType === "PASS") {
-    //   existingPayload.message.order.fulfillments = sessionData.fulfillments;
-    // }
-
+   
     existingPayload = updateSettlementAmount(existingPayload, sessionData);
     existingPayload = updateCollectedByAndBuyerFees(existingPayload, sessionData);
-    console.log("I AM HERE")
     return existingPayload;
   } catch (err) {
     console.error("Error in initUnlimitedPassGenerator:", err);

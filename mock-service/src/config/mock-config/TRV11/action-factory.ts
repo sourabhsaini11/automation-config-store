@@ -109,6 +109,8 @@ import { MockIssueOpenMetro_100_Class } from "./METRO/2.0.1/issue/issue_100/issu
 import { MockIssueCloseMetro_100_Class } from "./METRO/2.0.1/issue/issue_100/issue_close/class";
 import { MockOnIssueProcessingMetro_100_Class } from "./METRO/2.0.1/on_issue/on_issue_100/on_issue_processing/class";
 import { MockOnIssueResolvedMetro_100_Class } from "./METRO/2.0.1/on_issue/on_issue_100/on_issue_resolved/class";
+import { MockOnInitMonthlyPassBus201Class } from "./BUS/2.0.1/on_init/on_init_monthly_pass/class";
+import { MockInitUnlimitedPassBus201Class } from "./BUS/2.0.1/init/init_unlimited_pass/class";
 
 // helpers
 type Ctor<T> = new () => T;
@@ -154,6 +156,8 @@ const registry = {
   update_BUS_201: MockUpdateBus201Class,
   update_BUS_QR_201: MockUpdateQrBus201Class,
   on_search0_BUS_201: MockOnSearch0Bus201Class,
+  init_unlimited_pass_BUS_201: MockInitUnlimitedPassBus201Class,
+  on_init_monthly_pass_BUS_201: MockOnInitMonthlyPassBus201Class,
   
   // METRO 2.0.1
   cancel_METRO_201: MockCancelMetro201Class,

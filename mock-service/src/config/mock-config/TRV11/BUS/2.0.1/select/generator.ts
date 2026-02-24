@@ -59,7 +59,6 @@ export async function selectGenerator(existingPayload: any, sessionData: any) {
 		)
 	  ];
 	  const formattedFulfillmentIds = uniqueFulfillmentIds.map(id => ({ id }));
-	  console.log("select formatted_fulfil",sessionData.buyer_side_fulfillment_ids)
 	  existingPayload.message.order.fulfillments = formattedFulfillmentIds
 	return existingPayload;
 }

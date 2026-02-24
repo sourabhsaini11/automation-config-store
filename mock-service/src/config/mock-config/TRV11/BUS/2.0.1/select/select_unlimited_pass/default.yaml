@@ -1,7 +1,7 @@
 message:
   order:
     items:
-      - id: "I8"
+      - id: "I1"
         quantity:
           selected:
             count: 1

@@ -60,7 +60,7 @@ function updateFulfillmentsWithParentInfo(fulfillments: any[], sessionData: Sess
         type: "QR_AND_VEHICLE_NUMBER",
         status: "CLAIMED",
         token:"bPOPw0KGgoAAAANSUhEUgAAAH0AAAB9AQAAAACn",
-        valid_to: new Date(Date.now()+3*60*60*30).toISOString()
+        valid_to: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString()
       };
     } else {
       fulfillment.stops.push({
@@ -69,7 +69,7 @@ function updateFulfillmentsWithParentInfo(fulfillments: any[], sessionData: Sess
           type: "QR_AND_VEHICLE_NUMBER",
           status: "CLAIMED",
           token:"bPOPw0KGgoAAAANSUhEUgAAAH0AAAB9AQAAAACn",
-          valid_to: new Date(Date.now()+3*60*60*30).toISOString()
+          valid_to: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString()
         },
       });
     }

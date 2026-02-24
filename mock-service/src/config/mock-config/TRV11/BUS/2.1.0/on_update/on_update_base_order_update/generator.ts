@@ -5,7 +5,7 @@ export async function onUpdateGenerator(
   sessionData: any,
 ) {
   const routeFulfillmentId = "F1";
-  const duration = "PT2D";
+  const duration = "P2D";
   let validityEndDate = new Date();
   const daysMatch = duration.match(/P(?:T)?(\d+)D/);
   if (daysMatch) {

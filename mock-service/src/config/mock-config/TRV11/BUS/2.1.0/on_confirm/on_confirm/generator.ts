@@ -27,7 +27,7 @@ function updateOrderTimestamps(payload: any) {
   }
 
 function updateFulfillmentsWithParentInfo(fulfillments: any[],sessionData:SessionData): void {
-	const validTo = new Date(Date.now()+ 6*60*60*60).toISOString();
+	const validTo = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString();
 
 	fulfillments.forEach((fulfillment) => {
 		// Generate a random QR token

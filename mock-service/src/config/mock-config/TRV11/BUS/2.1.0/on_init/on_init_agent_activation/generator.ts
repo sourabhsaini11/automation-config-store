@@ -14,7 +14,7 @@ export async function onInitGenerator(existingPayload: any, sessionData: any) {
         fulfillment_ids,
         time: {
           label: "Validity",
-          duration: "PT2D",
+          duration: "P2D",
         },
       };
     });

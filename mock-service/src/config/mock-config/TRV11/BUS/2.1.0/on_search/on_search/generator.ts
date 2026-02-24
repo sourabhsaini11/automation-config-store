@@ -179,7 +179,7 @@ export async function onSearchGenerator(
           return {
             ...item,
             time: {
-              duration: "PT2D",
+              duration: "P2D",
               label: "Validity",
               timestamp: twoDaysFromNow.toISOString(),
             },
@@ -209,8 +209,8 @@ export async function onSearchGenerator(
             type: "START",
             location: {
               descriptor: {
-                name: "kashmere gate",
-                code: "KASHMERE_GATE",
+                name: "MOCK_STATION_1",
+                code: "MOCK_STATION_1",
               },
               gps: "28.666576, 77.233332",
             },
@@ -223,8 +223,8 @@ export async function onSearchGenerator(
             },
             location: {
               descriptor: {
-                name: "Indira Gandhi Technical Unviversity",
-                code: "INDIRA_GANDHI_TECHNICAL_UNIV",
+                name: "MOCK_STATION_2",
+                code: "MOCK_STATION_2",
               },
               gps: "28.624097, 77.204991",
             },
@@ -235,8 +235,8 @@ export async function onSearchGenerator(
             type: "END",
             location: {
               descriptor: {
-                name: "Greater Kailash",
-                code: "GREATER_KAILASH",
+                name: "MOCK_STATION_3",
+                code: "MOCK_STATION_3",
               },
               gps: "28.548230, 77.238039",
             },

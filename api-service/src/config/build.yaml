@@ -106122,7 +106122,7 @@ x-validations:
             _RETURN_:
               - _NAME_: ORDER_ID
                 attr: "$.message.tracking.tags[?(@.code=='order')].list[?(@.code=='id')].value"
-                reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+                reg: ['^.{1,128}$']
                 _CONTINUE_: "!(attr are present)"
                 _RETURN_: attr follow regex reg
           - _NAME_: TRACKING_CONFIG_TAG

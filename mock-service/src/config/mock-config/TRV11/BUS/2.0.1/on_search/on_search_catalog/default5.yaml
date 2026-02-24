@@ -33,7 +33,7 @@ message:
             vehicle:
               category: BUS
               variant: NON_AC
-          - id: F9
+          - id: F1
             type: PASS
             customer:
               person:
@@ -118,7 +118,7 @@ message:
                     https://dtc.delhi.gov.in/sites/default/files/DTC/logo/dtc_logo_2.png
                   size_type: xs
             fulfillment_ids:
-              - F9
+              - F1
             price:
               currency: INR
               value: "100"
@@ -139,7 +139,7 @@ message:
                     https://dtc.delhi.gov.in/sites/default/files/DTC/logo/dtc_logo_2.png
                   size_type: xs
             fulfillment_ids:
-              - F9
+              - F1
             price:
               currency: INR
               value: "200"

@@ -24460,6 +24460,7 @@ x-validations:
           - ROUTE
           - TRIP
           - TICKET
+          - PASS
         enumPath: "$.message.order.fulfillments[*].type"
         _CONTINUE_: "!(enumPath are present)"
         _RETURN_: enumPath all in enumList
@@ -24469,6 +24470,7 @@ x-validations:
           - END
           - INTERMEDIATE_STOP
           - TRANSIT_STOP
+          - PASS
         enumPath: "$.message.order.fulfillments[*].type"
         _CONTINUE_: "!(enumPath are present)"
         _RETURN_: enumPath all in enumList
@@ -24705,6 +24707,7 @@ x-validations:
         enumList:
           - ROUTE
           - TRIP
+          - PASS
         enumPath: "$.message.order.fulfillments[*].type"
         _CONTINUE_: "!(enumPath are present)"
         _RETURN_: enumPath all in enumList
@@ -24714,6 +24717,7 @@ x-validations:
           - END
           - INTERMEDIATE_STOP
           - TRANSIT_STOP
+          - PASS
         enumPath: "$.message.order.fulfillments[*].type"
         _CONTINUE_: "!(enumPath are present)"
         _RETURN_: enumPath all in enumList
@@ -24950,6 +24954,7 @@ x-validations:
         enumList:
           - ROUTE
           - TRIP
+          - PASS
         enumPath: "$.message.order.fulfillments[*].type"
         _CONTINUE_: "!(enumPath are present)"
         _RETURN_: enumPath all in enumList
@@ -26098,6 +26103,7 @@ x-validations:
           - ROUTE
           - TRIP
           - TICKET
+          - PASS
         useCasePath: "$.message.order.fulfillments[*].vehicle.category"
         useCode:
           - METRO
@@ -26739,6 +26745,7 @@ x-validations:
           - ROUTE
           - TRIP
           - TICKET
+          - PASS
         useCasePath: "$.message.order.fulfillments[*].vehicle.category"
         useCode:
           - METRO
@@ -27412,6 +27419,7 @@ x-validations:
           - ROUTE
           - TRIP
           - TICKET
+          - PASS
         useCasePath: "$.message.order.fulfillments[*].vehicle.category"
         useCode:
           - BUS
@@ -27703,6 +27711,7 @@ x-validations:
           - ROUTE
           - TRIP
           - TICKET
+          - PASS
       - _NAME_: REQUIRED_MESSAGE_NAME_28
         attr: "$.message.order.fulfillments[*].stops[*].instructions.name"
         _RETURN_: attr are present
@@ -28048,6 +28057,7 @@ x-validations:
           - ROUTE
           - TRIP
           - TICKET
+          - PASS
         useCasePath: "$.message.order.fulfillments[*].vehicle.category"
         useCode:
           - METRO

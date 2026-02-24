@@ -3,3 +3,4 @@ save-data:
   selected_item_ids: "$.message.order.items[*].id"
   selected_items: "$.message.order.items[*]"
   buyer_side_fulfillment_ids: "$.message.order.fulfillments[*]"
+  pan_id: "$.message.order.fulfillments[*].customer.person.creds[?(@.type=='PAN')].id"

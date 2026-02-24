@@ -84,9 +84,10 @@ export async function onSelectUnlimitedPassesGenerator(
   const updatedItems = items
     .map((item: any, index: number) => ({
       ...item,
-      price:
-        existingPayload.message.order.items[index]?.price ||
-        existingPayload.message.order.items[0]?.price,
+      price: {
+        currency: "INR",
+        value: item.price.value,
+      },
       quantity: {
         selected: {
           count: ids_with_quantities["items"][item.id] ?? 0, // Default to 0 if not in the mapping
@@ -95,6 +96,7 @@ export async function onSelectUnlimitedPassesGenerator(
     }))
     .filter((item) => item.quantity.selected.count > 0);
   existingPayload.message.order.items = updatedItems
+  const stationId = sessionData.start_code?.match(/\d+$/)?.[0] || "1";
   existingPayload.message.order.fulfillments = sessionData.fulfillments.map(
     (fulfillment) => ({
       ...fulfillment,
@@ -103,11 +105,11 @@ export async function onSelectUnlimitedPassesGenerator(
           type: "START",
           location: {
             descriptor: {
-              code: "std:011",
+              code: sessionData.start_code
             },
             gps: "28.666576, 77.233332",
           },
-          id: "1",
+          id: stationId,
         },
       ],
       vehicle: {

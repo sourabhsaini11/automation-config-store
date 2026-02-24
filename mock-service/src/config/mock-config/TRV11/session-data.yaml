@@ -47,3 +47,4 @@ session_data:
   issue_id: null
   on_issue_actions: null
   issue_actions: null
+  pan_id: null

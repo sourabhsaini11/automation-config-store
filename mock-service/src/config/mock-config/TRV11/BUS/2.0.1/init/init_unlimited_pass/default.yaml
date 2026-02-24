@@ -4,11 +4,15 @@ message:
       - id: I1
         quantity:
           selected:
-            count: 2
+            count: 1
     fulfillments:
       - id: F1
-      - id: F5
-      - id: F6
+        type: PASS
+        customer:
+          person:
+            creds:
+              - type: PAN
+                id: YKPYS1412V
     provider:
       id: P1
     billing:
@@ -26,7 +30,7 @@ message:
             list:
               - descriptor:
                   code: BUYER_FINDER_FEES_PERCENTAGE
-                value: "1"
+                value: '1'
           - descriptor:
               code: SETTLEMENT_TERMS
             display: false
@@ -42,16 +46,16 @@ message:
                 value: Delivery
               - descriptor:
                   code: MANDATORY_ARBITRATION
-                value: "TRUE"
+                value: 'TRUE'
               - descriptor:
                   code: COURT_JURISDICTION
                 value: New Delhi
               - descriptor:
                   code: DELAY_INTEREST
-                value: "2.5"
+                value: '2.5'
               - descriptor:
                   code: STATIC_TERMS
-                value: "https://www.abc.com/settlement-terms/"
+                value: 'https://www.abc.com/settlement-terms/'
               - descriptor:
                   code: SETTLEMENT_AMOUNT
-                value: "12505"
+                value: '12505'

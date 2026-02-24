@@ -1,4 +1,13 @@
-import { v4 as uuidV4 } from "uuid";
+
+function generateUuid(): string {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
+        const random = (Math.random() * 16) | 0;
+        const value = char === "x" ? random : (random & 0x3) | 0x8;
+        return value.toString(16);
+    });
+}
+
+
 export async function onUpdateStopEndGenerator(
   existingPayload: any,
   sessionData: any
@@ -26,7 +35,7 @@ export async function onUpdateStopEndGenerator(
   if (sessionData.payments) {
     existingPayload.message.order.payments = sessionData.payments;
     existingPayload.message.order.payments[1].params = {
-      transaction_id: uuidV4(),
+      transaction_id: generateUuid(),
       amount:
         sessionData?.updated_price ||
         existingPayload.message.order.quote.price.value,

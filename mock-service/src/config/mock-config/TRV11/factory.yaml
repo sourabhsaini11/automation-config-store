@@ -950,3 +950,14 @@ codes:
     action: issue
     default: METRO/2.0.1/issue/issue_100/issue_close/default.yaml
     message_id: true
+
+  - code: 344
+    action_id: init_unlimited_pass_BUS_201
+    action: init
+    default: BUS/2.0.1/init/init_unlimited_pass/default.yaml
+    message_id: true
+  - code: 345
+    action_id: on_init_monthly_pass_BUS_201
+    action: on_init
+    default: BUS/2.0.1/on_init/on_init_monthly_pass/default.yaml
+    message_id: false

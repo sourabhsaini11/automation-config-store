@@ -62,7 +62,7 @@ function updateFulfillmentsWithParentInfo(
     const m = istNow.getMonth();
     const d = istNow.getDate();
     const endIST = new Date(Date.UTC(y, m, d + 1, 4 - 5, 30 - 30, 0));
-    const validTo = endIST.toISOString();
+    const validTo = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString();
 
     // If a stop exists, modify the first stop; otherwise, create a new one
     if (fulfillment.stops.length > 0) {

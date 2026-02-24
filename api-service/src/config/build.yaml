@@ -105158,10 +105158,6 @@ x-validations:
             # reg: ['^[1-9][0-9]*$']
             # _CONTINUE_: "!(attr are present)"
             _RETURN_: attr are present
-          - _NAME_: QUOTE_TTL
-            attr: "$.message.order.quote.ttl"
-            reg: ['^P(?=\\d|T)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+S)?)?$']
-            _RETURN_: attr are present && attr follow regex reg
         - _NAME_: ORDER_PAYMENTS
           _RETURN_:
           - _NAME_: PAYMENTS_ID
@@ -105235,7 +105231,7 @@ x-validations:
         _RETURN_: &CONFIRM_ORDER
         - _NAME_: ORDER_ID
           attr: "$.message.order.id"
-          reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+          reg: ['^.{1,128}$']
           _RETURN_: attr follow regex reg
         - _NAME_: ORDER_STATE
           attr: "$.message.order.state"
@@ -105254,6 +105250,7 @@ x-validations:
             _RETURN_: attr are present
           - _NAME_: ITEM_DESCRIPTOR_CODE
             attr: "$.message.order.items[*].descriptor.code"
+            _CONTINUE_: "!(attr are present)"
             _RETURN_: attr are present
           - _NAME_: ITEMS_QUANTITY_COUNT
             attr: "$.message.order.items[*].quantity.count"
@@ -105385,8 +105382,8 @@ x-validations:
             condition: ["Self-Pickup"]
             _CONTINUE_: "!(attr_condition all in condition)"
             _RETURN_: attr are present
-        - _NAME_: ORDER_QUOTE
-          _RETURN_: *ON_INIT_QUOTE
+        # - _NAME_: ORDER_QUOTE
+        #   _RETURN_: *ON_INIT_QUOTE
         - _NAME_: ORDER_PAYMENTS
           _RETURN_: &CONFIRM_PAYMENT
 

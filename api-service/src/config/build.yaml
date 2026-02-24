@@ -103765,7 +103765,7 @@ x-validations:
             _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_STATE_DESCRIPTOR_CODE
             attr: "$.message.order.fulfillments[*].state.descriptor.code"
-            var_enum: [ "Accepted", "Cancelled", "Pending", "Order-delivered", "Return_Initiated", "Return_Pick_Failed", "Return_Approved", "Return_Picked", "Return_Delivered", "Liquidated", "Return_Rejected"]
+            var_enum: [ "Accepted", "Cancelled", "Pending", "Order-delivered","Order-picked-up", "Return_Initiated", "Return_Pick_Failed", "Return_Approved", "Return_Picked", "Return_Delivered", "Liquidated", "Return_Rejected"]
             _RETURN_: attr are present && attr all in var_enum
           - _NAME_: FULFILLMENTS_START
             _RETURN_:

@@ -4,7 +4,7 @@ function enhancePayments(payments: any) {
   const additionalParams = {
     bank_code: "XXXXXXXX",
     bank_account_number: "xxxxxxxxxxxxxx",
-    virtual_payment_address: "9988199772@okicic"
+    virtual_payment_address: "9988199772@okicic",
   };
 
   return payments.map((payment: any) => ({
@@ -27,12 +27,15 @@ function updateOrderTimestamps(payload: any) {
   return payload;
 }
 
-function updateFulfillmentsWithParentInfo(fulfillments: any[], sessionData: SessionData): void {
+function updateFulfillmentsWithParentInfo(
+  fulfillments: any[],
+  sessionData: SessionData,
+): void {
   const validTo = "2024-07-23T23:59:59.999Z";
 
   // Build a Map from fulfillment ID → buyer side fulfillment object
   const buyerFulfillmentMap = new Map(
-    (sessionData.buyer_side_fulfillment_ids || []).map((f: any) => [f.id, f])
+    (sessionData.buyer_side_fulfillment_ids || []).map((f: any) => [f.id, f]),
   );
 
   fulfillments.forEach((fulfillment) => {
@@ -55,12 +58,12 @@ function updateFulfillmentsWithParentInfo(fulfillments: any[], sessionData: Sess
     // fulfillment.vehicle= buyerEntry?.vehicle
     // If a stop exists, modify the first stop; otherwise, create a new one
     if (fulfillment.stops.length > 0) {
-      fulfillment.stops[0].type ="START"
+      fulfillment.stops[0].type = "START";
       fulfillment.stops[0].authorization = {
         type: "QR_AND_VEHICLE_NUMBER",
         status: "CLAIMED",
-        token:"bPOPw0KGgoAAAANSUhEUgAAAH0AAAB9AQAAAACn",
-        valid_to: new Date(Date.now()+3*60*60*30).toISOString()
+        token: "bPOPw0KGgoAAAANSUhEUgAAAH0AAAB9AQAAAACn",
+        valid_to: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
       };
     } else {
       fulfillment.stops.push({
@@ -68,26 +71,28 @@ function updateFulfillmentsWithParentInfo(fulfillments: any[], sessionData: Sess
         authorization: {
           type: "QR_AND_VEHICLE_NUMBER",
           status: "CLAIMED",
-          token:"bPOPw0KGgoAAAANSUhEUgAAAH0AAAB9AQAAAACn",
-          valid_to: new Date(Date.now()+3*60*60*30).toISOString()
+          token: "bPOPw0KGgoAAAANSUhEUgAAAH0AAAB9AQAAAACn",
+          valid_to: new Date(
+            Date.now() + 2 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
         },
       });
     }
   });
 }
 
-
 export async function onConfirmVehConfGenerator(
   existingPayload: any,
-  sessionData: SessionData
+  sessionData: SessionData,
 ) {
   const randomId = Math.random().toString(36).substring(2, 15);
   const order_id = randomId;
   existingPayload.message.order.payments = enhancePayments(
-    sessionData.updated_payments
+    sessionData.updated_payments,
   );
-  existingPayload.message.order.billing=sessionData.billing
-  existingPayload.message.order.cancellation_terms=sessionData.cancellation_terms[0]
+  existingPayload.message.order.billing = sessionData.billing;
+  existingPayload.message.order.cancellation_terms =
+    sessionData.cancellation_terms[0];
   // Check if items is a non-empty array
   if (sessionData.items.length > 0) {
     existingPayload.message.order.items = sessionData.items;
@@ -95,19 +100,27 @@ export async function onConfirmVehConfGenerator(
 
   // Check if fulfillments is a non-empty array
   if (sessionData.fulfillments.length > 0) {
+    let index = 0;
+    const fulfillments = sessionData?.buyer_side_fulfillment_ids
+      ?.flat()
+      ?.filter((f: any) => f?.type === "TICKET" && f?.vehicle?.registration)
+      ?.map((f: any) => f.vehicle.registration);
+
     existingPayload.message.order.fulfillments = sessionData.fulfillments.map(
       (fulfillment) => {
         if (fulfillment.type === "TICKET") {
+          const registration = fulfillments[index];
+          index++;
           return {
             ...fulfillment,
             vehicle: {
-              registration: "GL90",
+              registration: registration ?? "GL90",
             },
           };
         }
-        return fulfillment
+        return fulfillment;
       },
-    )
+    );
   }
   updateFulfillmentsWithParentInfo(sessionData.fulfillments, sessionData);
 
@@ -116,6 +129,6 @@ export async function onConfirmVehConfGenerator(
   }
   existingPayload.message.order.id = order_id;
   existingPayload = updateOrderTimestamps(existingPayload);
-  existingPayload.message.order.tags = sessionData.tags.flat()
+  existingPayload.message.order.tags = sessionData.tags.flat();
   return existingPayload;
 }

@@ -2,6 +2,12 @@ import { SessionData } from "../../../../session-types";
 
 const { v4: uuidv4 } = require("uuid");
 
+function getRandomFourDigitInt() {
+  const min = 1000;
+  const max = 9999;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 const transformPaymentsToPaid = (
   payments: any[],
   amount: any,
@@ -37,8 +43,28 @@ export async function confirmVehConWithoutUpdateGenerator(
     existingPayload.message.order.provider.id = sessionData.provider_id;
   }
 
-  existingPayload.message.order.fulfillments =
-    existingPayload.message.order.fulfillments;
+  if (sessionData.fulfillments) {
+    existingPayload.message.order.fulfillments = sessionData.fulfillments
+      ?.flat()
+      ?.map((f: any) => {
+        if (f.type === "TRIP") {
+          return {
+            id: f.id,
+            type: f.type,
+          };
+        }
+        if (f.type === "TICKET") {
+          const randomInt = getRandomFourDigitInt();
+          return {
+            id: f.id,
+            type: f.type,
+            vehicle: {
+              registration: `TX${randomInt}`,
+            },
+          };
+        }
+      });
+  }
 
   if (sessionData.payments) {
     existingPayload.message.order.payments = transformPaymentsToPaid(

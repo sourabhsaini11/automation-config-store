@@ -58,7 +58,7 @@ function transformFulfillments(fulfillments: any[], sessionData: any): any[] {
         descriptor: {
           code: "NUMBER",
         },
-        value: buyerSideFulfillment.vehicle.registration || ticketNumber,
+        value: ticketNumber,
       };
 
       if (ticketInfoTagIndex !== -1) {
@@ -99,18 +99,28 @@ export async function onUpdateVehConGenerator(
   }
 
   if (sessionData.fulfillments.length > 0) {
+    let index = 0;
+    const updateFulfillment = sessionData?.update_fulfillment
+      ?.flat()
+      ?.map((f: any) => {
+        if (f.vehicle.registration) {
+          return f.vehicle.registration;
+        }
+      });
     existingPayload.message.order.fulfillments = sessionData.fulfillments.map(
       (fulfillment) => {
         if (fulfillment.type === "TICKET") {
+          const registration = updateFulfillment[index] ?? "GL90";
+          index++;
           return {
             ...fulfillment,
             vehicle: {
               category: "BUS",
-              registration: "GL90",
+              registration: registration ?? "GL90",
             },
           };
         }
-        return fulfillment
+        return fulfillment;
       },
     );
     existingPayload.message.order.fulfillments = transformFulfillments(

@@ -10780,7 +10780,7 @@ x-validations:
                   - SOFT_CANCEL
                   - CONFIRM_CANCEL
                   - ACTIVE
-                  - COMPLETE
+                  - COMPLETED
                   - CANCELLED
                 _RETURN_: attr any in enumList
               - _NAME_: REGEX_ON_CONFIRM_UPDATED_AT
@@ -11329,7 +11329,7 @@ x-validations:
                   - SOFT-UPDATE
                   - CONFIRM-UPDATE
                   - ACTIVE
-                  - COMPLETE
+                  - COMPLETED
                   - CANCELLED
                 _RETURN_: attr any in enumList
               - _NAME_: REGEX_ON_UPDATE_UPDATED_AT

@@ -9781,21 +9781,7 @@ x-validations:
           - CURRENT_PAGE_NUMBER
         _CONTINUE_: "!(var_page all in subTags)"
         _RETURN_:
-          - _NAME_: REQUIRED_ADDON_ID
-            attr: $.message.catalog.providers[*].items[*].add_ons[*].id
-            _RETURN_: attr are present
-          - _NAME_: REQUIRED_ADDON_NAME
-            attr: $.message.catalog.providers[*].items[*].add_ons[*].descriptor.name
-            _RETURN_: attr are present
-          - _NAME_: REQUIRED_ADDON_PRICE
-            attr: $.message.catalog.providers[*].items[*].add_ons[*].price.value
-            _RETURN_: attr are present
-          - _NAME_: REQUIRED_ADDON_PRICE_CURRENCY
-            attr: $.message.catalog.providers[*].items[*].add_ons[*].price.currency
-            _RETURN_: attr are present
-          - _NAME_: REQUIRED_ADDON_PRICE_MAXIMUM_VALUE
-            attr: $.message.catalog.providers[*].items[*].add_ons[*].price.maximum_value
-            _RETURN_: attr are present
+
           - _NAME_: REQUIRED_CANCELLATION_TERMS_URL
             attr: $.message.catalog.providers[*].items[*].cancellation_terms[*].external_ref.url
             reg: ["^https:\/\/.*"]
@@ -9995,9 +9981,7 @@ x-validations:
           - _NAME_: REQUIRED_ITEM_ID
             attr: $.message.order.items[*].id
             _RETURN_: attr are present
-          - _NAME_: REQUIRED_ITEM_ADDS_ON_IDS
-            attr: $.message.order.items[*].add_ons[*].id
-            _RETURN_: attr are present
+
 
       - _NAME_: ON_SELECT_ORDER_QUOTE
         action:
@@ -10126,9 +10110,7 @@ x-validations:
           - _NAME_: REQUIRED_ITEM_QUANTITY
             attr: $.message.order.items[*].quantity.selected.count
             _RETURN_: attr are present
-          - _NAME_: REQUIRED_ADDS_ON_IDS
-            attr: $.message.order.items[*].add_ons[*].id
-            _RETURN_: attr are present
+
 
       - _NAME_: INIT_ORDER_PAYMENTS
         action:
@@ -10302,17 +10284,11 @@ x-validations:
               - _NAME_: REQUIRED_MESSAGE_ITEMS_ID
                 attr: $.message.order.items[*].id
                 _RETURN_: attr are present
-              - _NAME_: REQUIRED_MESSAGE_ITEMS_ADD_ONS
-                attr: $.message.order.items[*].add_ons[*].id
-                _RETURN_: attr are present
               - _NAME_: REQUIRED_ITEMS_LOCATIONS
                 attr: $.message.order.items[*].location_ids[*]
                 _RETURN_: attr are present
               - _NAME_: REQUIRED_ITEMS_QUANTITY
                 attr: $.message.order.items[*].quantity.selected.count
-                _RETURN_: attr are present
-              - _NAME_: REQUIRED_ITEMS_ADDONS
-                attr: $.message.order.items[*].add_ons[*].id
                 _RETURN_: attr are present
 
       - _NAME_: ON_INIT_ORDER_QUOTE
@@ -10538,17 +10514,11 @@ x-validations:
               - _NAME_: REQUIRED_MESSAGE_ITEMS_ID
                 attr: $.message.order.items[*].id
                 _RETURN_: attr are present
-              - _NAME_: REQUIRED_MESSAGE_ITEMS_ADD_ONS
-                attr: $.message.order.items[*].add_ons[*].id
-                _RETURN_: attr are present
               - _NAME_: REQUIRED_ITEMS_LOCATIONS
                 attr: $.message.order.items[*].location_ids[*]
                 _RETURN_: attr are present
               - _NAME_: REQUIRED_ITEMS_QUANTITY
                 attr: $.message.order.items[*].quantity.selected.count
-                _RETURN_: attr are present
-              - _NAME_: REQUIRED_ITEMS_ADDONS
-                attr: $.message.order.items[*].add_ons[*].id
                 _RETURN_: attr are present
 
       - _NAME_: CONFIRM_ORDER_QUOTE
@@ -10794,17 +10764,11 @@ x-validations:
               - _NAME_: REQUIRED_MESSAGE_ITEMS_ID
                 attr: $.message.order.items[*].id
                 _RETURN_: attr are present
-              - _NAME_: REQUIRED_MESSAGE_ITEMS_ADD_ONS
-                attr: $.message.order.items[*].add_ons[*].id
-                _RETURN_: attr are present
               - _NAME_: REQUIRED_ITEMS_LOCATIONS
                 attr: $.message.order.items[*].location_ids[*]
                 _RETURN_: attr are present
               - _NAME_: REQUIRED_ITEMS_QUANTITY
                 attr: $.message.order.items[*].quantity.selected.count
-                _RETURN_: attr are present
-              - _NAME_: REQUIRED_ITEMS_ADDONS
-                attr: $.message.order.items[*].add_ons[*].id
                 _RETURN_: attr are present
 
       - _NAME_: ON_CONFIRM_ORDER_FULFILLMENTS
@@ -11025,17 +10989,11 @@ x-validations:
               - _NAME_: REQUIRED_MESSAGE_ITEMS_ID
                 attr: $.message.order.items[*].id
                 _RETURN_: attr are present
-              - _NAME_: REQUIRED_MESSAGE_ITEMS_ADD_ONS
-                attr: $.message.order.items[*].add_ons[*].id
-                _RETURN_: attr are present
               - _NAME_: REQUIRED_ITEMS_LOCATIONS
                 attr: $.message.order.items[*].location_ids[*]
                 _RETURN_: attr are present
               - _NAME_: REQUIRED_ITEMS_QUANTITY
                 attr: $.message.order.items[*].quantity.selected.count
-                _RETURN_: attr are present
-              - _NAME_: REQUIRED_ITEMS_ADDONS
-                attr: $.message.order.items[*].add_ons[*].id
                 _RETURN_: attr are present
 
       - _NAME_: ON_STATUS_ORDER_FULFILLMENTS
@@ -11344,17 +11302,11 @@ x-validations:
               - _NAME_: REQUIRED_MESSAGE_ITEMS_ID
                 attr: $.message.order.items[*].id
                 _RETURN_: attr are present
-              - _NAME_: REQUIRED_MESSAGE_ITEMS_ADD_ONS
-                attr: $.message.order.items[*].add_ons[*].id
-                _RETURN_: attr are present
               - _NAME_: REQUIRED_ITEMS_LOCATIONS
                 attr: $.message.order.items[*].location_ids[*]
                 _RETURN_: attr are present
               - _NAME_: REQUIRED_ITEMS_QUANTITY
                 attr: $.message.order.items[*].quantity.selected.count
-                _RETURN_: attr are present
-              - _NAME_: REQUIRED_ITEMS_ADDONS
-                attr: $.message.order.items[*].add_ons[*].id
                 _RETURN_: attr are present
 
       - _NAME_: ON_UPDATE_ORDER_FULFILLMENTS

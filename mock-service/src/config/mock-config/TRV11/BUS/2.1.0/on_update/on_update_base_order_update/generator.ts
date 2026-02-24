@@ -86,8 +86,8 @@ export async function onUpdateGenerator(
           type: "START",
           location: {
             descriptor: {
-              name: "kashmere gate",
-              code: "KASHMERE_GATE",
+              name: "MOCK_STATION_1",
+              code: "MOCK_STATION_1",
             },
             gps: "28.666576, 77.233332",
           },
@@ -97,8 +97,8 @@ export async function onUpdateGenerator(
           type: "INTERMEDIATE_STOP",
           location: {
             descriptor: {
-              name: "Indira Gandhi Technical Unviversity",
-              code: "INDIRA_GANDHI_TECHNICAL_UNIV",
+              name: "MOCK_STATION_2",
+              code: "MOCK_STATION_2",
             },
             gps: "28.624097, 77.204991",
           },
@@ -109,8 +109,8 @@ export async function onUpdateGenerator(
           type: "INTERMEDIATE_STOP",
           location: {
             descriptor: {
-              name: "Yamuna Bazar",
-              code: "YAMUNA_BAZAR",
+              name: "MOCK_STATION_3",
+              code: "MOCK_STATION_3",
             },
             gps: "28.625972,77.209917",
           },
@@ -121,8 +121,8 @@ export async function onUpdateGenerator(
           type: "INTERMEDIATE_STOP",
           location: {
             descriptor: {
-              name: "dhaula kuan",
-              code: "DHAULA_KUAN",
+              name: "MOCK_STATION_4",
+              code: "MOCK_STATION_4",
             },
             gps: "28.610972,77.201717",
           },
@@ -133,8 +133,8 @@ export async function onUpdateGenerator(
           type: "INTERMEDIATE_STOP",
           location: {
             descriptor: {
-              name: "gpo",
-              code: "GPO",
+              name: "MOCK_STATION_5",
+              code: "MOCK_STATION_5",
             },
             gps: "28.623097,77.209917",
           },
@@ -145,8 +145,8 @@ export async function onUpdateGenerator(
           type: "END",
           location: {
             descriptor: {
-              name: "Greater Kailash",
-              code: "GREATER_KAILASH",
+              name: "MOCK_STATION_6",
+              code: "MOCK_STATION_6",
             },
             gps: "28.548230, 77.238039",
           },

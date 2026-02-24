@@ -53,6 +53,12 @@ export async function onInitGenerator(
         ...bap_tags_list.list,
         {
           descriptor: {
+            code: "SETTLEMENT_WINDOW",
+          },
+          value: "PT60M",
+        },
+        {
+          descriptor: {
             code: "SETTLEMENT_BANK_CODE",
           },
           value: "XXXXXXXX",

@@ -95,7 +95,7 @@ export async function onConfirmGenerator(
         price: item?.price ?? {},
         quantity: item?.quantity ?? {},
         time: (() => {
-          const duration = "PT2D";
+          const duration = "P2D";
           let validityEndDate = new Date();
           const daysMatch = duration.match(/P(?:T)?(\d+)D/);
           if (daysMatch) {

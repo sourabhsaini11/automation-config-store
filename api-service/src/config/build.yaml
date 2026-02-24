@@ -105116,48 +105116,48 @@ x-validations:
         #   _RETURN_: *INIT_BILLING
         - _NAME_: ORDER_FULFILLMENTS
           _RETURN_: *INIT_FULFILLMENTS
-        # - _NAME_: ORDER_QUOTE
-        #   _RETURN_: &ON_INIT_QUOTE
-        #   - _NAME_: QUOTE_PRICE_CURRENCY
-        #     attr: "$.message.order.quote.price.currency"
-        #     reg: ['^[A-Z]{3}$']
-        #     _RETURN_: attr are present && attr follow regex reg
-        #   - _NAME_: QUOTE_PRICE_VALUE
-        #     attr: "$.message.order.quote.price.value"
-        #     reg: ['^-?(\\d+\\.\\d{1,2}|\\d+)$']
-        #     _RETURN_: attr are present && attr follow regex reg
-        #   - _NAME_: QUOTE_BREAKUP_PRESENT
-        #     attr: "$.message.order.quote.breakup[*]['@ondc/org/item_id']"
-        #     _RETURN_: attr are present
-        #   - _NAME_: BREAKUP_ITEM_ID
-        #     attr: "$.message.order.quote.breakup[*]['@ondc/org/item_id']"
-        #     _RETURN_: attr are present
-        #   - _NAME_: BREAKUP_TITLE
-        #     attr: "$.message.order.quote.breakup[*].title"
-        #     _RETURN_: attr are present
-        #   - _NAME_: BREAKUP_TITLE_TYPE
-        #     attr: "$.message.order.quote.breakup[*]['@ondc/org/title_type']"
-        #     var_enum:
-        #       - item
-        #       - tax
-        #       - delivery
-        #       - packing
-        #       - discount
-        #       - misc
-        #     _RETURN_: attr are present && attr all in var_enum
-        #   - _NAME_: BREAKUP_PRICE_CURRENCY
-        #     attr: "$.message.order.quote.breakup[*].price.currency"
-        #     var_enum: ["INR"]
-        #     _RETURN_: attr are present && attr all in var_enum
-        #   - _NAME_: BREAKUP_PRICE_VALUE
-        #     attr: "$.message.order.quote.breakup[*].price.value"
-        #     reg: ['^-?(\\d+\\.\\d{1,2}|\\d+)$']
-        #     _RETURN_: attr are present && attr follow regex reg
-        #   - _NAME_: BREAKUP_ITEM_QUANTITY_COUNT
-        #     attr: "$.message.order.quote.breakup[*]['@ondc/org/item_quantity'].count"
-        #     # reg: ['^[1-9][0-9]*$']
-        #     # _CONTINUE_: "!(attr are present)"
-        #     _RETURN_: attr are present
+        - _NAME_: ORDER_QUOTE
+          _RETURN_: &ON_INIT_QUOTE
+          - _NAME_: QUOTE_PRICE_CURRENCY
+            attr: "$.message.order.quote.price.currency"
+            reg: ['^[A-Z]{3}$']
+            _RETURN_: attr are present && attr follow regex reg
+          - _NAME_: QUOTE_PRICE_VALUE
+            attr: "$.message.order.quote.price.value"
+            reg: ['^-?(\\d+\\.\\d{1,2}|\\d+)$']
+            _RETURN_: attr are present && attr follow regex reg
+          - _NAME_: QUOTE_BREAKUP_PRESENT
+            attr: "$.message.order.quote.breakup[*]['@ondc/org/item_id']"
+            _RETURN_: attr are present
+          - _NAME_: BREAKUP_ITEM_ID
+            attr: "$.message.order.quote.breakup[*]['@ondc/org/item_id']"
+            _RETURN_: attr are present
+          - _NAME_: BREAKUP_TITLE
+            attr: "$.message.order.quote.breakup[*].title"
+            _RETURN_: attr are present
+          - _NAME_: BREAKUP_TITLE_TYPE
+            attr: "$.message.order.quote.breakup[*]['@ondc/org/title_type']"
+            var_enum:
+              - item
+              - tax
+              - delivery
+              - packing
+              - discount
+              - misc
+            _RETURN_: attr are present && attr all in var_enum
+          - _NAME_: BREAKUP_PRICE_CURRENCY
+            attr: "$.message.order.quote.breakup[*].price.currency"
+            var_enum: ["INR"]
+            _RETURN_: attr are present && attr all in var_enum
+          - _NAME_: BREAKUP_PRICE_VALUE
+            attr: "$.message.order.quote.breakup[*].price.value"
+            reg: ['^-?(\\d+\\.\\d{1,2}|\\d+)$']
+            _RETURN_: attr are present && attr follow regex reg
+          - _NAME_: BREAKUP_ITEM_QUANTITY_COUNT
+            attr: "$.message.order.quote.breakup[*]['@ondc/org/item_quantity'].count"
+            # reg: ['^[1-9][0-9]*$']
+            # _CONTINUE_: "!(attr are present)"
+            _RETURN_: attr are present
         - _NAME_: ORDER_PAYMENTS
           _RETURN_:
           - _NAME_: PAYMENTS_ID
@@ -105382,8 +105382,8 @@ x-validations:
             condition: ["Self-Pickup"]
             _CONTINUE_: "!(attr_condition all in condition)"
             _RETURN_: attr are present
-        - _NAME_: ORDER_QUOTE
-          _RETURN_: *ON_INIT_QUOTE
+        # - _NAME_: ORDER_QUOTE
+        #   _RETURN_: *ON_INIT_QUOTE
         - _NAME_: ORDER_PAYMENTS
           _RETURN_: &CONFIRM_PAYMENT
 

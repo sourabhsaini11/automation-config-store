@@ -9142,7 +9142,7 @@ x-validations:
                   - SOFT-UPDATE
                   - CONFIRM-UPDATE
                   - ACTIVE
-                  - COMPLETE
+                  - COMPLETED
                   - CANCELLED
                 _RETURN_: attr any in enumList
               - _NAME_: REGEX_ON_UPDATE_UPDATED_AT

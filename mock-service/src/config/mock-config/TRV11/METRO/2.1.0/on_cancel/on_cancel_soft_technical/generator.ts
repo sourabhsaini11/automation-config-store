@@ -220,7 +220,7 @@ function applyCancellation(quote: Quote, cancellationCharges: number): Quote {
 function removeTicketStops(order: any) {
   if (!order.fulfillments || !Array.isArray(order.fulfillments)) return order;
 
-  order.fulfillments = order.fulfillments
+  order.fulfillments = order.fulfillments;
 
   return order;
 }
@@ -239,7 +239,22 @@ export async function onCancelSoftTechnicalGenerator(
 
   if (sessionData.fulfillments.length > 0) {
     existingPayload.message.order.fulfillments = sessionData.fulfillments;
-
+    if (sessionData?.flow_id === "TECHNICAL_CANCELLATION_FLOW") {
+      existingPayload.message.order.fulfillments =
+        existingPayload.message.order.fulfillments?.map((f: any) => {
+          if (f.type === "TICKET") {
+            return {
+              ...f,
+              state: {
+                descriptor: {
+                  code: "INACTIVE",
+                },
+              },
+            };
+          }
+          return f;
+        });
+    }
     existingPayload.message.order = removeTicketStops(
       existingPayload.message.order,
     );
@@ -267,7 +282,7 @@ export async function onCancelSoftTechnicalGenerator(
   }
   const now = new Date().toISOString();
   existingPayload.message.order.created_at = sessionData.created_at;
-  existingPayload.message.order.tags = sessionData?.tags?.flat()
+  existingPayload.message.order.tags = sessionData?.tags?.flat();
 
   //______SETTLEMENT_AMOUNT____________
   const tags = existingPayload?.message?.order?.tags;
@@ -320,7 +335,7 @@ export async function onCancelSoftTechnicalGenerator(
   if (settlementAmountItemBpp) {
     settlementAmountItemBpp.value = settlementAmount.toString();
   }
-  
+
   existingPayload.message.order.updated_at = now;
   return existingPayload;
 }

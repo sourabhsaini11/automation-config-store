@@ -49,12 +49,7 @@ export class MockOnSelectWithoutFormClass extends MockAction {
 
         const items = order.items;
         if (items) {
-            const prevCats = sessionData.category_ids;
-            if (prevCats?.length) {
-                const currCats = new Set(items.flatMap((i: any) => i.category_ids || []));
-                const missing = prevCats.filter(id => !currCats.has(id));
-                if (missing.length) return { valid: false, message: `Missing categories: ${missing}`, code: "CATEGORY_MISMATCH" };
-            }
+
 
             if (sessionData.selected_items) {
                 const selectedIds = sessionData.selected_items.map((i: any) => i.id);

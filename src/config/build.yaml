@@ -7706,7 +7706,7 @@ x-validations:
             attr: $.message.order.items[*].quantity.selected.count
             _RETURN_: attr are present
           - _NAME_: ITEM_ADDON_VALIDATION
-            attr: $.message.order.items[*].add_ons
+            attr: "$.message.order.items[*].add_ons[*].id"
             _CONTINUE_: "!(attr are present)"
             _RETURN_:
               - _NAME_: REQUIRED_ITEM_ADDON_ID
@@ -7812,7 +7812,7 @@ x-validations:
             attr: $.message.order.items[*].id
             _RETURN_: attr are present
           - _NAME_: ITEM_ADDON_VALIDATION
-            attr: $.message.order.items[*].add_ons
+            attr: "$.message.order.items[*].add_ons[*].id"
             _CONTINUE_: "!(attr are present)"
             _RETURN_:
               - _NAME_: REQUIRED_ITEM_ADDS_ON_IDS
@@ -7946,7 +7946,7 @@ x-validations:
             attr: $.message.order.items[*].quantity.selected.count
             _RETURN_: attr are present
           - _NAME_: ITEM_ADDON_VALIDATION
-            attr: $.message.order.items[*].add_ons
+            attr: "$.message.order.items[*].add_ons[*].id"
             _CONTINUE_: "!(attr are present)"
             _RETURN_:
               - _NAME_: REQUIRED_ADDS_ON_IDS

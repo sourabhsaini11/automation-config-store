@@ -134,4 +134,5 @@ export interface Input {
 	adult_ticket_count?: string;
 	child_ticket_count?: string;
 	journey_date?: string;
+	data: any
 }

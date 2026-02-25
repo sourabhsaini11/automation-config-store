@@ -8,3 +8,4 @@ save-data:
   updated_at: "$.message.order.updated_at"
   items: "$.message.order.items[*]"
   order_id: "$.message.order.id"
+  quote: "$.message.order.quote"

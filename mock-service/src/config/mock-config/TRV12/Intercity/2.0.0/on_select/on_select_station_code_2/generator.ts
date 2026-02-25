@@ -24,7 +24,7 @@ function calculateQuote(sessionData: SessionData, existingPayload: any) {
   const seatFare = 50;
   const convenienceFee = 19;
 
-  const seatCount = sessionData?.selected_item_counts ?? 0;
+  const seatCount = Number(sessionData?.selected_item_counts || 0);
   const baseFare = baseFarePerSeat * seatCount;
   const tax = Math.round(baseFare * 0.06);
 

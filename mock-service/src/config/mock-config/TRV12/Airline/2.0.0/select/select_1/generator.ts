@@ -1,4 +1,4 @@
-function createItemPayload(userInputItem: any): any {
+function createItemPayload(userInputItem: any, addOnsToInclude: any[] = []): any {
   const itemPayload: any = {
     quantity: {
       selected: {
@@ -7,26 +7,18 @@ function createItemPayload(userInputItem: any): any {
     },
   };
 
-  if (
-    userInputItem.addOns &&
-    Array.isArray(userInputItem.addOns) &&
-    userInputItem.addOns.length > 0
-  ) {
-    // Only use parent_item_id when add-ons exist
-    itemPayload.parent_item_id = userInputItem.itemId;
+  itemPayload.parent_item_id = userInputItem.itemId;
 
-    console.log('userInputItem.addOns', userInputItem.addOns)
+  if (addOnsToInclude.length > 0) {
+    console.log('Distributing add-ons for item:', userInputItem.itemId, addOnsToInclude);
 
-    // Add add-ons
-    itemPayload.add_ons = userInputItem.addOns.map((addOn: any) => ({
+
+    itemPayload.add_ons = addOnsToInclude.map((addOn: any) => ({
       id: addOn.id,
       quantity: {
-        selected: { count: addOn.count || 1},
+        selected: { count: addOn.count },
       },
     }));
-  } else {
-    // Use id only when no add-ons
-    itemPayload.parent_item_id = userInputItem.itemId;
   }
 
   return itemPayload;
@@ -37,34 +29,60 @@ export async function select_1_DefaultGenerator(
   existingPayload: any,
   sessionData: any
 ) {
-  
-  // delete existingPayload.context.bpp_uri;
-  // delete existingPayload.context.bpp_id;
-    const userInputs = typeof sessionData.user_inputs?.data === "string"
+
+  const userInputs = typeof sessionData.user_inputs?.data === "string"
     ? JSON.parse(sessionData.user_inputs.data)
     : sessionData.user_inputs;
 
-  console.log('userInputs.items', userInputs.items, userInputs)
 
-  // Process all items from user_inputs
-const itemPayloads = userInputs.items.flatMap((item: any) => {
-  const count = Number(item.count) || 1;
+  const mergedItemsMap = new Map<string, any>();
 
-  return Array.from({ length: count }, () =>
-    createItemPayload({ ...item, count: 1 })
-  );
-});
+  (userInputs.items || []).forEach((item: any) => {
+    const { count: countRaw, addOns: addOnsRaw, ...attributes } = item;
+    const itemCount = Number(countRaw) || 1;
+
+    const addOns = (addOnsRaw || [])
+      .map((ao: any) => ({
+        id: ao.id,
+        count: Number(ao.count) || 0
+      }))
+      .filter((ao: any) => ao.count > 0);
+
+    const normalizedAddOns = addOns
+      .map((ao: any) => ({
+        id: ao.id,
+        ratio: ao.count / itemCount
+      }))
+      .sort((a: any, b: any) => a.id.localeCompare(b.id));
+
+    const addonKey = normalizedAddOns.map((ao: any) => `${ao.id}:${ao.ratio}`).join('|');
+    const attributesKey = JSON.stringify(attributes);
+    const groupKey = `${attributesKey}_${addonKey}`;
+
+    if (mergedItemsMap.has(groupKey)) {
+      const existing = mergedItemsMap.get(groupKey);
+      existing.count += itemCount;
+      existing.addOns.forEach((existingAo: any) => {
+        const matchingInputAo = addOns.find((ia: any) => ia.id === existingAo.id);
+        if (matchingInputAo) {
+          existingAo.count += matchingInputAo.count;
+        }
+      });
+    } else {
+      mergedItemsMap.set(groupKey, {
+        ...attributes,
+        count: itemCount,
+        addOns: addOns.map((ao: any) => ({ ...ao }))
+      });
+    }
+  });
+
+  const itemPayloads = Array.from(mergedItemsMap.values()).map((item: any) => {
+    return createItemPayload(item, item.addOns);
+  });
 
 
-  // Update the payload with all selected items
   existingPayload.message.order.items = itemPayloads;
-
-  // Set provider ID from user_inputs
-  // existingPayload.message.order.provider.id = userInputs.provider;
-
-  // Create fulfillment object with the selected fulfillment ID
-  // const contextTimestamp =
-  //   existingPayload.context?.timestamp || new Date().toISOString();
 
   existingPayload.message.order.fulfillments = [
     {

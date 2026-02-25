@@ -2,8 +2,6 @@ export async function onSearch_1_Generator(
   existingPayload: any,
   sessionData: any
 ) {
-  delete existingPayload.context.bpp_uri;
-  delete existingPayload.context.bpp_id;
 
   const items = sessionData?.search_1_items ?? [];
   console.log("items", sessionData?.search_1_items);

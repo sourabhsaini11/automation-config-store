@@ -2,9 +2,7 @@ export async function onSelect_2_DefaultGenerator(
   existingPayload: any,
   sessionData: any
 ) {
-  delete existingPayload.context.bpp_uri;
-  delete existingPayload.context.bpp_id;
-
+  
   existingPayload.message.order.provider = sessionData?.on_select_1_provider;
 
   const items = sessionData?.select_2_items.map((i: any) => {

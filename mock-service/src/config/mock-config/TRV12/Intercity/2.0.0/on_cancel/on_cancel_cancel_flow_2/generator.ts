@@ -13,7 +13,7 @@ export async function onCancelGenerator(
   existingPayload.message.order.payments = sessionData.payments;
   existingPayload.message.order.fulfillments = sessionData.fulfillments;
 
-  existingPayload.message.order.created_at = sessionData.created_at;
-  existingPayload.message.order.updated_at = sessionData.updated_at;
+    existingPayload.message.order.created_at = sessionData?.created_at ?? new Date().toISOString()
+  existingPayload.message.order.updated_at = existingPayload?.context?.timestamp ?? new Date().toISOString()
   return existingPayload;
 }

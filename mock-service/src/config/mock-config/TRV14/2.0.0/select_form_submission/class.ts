@@ -49,14 +49,7 @@ export class MockSelect2Class extends MockAction {
 
         const items = order.items;
         if (items) {
-            const prevCats = sessionData.category_ids;
-            if (prevCats?.length) {
-                const currCats = new Set(items.flatMap((i: any) => i.category_ids || []));
-                const missing = prevCats.filter(id => !currCats.has(id));
-                if (missing.length) return { valid: false, message: `Missing categories: ${missing}`, code: "CATEGORY_MISMATCH" };
-            }
 
-            // Check against session search results
             if (sessionData.items) {
                 const validItemIds = new Set(sessionData.items.map((i: any) => i.id));
                 const invalidIds = items.filter((i: any) => !validItemIds.has(i.id)).map((i: any) => i.id);

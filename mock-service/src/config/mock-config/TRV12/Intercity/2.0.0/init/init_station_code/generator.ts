@@ -77,7 +77,41 @@ function transformFulfillments(fulfillments: any) {
       person: { name: "RACHEL ADAMS", age: "27", gender: "FEMALE" },
       contact: { phone: "+91-9723797890" },
     },
+    {
+      person: { name: "Amit Sharma", age: "34", gender: "MALE" },
+      contact: { phone: "+91-9812345670" },
+    },
+    {
+      person: { name: "Priya Nair", age: "29", gender: "FEMALE" },
+      contact: { phone: "+91-9876543210" },
+    },
+    {
+      person: { name: "Rahul Verma", age: "41", gender: "MALE" },
+      contact: { phone: "+91-9765432109" },
+    },
+    {
+      person: { name: "Sneha Kapoor", age: "25", gender: "FEMALE" },
+      contact: { phone: "+91-9654321098" },
+    },
+    {
+      person: { name: "David Thomas", age: "38", gender: "MALE" },
+      contact: { phone: "+91-9543210987" },
+    },
+    {
+      person: { name: "Anjali Mehta", age: "31", gender: "FEMALE" },
+      contact: { phone: "+91-9432109876" },
+    },
+    {
+      person: { name: "Karan Singh", age: "36", gender: "MALE" },
+      contact: { phone: "+91-9321098765" },
+    },
+    {
+      person: { name: "Meera Iyer", age: "28", gender: "FEMALE" },
+      contact: { phone: "+91-9210987654" },
+    }
   ];
+
+
 
   return fulfillments.map((f: any, index: number) => {
     if (f.id === "F1") {

@@ -2,9 +2,7 @@ export async function onCancelConfirmSellerCancellationGenerator(
   existingPayload: any,
   sessionData: any
 ) {
-  delete existingPayload.context.bpp_uri;
-  delete existingPayload.context.bpp_id;
-
+  
   existingPayload.message.order.id = sessionData?.confirm_order_id ?? "O1";
   (existingPayload.message.order.cancellation.time =
     existingPayload?.context?.timestamp ?? "2023-10-03T02:00:08.143Z"),

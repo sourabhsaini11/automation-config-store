@@ -28,25 +28,54 @@ export class MockSelectClass extends MockAction {
     generator(existingPayload: any, sessionData: SessionData): Promise<any> {
         return selectDefaultGenerator(existingPayload, sessionData);
     }
-    async validate(targetPayload: any): Promise<MockOutput> {
+    async validate(targetPayload: any, sessionData: SessionData): Promise<MockOutput> {
+        const order = targetPayload?.message?.order;
+        const provider = order?.provider;
+        if (!provider) return { valid: false, message: "Provider not found", code: "MISSING_PROVIDER" };
+
+        if (sessionData.provider_id && provider.id !== sessionData.provider_id)
+            return { valid: false, message: `Provider ID mismatch with session: ${sessionData.provider_id}`, code: "ID_MISMATCH" };
+
+        const fulfillments = order?.fulfillments;
+        if (sessionData.fulfillments && fulfillments) {
+            const validFulfillmentIds = new Set(sessionData.fulfillments.map((f: any) => f.id));
+            const invalidFulfillmentIds = fulfillments.filter((f: any) => !validFulfillmentIds.has(f.id)).map((f: any) => f.id);
+            if (invalidFulfillmentIds.length) {
+                return { valid: false, message: `Fulfillment IDs [${invalidFulfillmentIds.join(", ")}] not found in previous search results`, code: "FULFILLMENT_ID_MISMATCH" };
+            }
+        }
+
+        if (order?.items) {
+            const selecteditems = order.items;
+            const itemsOnsearch = sessionData.items;
+
+            if (itemsOnsearch) {
+                const validItemIds = new Set(itemsOnsearch.map((i: any) => i.id));
+                const invalidItemIds = selecteditems.filter((i: any) => !validItemIds.has(i.id)).map((i: any) => i.id);
+                if (invalidItemIds.length) {
+                    return { valid: false, message: `Item IDs [${invalidItemIds.join(", ")}] not found in previous search results`, code: "ITEM_ID_MISMATCH" };
+                }
+            }
+        }
+
         return { valid: true };
     }
     async meetRequirements(sessionData: SessionData): Promise<MockOutput> {
         // Validate user_inputs structure exists
         if (!sessionData.user_inputs) {
-            return { 
-                valid: false, 
+            return {
+                valid: false,
                 message: "user_inputs not found in session data",
                 code: "MISSING_USER_INPUTS"
             };
         }
 
-        const userInputs : any = sessionData.user_inputs;
+        const userInputs: any = sessionData.user_inputs;
 
         // Validate provider
         if (!userInputs.provider) {
-            return { 
-                valid: false, 
+            return {
+                valid: false,
                 message: "provider is required in user_inputs",
                 code: "MISSING_PROVIDER"
             };
@@ -54,8 +83,8 @@ export class MockSelectClass extends MockAction {
 
         // Validate fulfillment
         if (!userInputs.fulfillment) {
-            return { 
-                valid: false, 
+            return {
+                valid: false,
                 message: "fulfillment is required in user_inputs",
                 code: "MISSING_FULFILLMENT"
             };
@@ -63,8 +92,8 @@ export class MockSelectClass extends MockAction {
 
         // Validate items array
         if (!userInputs.items || !Array.isArray(userInputs.items) || userInputs.items.length === 0) {
-            return { 
-                valid: false, 
+            return {
+                valid: false,
                 message: "items array is required and must not be empty in user_inputs",
                 code: "MISSING_OR_EMPTY_ITEMS"
             };
@@ -74,14 +103,14 @@ export class MockSelectClass extends MockAction {
         for (let i = 0; i < userInputs.items.length; i++) {
             const item = userInputs.items[i];
             if (!item.itemId) {
-                return { 
-                    valid: false, 
+                return {
+                    valid: false,
                     message: `itemId is required for item at index ${i}`,
                     code: "MISSING_ITEM_ID"
                 };
             }
         }
-        
+
         return { valid: true };
     }
 } 

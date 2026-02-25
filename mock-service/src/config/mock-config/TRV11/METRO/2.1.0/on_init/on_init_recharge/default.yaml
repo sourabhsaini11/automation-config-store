@@ -118,7 +118,7 @@ message:
             value: 7 INR
           - descriptor:
               code: SETTLEMENT_TYPE
-            value: upi
+            value: NEFT
           - descriptor:
               code: SETTLEMENT_BANK_CODE
             value: XXXXXXXX

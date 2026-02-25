@@ -104,6 +104,22 @@ export async function onUpdateAcceptedGenerator(
 
   if (sessionData.fulfillments.length > 0) {
     existingPayload.message.order.fulfillments = sessionData.fulfillments;
+    if (sessionData?.flow_id === "DELAYED_CANCELLATION_FLOW_ACCEPTED") {
+      existingPayload.message.order.fulfillments =
+        existingPayload.message.order.fulfillments?.map((f: any) => {
+          if (f.type === "TICKET") {
+            return {
+              ...f,
+              state: {
+                descriptor: {
+                  code: "INACTIVE",
+                },
+              },
+            };
+          }
+          return f;
+        });
+    }
   }
 
   // existingPayload.message.order.fulfillments.forEach((fulfillment: any) => {

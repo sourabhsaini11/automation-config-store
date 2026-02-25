@@ -28,7 +28,37 @@ export class MockSelect2Class extends MockAction {
     generator(existingPayload: any, sessionData: SessionData): Promise<any> {
         return select2Generator(existingPayload, sessionData);
     }
-    async validate(targetPayload: any): Promise<MockOutput> {
+    async validate(targetPayload: any, sessionData: SessionData): Promise<MockOutput> {
+        const order = targetPayload?.message?.order;
+        if (!order) return { valid: false, message: "Order not found in message", code: "MISSING_ORDER" };
+
+        const provider = order.provider;
+        if (!provider) return { valid: false, message: "Provider not found in order", code: "MISSING_PROVIDER" };
+
+        if (sessionData.provider_id && provider.id !== sessionData.provider_id)
+            return { valid: false, message: `Provider ID mismatch with session: ${sessionData.provider_id}`, code: "ID_MISMATCH" };
+
+        const fulfillments = order.fulfillments;
+        if (sessionData.fulfillments && fulfillments) {
+            const validFulfillmentIds = new Set(sessionData.fulfillments.map((f: any) => f.id));
+            const invalidFulfillmentIds = fulfillments.filter((f: any) => !validFulfillmentIds.has(f.id)).map((f: any) => f.id);
+            if (invalidFulfillmentIds.length) {
+                return { valid: false, message: `Fulfillment IDs [${invalidFulfillmentIds.join(", ")}] not found in previous search results`, code: "FULFILLMENT_ID_MISMATCH" };
+            }
+        }
+
+        const items = order.items;
+        if (items) {
+
+            if (sessionData.items) {
+                const validItemIds = new Set(sessionData.items.map((i: any) => i.id));
+                const invalidIds = items.filter((i: any) => !validItemIds.has(i.id)).map((i: any) => i.id);
+                if (invalidIds.length) {
+                    return { valid: false, message: `Item IDs [${invalidIds.join(", ")}] not found in previous search results`, code: "ITEM_ID_MISMATCH" };
+                }
+            }
+        }
+
         return { valid: true };
     }
     async meetRequirements(sessionData: SessionData): Promise<MockOutput> {

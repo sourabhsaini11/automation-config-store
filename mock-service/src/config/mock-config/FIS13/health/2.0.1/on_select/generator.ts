@@ -81,5 +81,15 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
     existingPayload.message.order.items[0].xinput.form.url = url;
   }
 
+  // Carry forward or remove add_ons based on user selection from select step
+  if (existingPayload.message?.order?.items?.[0]) {
+    const userAddOns = sessionData.user_selected_add_ons;
+    if (Array.isArray(userAddOns) && userAddOns.length > 0) {
+      existingPayload.message.order.items[0].add_ons = userAddOns;
+    } else {
+      delete existingPayload.message.order.items[0].add_ons;
+    }
+  }
+
   return existingPayload;
-} 
+}

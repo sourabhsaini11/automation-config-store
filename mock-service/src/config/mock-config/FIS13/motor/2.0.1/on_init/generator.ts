@@ -71,9 +71,19 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
     existingPayload.message.order.items[0].xinput.form.id = crypto.randomUUID();
     const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/vehicle_nominee_details_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
     existingPayload.message.order.items[0].xinput.form.url = url;
-
+    console.log("Generated dynamic form ID:", existingPayload.message.order.items[0].xinput.form.id);
   }
 
-  
+
+  // Carry forward or remove add_ons based on user selection from select step
+  if (existingPayload.message?.order?.items?.[0]) {
+    const userAddOns = sessionData.user_selected_add_ons;
+    if (Array.isArray(userAddOns) && userAddOns.length > 0) {
+      existingPayload.message.order.items[0].add_ons = userAddOns;
+    } else {
+      delete existingPayload.message.order.items[0].add_ons;
+    }
+  }
+
   return existingPayload;
 }

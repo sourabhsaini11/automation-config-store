@@ -38,6 +38,7 @@ export interface SessionData {
 	collected_by: string | undefined;
 	updated_price: string | undefined;
 	selected_add_ons: any[] | undefined;
+	user_selected_add_ons: any[] | undefined;
 	created_at: string | undefined;
 	cancellation_reason_id: string | undefined;
 	cancellation_quote: any[] | undefined;

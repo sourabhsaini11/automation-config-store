@@ -7,3 +7,4 @@ save-data:
   fulfillments: "$.message.catalog.providers[0].fulfillments[*]"
   fullfillment_ids: "$.message.catalog.providers[0].fulfillments[*].id"
   selected_provider: "$.message.catalog.providers[0]"
+  selected_add_ons: "$.message.catalog.providers[0].items[0].add_ons[*]"

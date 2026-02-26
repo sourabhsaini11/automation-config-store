@@ -35,14 +35,21 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
   }
 
   // Carry forward item.id from session data
-  const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = selectedItem.id;
+  const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  if (childItem?.id && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = childItem.id;
+    if (childItem.parent_item_id) {
+      existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
+    }
+
   }
 
+  // Resolve fulfillment ID (handle both string and array from session)
+  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
+
   // Carry forward fulfillment.id from session data
-  if (sessionData.fullfillment_ids?.[0] && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
   }
 
   // Carry forward quote.id from session data

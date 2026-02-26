@@ -53,7 +53,9 @@ import { MockOnInitClass as MotorMockOnInitClass } from "./motor/2.0.1/on_init/c
 import { MockOnInitClass2 as MotorMockOnInitClass2 } from "./motor/2.0.1/on_init2/class";
 import { MockOnInitClass3 as MotorMockOnInitClass3 } from "./motor/2.0.1/on_init3/class";
 import { MockConfirmClass as MotorMockConfirmClass } from "./motor/2.0.1/confirm/class";
+import { MockConfirm2Class as MotorMockConfirm2Class } from "./motor/2.0.1/confirm2/class";
 import { MockOnConfirmClass as MotorMockOnConfirmClass } from "./motor/2.0.1/on_confirm/class";
+import { MockOnConfirm2Class as MotorMockOnConfirm2Class } from "./motor/2.0.1/on_confirm2/class";
 import { MockStatusClass as MotorMockStatusClass } from "./motor/2.0.1/status/class";
 import { MockOnStatusClass as MotorMockOnStatusClass } from "./motor/2.0.1/on_status/class";
 import { MockOnStatusUnsolicitedClass as MotorMockOnStatusUnsolicitedClass } from "./motor/2.0.1/on_status_unsolicited/class";
@@ -88,6 +90,8 @@ import { MockSearch2Class } from "./health/2.0.1/search2/class";
 import { MockSearch3Class } from "./health/2.0.1/search3/class";
 import { MockSearch4Class } from "./health/2.0.1/search4/class";
 import { MockOnSearchClass4 } from "./health/2.0.1/on_search4/class";
+import { MockOnConfirm2Class } from "./health/2.0.1/on_confirm2/class";
+import { MockConfirm2Class } from "./health/2.0.1/confirm2/class";
 
 
 // types/helpers
@@ -128,6 +132,8 @@ const registry = {
 	// confirm / on_confirm
 	confirm: MockConfirmClass,
 	on_confirm: MockOnConfirmClass,
+	confirm2: MockConfirm2Class,
+	on_confirm2: MockOnConfirm2Class,
 
 	// status / on_status
 	status: MockStatusClass,
@@ -192,6 +198,8 @@ const registry = {
 	// confirm / on_confirm
 	confirm_motor: MotorMockConfirmClass,
 	on_confirm_motor: MotorMockOnConfirmClass,
+	confirm_motor2: MotorMockConfirm2Class,
+	on_confirm_motor2: MotorMockOnConfirm2Class,
 
 	// status / on_status
 	status_motor: MotorMockStatusClass,

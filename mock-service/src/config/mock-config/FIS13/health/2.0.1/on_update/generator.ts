@@ -23,6 +23,9 @@ export async function onUpdateDefaultGenerator(existingPayload: any, sessionData
       existingPayload.message.order.created_at = sessionData.created_at;
     }
   }
+  // Resolve fulfillment ID (handle both string and array from session)
+  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
+
   // Load order from session data
   if (existingPayload.message) {
     const order = existingPayload.message.order || (existingPayload.message.order = {});
@@ -49,8 +52,8 @@ export async function onUpdateDefaultGenerator(existingPayload: any, sessionData
     }
 
     // Map fulfillment.id from session data
-    if (sessionData.fullfillment_ids?.[0] && order.fulfillments?.[0]) {
-      order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+    if (fulfillmentId && order.fulfillments?.[0]) {
+      order.fulfillments[0].id = fulfillmentId;
     }
   }
 

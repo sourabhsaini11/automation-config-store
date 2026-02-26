@@ -32,10 +32,13 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
     existingPayload.message.catalog.providers[0].id = crypto.randomUUID();
   }
 
-  // Generate dynamic item IDs (replace hardcoded placeholders)
+  // Generate dynamic item IDs and form IDs (replace hardcoded placeholders)
   if (existingPayload.message?.catalog?.providers?.[0]?.items) {
     existingPayload.message.catalog.providers[0].items.forEach((item: any) => {
       item.id = crypto.randomUUID();
+      if (item.xinput?.form) {
+        item.xinput.form.id = crypto.randomUUID();
+      }
     });
   }
 

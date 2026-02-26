@@ -29,20 +29,25 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
     console.log("Updated provider.id:", sessionData.selected_provider.id);
   }
   
-  // Carry forward item.id from session data
-  const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = selectedItem.id;
+  // Generate child item ID and set parent_item_id from on_search item
+  const parentItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  if (parentItem?.id && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].parent_item_id = parentItem.id;
+    existingPayload.message.order.items[0].id = crypto.randomUUID();
+
   }
 
+  // Resolve fulfillment ID (handle both string and array from session)
+  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
+
   // Carry forward fulfillment.id from session data
-  if (sessionData.fullfillment_ids?.[0] && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
   }
 
   // Carry forward quote.id from session data
-  if (sessionData.quote_id && existingPayload.message?.order?.quote) {
-    existingPayload.message.order.quote.id = sessionData.quote_id;
+  if ((sessionData.quote_id || sessionData.quote?.id) && existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = sessionData.quote_id || sessionData.quote?.id;
   }
 
   return existingPayload;

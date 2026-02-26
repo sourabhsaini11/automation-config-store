@@ -31,16 +31,24 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
     existingPayload.message.order.items[0].id = selectedItem.id;
   }
 
+  // Resolve fulfillment ID (handle both string and array from session)
+  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
+
   // Carry forward fulfillment.id from session data
-  if (sessionData.fullfillment_ids?.[0] && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
   }
 
   // Carry forward quote.id from session data
   if (sessionData.quote_id && existingPayload.message?.order?.quote) {
     existingPayload.message.order.quote.id = sessionData.quote_id;
   }
-  
+
+  // If flow is pre-order, set payment type to PRE-ORDER
+  if (sessionData.flow_id === 'Motor_Insurance_Application(PRE-ORDER)' && existingPayload.message?.order?.payments?.[0]) {
+    existingPayload.message.order.payments[0].type = "PRE-ORDER";
+  }
+
   // Update customer name in fulfillments if available from session data
   if (sessionData.customer_name && existingPayload.message?.order?.fulfillments?.[0]?.customer?.person) {
     existingPayload.message.order.fulfillments[0].customer.person.name = sessionData.customer_name;
@@ -63,9 +71,11 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
     console.log("check for form +++")
  existingPayload.message.order.items = existingPayload.message.order.items.map((item: any) => {
       if (item.xinput?.form) {
-        // Generate dynamic form URL with session data
+        // Generate dynamic form ID and URL
+        item.xinput.form.id = crypto.randomUUID();
         const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/personal_details_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
         item.xinput.form.url = url;
+
       }
       return item;
     });

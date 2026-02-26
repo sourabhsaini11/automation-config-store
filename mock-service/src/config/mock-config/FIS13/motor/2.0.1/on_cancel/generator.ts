@@ -30,9 +30,13 @@ export async function onCancelDefaultGenerator(existingPayload: any, sessionData
     }
 
     // Map item.id from session data (carry-forward from confirm)
-    const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-    if (selectedItem?.id && order.items?.[0]) {
-      order.items[0].id = selectedItem.id;
+    const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+    if (childItem?.id && order.items?.[0]) {
+      order.items[0].id = childItem.id;
+      if (childItem.parent_item_id) {
+        order.items[0].parent_item_id = childItem.parent_item_id;
+      }
+
     }
 
     // Map quote.id from session data (carry-forward from confirm)
@@ -40,9 +44,12 @@ export async function onCancelDefaultGenerator(existingPayload: any, sessionData
       order.quote.id = sessionData.quote_id;
     }
 
+    // Resolve fulfillment ID (handle both string and array from session)
+    const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
+
     // Map fulfillment.id from session data
-    if (sessionData.fullfillment_ids?.[0] && order.fulfillments?.[0]) {
-      order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+    if (fulfillmentId && order.fulfillments?.[0]) {
+      order.fulfillments[0].id = fulfillmentId;
     }
   }
 

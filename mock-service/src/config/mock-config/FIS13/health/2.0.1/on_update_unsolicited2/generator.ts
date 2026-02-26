@@ -32,6 +32,9 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
     });
   }
   
+  // Resolve fulfillment ID (handle both string and array from session)
+  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
+
   // Load order from session data
   if (existingPayload.message) {
     const order = existingPayload.message.order || (existingPayload.message.order = {});
@@ -58,8 +61,8 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
     }
 
     // Map fulfillment.id from session data
-    if (sessionData.fullfillment_ids?.[0] && order.fulfillments?.[0]) {
-      order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+    if (fulfillmentId && order.fulfillments?.[0]) {
+      order.fulfillments[0].id = fulfillmentId;
     }
   }
 

@@ -37,15 +37,14 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
   //     console.log("Updated item.id:", selectedItem.id);
   //   }
   // }
-  // Carry forward item.id from session data
-  const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = selectedItem.id;
-  }
+  // Generate dynamic child item ID and set parent_item_id from parent item in session
+  const parentItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  if (existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = crypto.randomUUID();
+    if (parentItem?.id) {
+      existingPayload.message.order.items[0].parent_item_id = parentItem.id;
+    }
 
-  // Carry forward fulfillment.id from session data
-  if (sessionData.fullfillment_ids?.[0] && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = sessionData.fullfillment_ids[0];
   }
 
   // Generate dynamic quote ID (replace hardcoded OFFER_ID/PROPOSAL_ID)
@@ -53,8 +52,9 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
     existingPayload.message.order.quote.id = crypto.randomUUID();
   }
 
-  // redirection to be done
- if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
+  // Generate dynamic form ID and URL
+  if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
+    existingPayload.message.order.items[0].xinput.form.id = crypto.randomUUID();
     const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/manual_review_form_motor?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
     existingPayload.message.order.items[0].xinput.form.url = url;
   }

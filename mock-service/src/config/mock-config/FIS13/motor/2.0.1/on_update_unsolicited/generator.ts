@@ -54,9 +54,12 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
       order.quote.id = sessionData.quote_id;
     }
 
+    // Resolve fulfillment ID (handle both string and array from session)
+    const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
+
     // Map fulfillment.id from session data
-    if (sessionData.fullfillment_ids?.[0] && order.fulfillments?.[0]) {
-      order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+    if (fulfillmentId && order.fulfillments?.[0]) {
+      order.fulfillments[0].id = fulfillmentId;
     }
   }
 

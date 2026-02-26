@@ -31,14 +31,20 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
     existingPayload.message.order.items[0].id = selectedItem.id;
   }
 
-  // Carry forward fulfillment.id from session data
-  if (sessionData.fullfillment_ids?.[0] && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+  // Generate dynamic fulfillment ID (BPP assigns fulfillment ID in on_init)
+  if (existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = crypto.randomUUID();
+
   }
 
   // Carry forward quote.id from session data
   if (sessionData.quote_id && existingPayload.message?.order?.quote) {
     existingPayload.message.order.quote.id = sessionData.quote_id;
+  }
+
+  // If flow is pre-order, set payment type to PRE-ORDER
+  if (sessionData.flow_id === 'Motor_Insurance_Application(PRE-ORDER)' && existingPayload.message?.order?.payments?.[0]) {
+    existingPayload.message.order.payments[0].type = "PRE-ORDER";
   }
 
   // Update customer name in fulfillments if available from session data
@@ -60,10 +66,12 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
   }
   //  Update form URLs for items with session data (preserve existing structure)
 
-   if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
+  // Generate dynamic form ID and URL
+  if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
+    existingPayload.message.order.items[0].xinput.form.id = crypto.randomUUID();
     const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/vehicle_nominee_details_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
     existingPayload.message.order.items[0].xinput.form.url = url;
-    existingPayload.message.order.items[0].xinput.form.id = "F06";
+
   }
 
   

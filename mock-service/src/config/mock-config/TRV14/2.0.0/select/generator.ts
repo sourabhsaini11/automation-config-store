@@ -67,7 +67,7 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
         {
           type: "START",
           time: {
-            timestamp: contextTimestamp
+            timestamp: userInputs?.timestamp || contextTimestamp
           }
         }
       ]

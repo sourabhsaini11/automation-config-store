@@ -30,23 +30,22 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
     console.log("Updated provider.id:", sessionData.selected_provider.id);
   }
   
-  // Update item.id if available from session data (carry-forward from select)
-  // if (sessionData.items && Array.isArray(sessionData.items) && sessionData.items.length > 0) {
-  //   const selectedItem = sessionData.items[0];
-  //   if (existingPayload.message?.order?.items?.[0]) {
-  //     existingPayload.message.order.items[0].id = selectedItem.id;
-  //     console.log("Updated item.id:", selectedItem.id);
-  //   }
-  // }
-  // Carry forward item.id from session data
-  const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = selectedItem.id;
+  // Carry forward child item ID and parent_item_id from select
+  const childItem = sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  if (childItem?.id && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = childItem.id;
+    if (childItem.parent_item_id) {
+      existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
+    }
+
   }
 
+  // Resolve fulfillment ID (handle both string and array from session)
+  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
+
   // Carry forward fulfillment.id from session data
-  if (sessionData.fullfillment_ids?.[0] && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
   }
 
   // Generate dynamic quote ID (replace hardcoded OFFER_ID/PROPOSAL_ID)
@@ -54,8 +53,30 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
     existingPayload.message.order.quote.id = crypto.randomUUID();
   }
 
-  // redirection to be done
- if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
+  // Update quote breakup item references with dynamic child item ID
+  if (existingPayload.message?.order?.quote?.breakup && childItem?.id) {
+    existingPayload.message.order.quote.breakup.forEach((b: any) => {
+      if (b.item?.id) b.item.id = childItem.id;
+    });
+  }
+
+  // Update PROPOSAL_ID tag value with dynamic quote ID
+  if (existingPayload.message?.order?.items?.[0]?.tags) {
+    const quoteId = existingPayload.message.order.quote?.id;
+    existingPayload.message.order.items[0].tags.forEach((tag: any) => {
+      if (tag.list) {
+        tag.list.forEach((listItem: any) => {
+          if (listItem.descriptor?.code === "PROPOSAL_ID" && quoteId) {
+            listItem.value = quoteId;
+          }
+        });
+      }
+    });
+  }
+
+  // Generate dynamic form ID and URL
+  if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
+    existingPayload.message.order.items[0].xinput.form.id = crypto.randomUUID();
     const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/verification_status?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
     existingPayload.message.order.items[0].xinput.form.url = url;
   }

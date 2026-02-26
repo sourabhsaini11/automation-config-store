@@ -45,9 +45,12 @@ export async function initDefaultGenerator(existingPayload: any, sessionData: an
     existingPayload.message.order.items[0].id = selectedItem.id;
   }
 
+  // Resolve fulfillment ID (handle both string and array from session)
+  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
+
   // Carry forward fulfillment.id from session data
-  if (sessionData.fullfillment_ids?.[0] && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = sessionData.fullfillment_ids[0];
+  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
   }
 
   // Carry forward quote.id from session data
@@ -55,12 +58,18 @@ export async function initDefaultGenerator(existingPayload: any, sessionData: an
     existingPayload.message.order.quote.id = sessionData.quote_id;
   }
 
+  // If flow is pre-order, set payment type to PRE-ORDER
+  const preOrderFlows = ['Health_Insurance_Application(PRE-ORDER-Individual)', 'Health_Insurance_Application(PRE-ORDER-Family)'];
+  if (preOrderFlows.includes(sessionData.flow_id) && existingPayload.message?.order?.payments?.[0]) {
+    existingPayload.message.order.payments[0].type = "PRE-ORDER";
+  }
+
    if (existingPayload.message?.order?.items?.[0]) {
     const item = existingPayload.message.order.items[0];
     if (item.xinput?.form) {
       const formId = sessionData.form_id || "F07";
       item.xinput.form.id = formId;
-      console.log("Updated form ID:", formId);
+    
     }
     
     // Set form status and submission_id

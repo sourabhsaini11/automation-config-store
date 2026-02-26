@@ -18,9 +18,11 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
     existingPayload.message.catalog.providers[0].items = existingPayload.message.catalog.providers[0].items.map((item: any) => {
       if (item.xinput?.form) {
         console.log('here isnide>>>>>>')
-        // Generate dynamic form URL with session data
+        // Generate dynamic form ID and URL with session data
+        item.xinput.form.id = crypto.randomUUID();
         const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/vehicle_details_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
         console.log("Form URL generated:", url);
+
         item.xinput.form.url = url;
       }
       return item;

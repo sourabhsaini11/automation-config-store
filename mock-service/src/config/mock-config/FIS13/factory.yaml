@@ -189,6 +189,16 @@ codes:
     action: on_search
     default: FIS13/health/2.0.1/on_search4/default.yaml
     message_id: false  
+  - code: 238
+    action_id: confirm2
+    action: confirm
+    default: FIS13/health/2.0.1/confirm2/default.yaml
+    message_id: true
+  - code: 239
+    action_id: on_confirm2
+    action: on_confirm
+    default: FIS13/health/2.0.1/on_confirm2/default.yaml
+    message_id: false  
 
 # // Motor Insurance //
   - code: 300
@@ -381,3 +391,13 @@ codes:
     action: on_status
     default: FIS13/motor/2.0.1/on_status_unsolicited5/default.yaml
     message_id: true      
+  - code: 338
+    action_id: confirm_motor2
+    action: confirm
+    default: FIS13/motor/2.0.1/confirm2/default.yaml
+    message_id: true
+  - code: 339
+    action_id: on_confirm_motor2
+    action: on_confirm
+    default: FIS13/motor/2.0.1/on_confirm2/default.yaml
+    message_id: false  

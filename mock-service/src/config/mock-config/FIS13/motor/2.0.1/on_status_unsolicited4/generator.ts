@@ -39,7 +39,7 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
     if (childItem.parent_item_id) {
       existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
     }
-
+    console.log("Updated item.id:", childItem.id, "parent_item_id:", childItem.parent_item_id);
   }
 
   // Resolve fulfillment ID (handle both string and array from session)
@@ -77,5 +77,15 @@ if (existingPayload.message?.order?.items?.[0]) {
       }
     }
   }
+  // Carry forward or remove add_ons based on user selection from select step
+  if (existingPayload.message?.order?.items?.[0]) {
+    const userAddOns = sessionData.user_selected_add_ons;
+    if (Array.isArray(userAddOns) && userAddOns.length > 0) {
+      existingPayload.message.order.items[0].add_ons = userAddOns;
+    } else {
+      delete existingPayload.message.order.items[0].add_ons;
+    }
+  }
+
   return existingPayload;
 }

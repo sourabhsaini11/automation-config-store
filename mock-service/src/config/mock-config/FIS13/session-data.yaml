@@ -40,6 +40,7 @@ session_data:
   collected_by: null
   updated_price: null
   selected_add_ons: []
+  user_selected_add_ons: []
   created_at: null
   cancellation_reason_id: null
   cancellation_quote: []

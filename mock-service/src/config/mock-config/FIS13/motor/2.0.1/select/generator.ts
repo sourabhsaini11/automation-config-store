@@ -54,5 +54,47 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
     existingPayload.message.order.quote.id = sessionData.quote_id;
   }
 
+  // Build add_ons from user-selected addon IDs and session data
+  if (sessionData.user_inputs?.addon_ids && sessionData.selected_add_ons?.length > 0) {
+    const addonIds = sessionData.user_inputs.addon_ids.split(",").map((id: string) => id.trim()).filter(Boolean);
+    const addonQuantities = sessionData.user_inputs.addon_quantities
+      ? sessionData.user_inputs.addon_quantities.split(",").map((q: string) => parseInt(q.trim()) || 1)
+      : addonIds.map(() => 1);
+
+    if (addonIds.length > 0) {
+      const selectedAddOns = addonIds.map((id: string, index: number) => {
+        const addon = sessionData.selected_add_ons.find((a: any) => a.id === id);
+        if (addon) {
+          return {
+            id: addon.id,
+            quantity: {
+              selected: {
+                count: addonQuantities[index] || 1,
+              },
+            },
+          };
+        }
+        return { id, quantity: { selected: { count: addonQuantities[index] || 1 } } };
+      });
+
+      if (existingPayload.message?.order?.items?.[0]) {
+        existingPayload.message.order.items[0].add_ons = selectedAddOns;
+        console.log("Added user-selected add_ons:", JSON.stringify(selectedAddOns));
+      }
+    } else {
+      // Remove add_ons if none selected
+      if (existingPayload.message?.order?.items?.[0]?.add_ons) {
+        delete existingPayload.message.order.items[0].add_ons;
+        console.log("Removed add_ons - none selected");
+      }
+    }
+  } else {
+    // Remove add_ons from default payload if no addon input provided
+    if (existingPayload.message?.order?.items?.[0]?.add_ons) {
+      delete existingPayload.message.order.items[0].add_ons;
+      console.log("Removed add_ons - no addon input provided");
+    }
+  }
+
   return existingPayload;
 } 

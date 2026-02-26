@@ -70,7 +70,7 @@ export async function selectForPartialCancellationGenerator(existingPayload: any
         {
           type: "START",
           time: {
-            timestamp: contextTimestamp
+            timestamp: userInputs?.timestamp || contextTimestamp
           }
         }
       ]

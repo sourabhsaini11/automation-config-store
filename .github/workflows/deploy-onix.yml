@@ -370,3 +370,4 @@ jobs:
             echo "Deployment successful!"
             docker ps -f name=${CONTAINER_NAME}
             docker logs --tail 20 ${CONTAINER_NAME}
+            

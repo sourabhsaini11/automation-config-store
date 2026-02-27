@@ -9,7 +9,6 @@
  * Note: Parent items (items without price/quantity) are included in response for 
  * demonstration purposes but excluded from price calculations
  */
-import data from "./data.json"
 
 /**
  * Merges add-on selection data with full add-on details
@@ -138,7 +137,7 @@ function calculateQuote(items: any[]): any {
 export async function onSelectDefaultGenerator(existingPayload: any, sessionData: any) {
   // Note: Validation is handled in meetRequirements method of the class
   // inject default data 
-  sessionData.fulfillments = data.fulfillments
+  // sessionData.fulfillments = data.fulfillments
 
 
   // Filter and merge items based on selected_items

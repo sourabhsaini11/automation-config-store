@@ -19580,6 +19580,7 @@ x-validations:
                 _RETURN_: attr are present
               - _NAME_: REQUIRED_ORDER_FULFILLMENT_TIME
                 attr: $.message.order.fulfillments[*].stops[*].time.timestamp
+                _CONTINUE_: '!(attr are present)'
                 _RETURN_: attr are present
           - _NAME_: ENUM_FULFILLMENT
             _RETURN_:
@@ -19592,6 +19593,7 @@ x-validations:
                 attr: $.message.order.fulfillments[*].stops[*].time.timestamp
                 reg:
                   - ^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\.\\d{3}Z$
+                _CONTINUE_: '!(attr are present)'
                 _RETURN_: attr follow regex reg
       - _NAME_: SELECT_PROVIDER
         action:
@@ -20496,6 +20498,7 @@ x-validations:
                 _RETURN_: attr are present
               - _NAME_: REQUIRED_ORDER_FULFILLMENT_TIME
                 attr: $.message.order.fulfillments[*].stops[*].time.timestamp
+                _CONTINUE_: '!(attr are present)'
                 _RETURN_: attr are present
               - _NAME_: REQUIRED_FULFILMENT_STATE
                 attr: $.message.order.fulfillments[*].state.descriptor.code
@@ -20524,6 +20527,7 @@ x-validations:
                 attr: $.message.order.fulfillments[*].stops[*].time.timestamp
                 reg:
                   - ^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\.\\d{3}Z$
+                _CONTINUE_: '!(attr are present)'
                 _RETURN_: attr follow regex reg
               - _NAME_: REQUIRED_FULFILMENT_STATE
                 attr: $.message.order.fulfillments[*].state.descriptor.code
@@ -20709,6 +20713,7 @@ x-validations:
                 _RETURN_: attr are present
               - _NAME_: REQUIRED_ORDER_FULFILLMENT_TIME
                 attr: $.message.order.fulfillments[*].stops[*].time.timestamp
+                _CONTINUE_: '!(attr are present)'
                 _RETURN_: attr are present
               - _NAME_: REQUIRED_FULFILMENT_STATE
                 attr: $.message.order.fulfillments[*].state.descriptor.code
@@ -20737,6 +20742,7 @@ x-validations:
                 attr: $.message.order.fulfillments[*].stops[*].time.timestamp
                 reg:
                   - ^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\.\\d{3}Z$
+                _CONTINUE_: '!(attr are present)'
                 _RETURN_: attr follow regex reg
               - _NAME_: REQUIRED_FULFILMENT_STATE
                 attr: $.message.order.fulfillments[*].state.descriptor.code

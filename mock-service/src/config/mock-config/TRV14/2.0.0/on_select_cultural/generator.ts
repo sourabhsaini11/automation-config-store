@@ -1,4 +1,3 @@
-import data from "./data.json"
 
 function mergeAddOnsWithSelection(fullAddOns: any[], selectedAddOns: any[]): any[] {
   return fullAddOns.map((fullAddOn: any) => {
@@ -102,7 +101,6 @@ function calculateQuote(items: any[]): any {
 }
 
 export async function onSelectDefaultGenerator(existingPayload: any, sessionData: any) {
-  sessionData.fulfillments = data.fulfillments
 
   const responseItems: any[] = [];
   const addedParentIds: Set<string> = new Set();

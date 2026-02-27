@@ -1,12 +1,12 @@
 name: Deploy api service
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - "src/config/build.yaml"
-    branches-ignore:
-      - main
-      - dev
+  # push:
+  #   paths:
+  #     - "src/config/build.yaml"
+  #   branches-ignore:
+  #     - main
+  #     - dev
 
 jobs:
   deploy-draft:
@@ -276,3 +276,4 @@ jobs:
           echo "Running docker-compose up -d --build"
           sudo docker compose up -d --build
           EOF
+          

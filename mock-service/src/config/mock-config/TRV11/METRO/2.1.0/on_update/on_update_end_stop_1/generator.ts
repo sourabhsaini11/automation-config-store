@@ -126,14 +126,21 @@ export async function onUpdateStopEndGenerator(
   }
 
   existingPayload.message.order.fulfillments =
-    existingPayload?.message?.order?.fulfillments?.map((fulfillment: any) => {
-      if (fulfillment?.type === "TRIP") {
-        return {
-          ...fulfillment,
-          stops: updatedStops,
-        };
-      } else return fulfillment;
-    });
+  existingPayload?.message?.order?.fulfillments?.map((fulfillment: any) => {
+    if (fulfillment?.type === "TRIP") {
+      return {
+        ...fulfillment,
+        stops: updatedStops?.map((stop: any) => {
+          if (stop?.type === "START") {
+            const { instructions, parent_stop_id, ...rest } = stop;
+            return rest; 
+          }
+          return stop;
+        }),
+      };
+    }
+    return fulfillment;
+  });
 
   // Update item prices based on TRIP fulfillment stops length
   const tripFulfillment = existingPayload.message.order.fulfillments?.find(

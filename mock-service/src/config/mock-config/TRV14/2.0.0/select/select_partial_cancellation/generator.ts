@@ -50,13 +50,13 @@ export async function selectPartialCancellationGenerator(existingPayload: any, s
 
   // Select the first item (index 0) or second item (index 1) based on availability
   let selectedItem: any;
-  if(sessionData.items.length > 1){
-     selectedItem = sessionData.items[1];
+  if (sessionData.items.length > 1) {
+    selectedItem = sessionData.items[1];
   }
-  else{
-     selectedItem = sessionData.items[0];
+  else {
+    selectedItem = sessionData.items[0];
   }
-  
+
   // Create item payload for the selected item only (don't include parent in select payload)
   const selectedItemPayload = createItemPayload(selectedItem);
 

@@ -84,10 +84,10 @@ export class MockSelectForPartialCancellationClass extends MockAction {
         }
 
         // Validate fulfillment
-        if (!userInputs.fulfillment) {
+        if (!userInputs.fulfillments) {
             return {
                 valid: false,
-                message: "fulfillment is required in user_inputs",
+                message: "fulfillments is required in user_inputs",
                 code: "MISSING_FULFILLMENT"
             };
         }

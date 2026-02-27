@@ -82,7 +82,7 @@ export class MockSelectClass extends MockAction {
         }
 
         // Validate fulfillment
-        if (!userInputs.fulfillment) {
+        if (!userInputs.fulfillments) {
             return {
                 valid: false,
                 message: "fulfillment is required in user_inputs",

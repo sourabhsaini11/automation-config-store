@@ -22495,7 +22495,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
       useCasePath: "$.message.intent.fulfillment.vehicle.category"
       useCode:
       - METRO
@@ -22542,11 +22543,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_CODE_14
       attr: "$.context.location.city.code"
-      _RETURN_: attr are present
-      useCasePath: "$.message.intent.fulfillment.vehicle.category"
-      useCode:
-      - BUS
-      _CONTINUE_: "!(useCasePath all in useCode)"
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
     - _NAME_: REQUIRED_CONTEXT_DOMAIN_15
       attr: "$.context.domain"
       _RETURN_: attr are present
@@ -22584,7 +22582,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_VERSION_20
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
       useCasePath: "$.message.intent.fulfillment.vehicle.category"
       useCode:
       - BUS
@@ -22699,7 +22698,8 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
     - _NAME_: REQUIRED_CONTEXT_ACTION_9
       attr: "$.context.action"
       _RETURN_: attr are present && attr all in enumList
@@ -22731,7 +22731,8 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_CODE_18
       attr: "$.context.location.city.code"
-      _RETURN_: attr are present
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
     - _NAME_: REQUIRED_CONTEXT_DOMAIN_19
       attr: "$.context.domain"
       _RETURN_: attr are present
@@ -22749,7 +22750,8 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_VERSION_24
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
     - _NAME_: REQUIRED_CONTEXT_ACTION_25
       attr: "$.context.action"
       _RETURN_: attr are present
@@ -22894,7 +22896,8 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
     - _NAME_: REQUIRED_CONTEXT_ACTION_9
       attr: "$.context.action"
       _RETURN_: attr are present && attr all in enumList
@@ -22935,7 +22938,8 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_CODE_21
       attr: "$.context.location.city.code"
-      _RETURN_: attr are present
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
     - _NAME_: REQUIRED_CONTEXT_DOMAIN_22
       attr: "$.context.domain"
       _RETURN_: attr are present
@@ -22953,7 +22957,8 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_VERSION_27
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
     - _NAME_: REQUIRED_CONTEXT_ACTION_28
       attr: "$.context.action"
       _RETURN_: attr are present
@@ -23105,7 +23110,8 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
     - _NAME_: REQUIRED_CONTEXT_ACTION_9
       attr: "$.context.action"
       _RETURN_: attr are present && attr all in enumList
@@ -23168,7 +23174,8 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_CODE_26
       attr: "$.context.location.city.code"
-      _RETURN_: attr are present
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
     - _NAME_: REQUIRED_CONTEXT_DOMAIN_27
       attr: "$.context.domain"
       _RETURN_: attr are present
@@ -23186,7 +23193,8 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_VERSION_32
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
     - _NAME_: REQUIRED_CONTEXT_ACTION_33
       attr: "$.context.action"
       _RETURN_: attr are present
@@ -23312,7 +23320,8 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
     - _NAME_: REQUIRED_CONTEXT_ACTION_9
       attr: "$.context.action"
       _RETURN_: attr are present && attr all in enumList
@@ -23330,15 +23339,13 @@ x-validations:
     - _NAME_: REQUIRED_CONTEXT_BPP_URI_13
       attr: "$.context.bpp_uri"
       _RETURN_: attr are present
-    - _NAME_: REQUIRED_MESSAGE_ORDER_ID_14
-      attr: "$.message.order_id"
-      _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_CODE_15
       attr: "$.context.location.country.code"
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_CODE_16
       attr: "$.context.location.city.code"
-      _RETURN_: attr are present
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
     - _NAME_: REQUIRED_CONTEXT_DOMAIN_17
       attr: "$.context.domain"
       _RETURN_: attr are present
@@ -23356,7 +23363,8 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_VERSION_22
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
     - _NAME_: REQUIRED_CONTEXT_ACTION_23
       attr: "$.context.action"
       _RETURN_: attr are present
@@ -23397,7 +23405,8 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
     - _NAME_: REQUIRED_CONTEXT_ACTION_9
       attr: "$.context.action"
       _RETURN_: attr are present && attr all in enumList
@@ -23444,6 +23453,10 @@ x-validations:
     - _NAME_: REQUIRED_CONTEXT_TIMESTAMP_4
       attr: "$.context.timestamp"
       _RETURN_: attr are present
+    - _NAME_: REQUIRED_CONTEXT_CODE_16
+      attr: "$.context.location.city.code"
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
     - _NAME_: REQUIRED_CONTEXT_BAP_ID_5
       attr: "$.context.bap_id"
       _RETURN_: attr are present
@@ -23455,7 +23468,8 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
     - _NAME_: REQUIRED_CONTEXT_ACTION_9
       attr: "$.context.action"
       _RETURN_: attr are present && attr all in enumList
@@ -23605,7 +23619,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
       useCasePath: "$.message.catalog.providers[*].fulfillments[*].vehicle.category"
       useCode:
       - METRO
@@ -23739,7 +23754,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_CODE_26
       attr: "$.context.location.city.code"
-      _RETURN_: attr are present
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
       useCasePath: "$.message.catalog.providers[*].fulfillments[*].vehicle.category"
       useCode:
       - BUS
@@ -23781,7 +23797,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_VERSION_32
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
       useCasePath: "$.message.catalog.providers[*].fulfillments[*].vehicle.category"
       useCode:
       - BUS
@@ -24031,6 +24048,10 @@ x-validations:
       useCode:
       - METRO
       _CONTINUE_: "!(useCasePath all in useCode)"
+    - _NAME_: REQUIRED_CONTEXT_CODE_18
+      attr: "$.context.location.city.code"
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
     - _NAME_: REQUIRED_CONTEXT_BAP_ID_5
       attr: "$.context.bap_id"
       _RETURN_: attr are present
@@ -24054,7 +24075,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
       useCasePath: "$.message.order.fulfillments[*].vehicle.category"
       useCode:
       - METRO
@@ -24185,6 +24207,10 @@ x-validations:
       useCode:
       - METRO
       _CONTINUE_: "!(useCasePath all in useCode)"
+    - _NAME_: REQUIRED_VEHICLE_CATEGORY
+      attr: "$.message.order.fulfillments[*].vehicle.category"
+      _RETURN_: attr are present
+
     - _NAME_: REQUIRED_MESSAGE_TYPE_26
       attr: "$.message.order.fulfillments[*].type"
       _RETURN_: attr are present && attr all in enumList
@@ -24290,7 +24316,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_CODE_39
       attr: "$.context.location.city.code"
-      _RETURN_: attr are present
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
       useCasePath: "$.message.order.fulfillments[*].vehicle.category"
       useCode:
       - BUS
@@ -24332,7 +24359,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_VERSION_45
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
       useCasePath: "$.message.order.fulfillments[*].vehicle.category"
       useCode:
       - BUS
@@ -24634,7 +24662,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
       useCasePath: "$.message.order.fulfillments[*].vehicle.category"
       useCode:
       - METRO
@@ -24648,6 +24677,10 @@ x-validations:
       useCode:
       - METRO
       _CONTINUE_: "!(useCasePath all in useCode)"
+    - _NAME_: REQUIRED_CONTEXT_CODE_18
+      attr: "$.context.location.city.code"
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
     - _NAME_: REQUIRED_CONTEXT_BAP_URI_10
       attr: "$.context.bap_uri"
       _RETURN_: attr are present
@@ -24676,6 +24709,9 @@ x-validations:
       useCode:
       - METRO
       _CONTINUE_: "!(useCasePath all in useCode)"
+    - _NAME_: REQUIRED_VEHICLE_CATEGORY
+      attr: "$.message.order.fulfillments[*].vehicle.category"
+      _RETURN_: attr are present
     - _NAME_: REQUIRED_MESSAGE_ID_14
       attr: "$.message.order.items[*].id"
       _RETURN_: attr are present
@@ -24908,7 +24944,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_CODE_43
       attr: "$.context.location.city.code"
-      _RETURN_: attr are present
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
       useCasePath: "$.message.order.fulfillments[*].vehicle.category"
       useCode:
       - BUS
@@ -24950,7 +24987,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_VERSION_49
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
       useCasePath: "$.message.order.fulfillments[*].vehicle.category"
       useCode:
       - BUS
@@ -25273,6 +25311,10 @@ x-validations:
       useCode:
       - METRO
       _CONTINUE_: "!(useCasePath all in useCode)"
+    - _NAME_: REQUIRED_CONTEXT_CODE_18
+      attr: "$.context.location.city.code"
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
     - _NAME_: REQUIRED_CONTEXT_DOMAIN_3
       attr: "$.context.domain"
       _RETURN_: attr are present && attr all in enumList
@@ -25312,7 +25354,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
       useCasePath: "$.message.order.fulfillments[*].vehicle.category"
       useCode:
       - METRO
@@ -25354,6 +25397,10 @@ x-validations:
       useCode:
       - METRO
       _CONTINUE_: "!(useCasePath all in useCode)"
+    - _NAME_: REQUIRED_VEHICLE_CATEGORY
+      attr: "$.message.order.fulfillments[*].vehicle.category"
+      _RETURN_: attr are present
+
     - _NAME_: REQUIRED_MESSAGE_ID_14
       attr: "$.message.order.id"
       _RETURN_: attr are present
@@ -25637,7 +25684,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_CODE_51
       attr: "$.context.location.city.code"
-      _RETURN_: attr are present
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
       useCasePath: "$.message.order.fulfillments[*].vehicle.category"
       useCode:
       - BUS
@@ -25679,7 +25727,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_VERSION_57
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
       useCasePath: "$.message.order.fulfillments[*].vehicle.category"
       useCode:
       - BUS
@@ -26061,6 +26110,10 @@ x-validations:
       useCode:
       - BUS
       _CONTINUE_: "!(useCasePath all in useCode)"
+    - _NAME_: REQUIRED_CONTEXT_CODE_16
+      attr: "$.context.location.city.code"
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
     - _NAME_: REQUIRED_CONTEXT_TIMESTAMP_4
       attr: "$.context.timestamp"
       _RETURN_: attr are present
@@ -26091,7 +26144,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
       useCasePath: "$.message.order.fulfillments[*].vehicle.category"
       useCode:
       - BUS
@@ -26154,6 +26208,9 @@ x-validations:
       useCode:
       - BUS
       _CONTINUE_: "!(useCasePath all in useCode)"
+    - _NAME_: REQUIRED_VEHICLE_CATEGORY
+      attr: "$.message.order.fulfillments[*].vehicle.category"
+      _RETURN_: attr are present
     - _NAME_: REQUIRED_MESSAGE_CODE_18
       attr: "$.message.order.items[*].descriptor.code"
       _RETURN_: attr are present && attr all in enumList
@@ -26449,9 +26506,14 @@ x-validations:
     - _NAME_: REQUIRED_CONTEXT_MESSAGE_ID_7
       attr: "$.context.message_id"
       _RETURN_: attr are present
+    - _NAME_: REQUIRED_CONTEXT_CODE_16
+      attr: "$.context.location.city.code"
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
     - _NAME_: REQUIRED_CONTEXT_ACTION_9
       attr: "$.context.action"
       _RETURN_: attr are present && attr all in enumList
@@ -26471,6 +26533,9 @@ x-validations:
       _RETURN_: attr are present
     - _NAME_: REQUIRED_MESSAGE_ID_14
       attr: "$.message.order.id"
+      _RETURN_: attr are present
+    - _NAME_: REQUIRED_VEHICLE_CATEGORY
+      attr: "$.message.order.fulfillments[*].vehicle.category"
       _RETURN_: attr are present
     - _NAME_: REQUIRED_MESSAGE_ID_15
       attr: "$.message.order.items[*].id"
@@ -26669,6 +26734,10 @@ x-validations:
       useCode:
       - METRO
       _CONTINUE_: "!(useCasePath all in useCode)"
+    - _NAME_: REQUIRED_CONTEXT_CODE_18
+      attr: "$.context.location.city.code"
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
     - _NAME_: REQUIRED_CONTEXT_DOMAIN_3
       attr: "$.context.domain"
       _RETURN_: attr are present && attr all in enumList
@@ -26708,7 +26777,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_VERSION_8
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
       useCasePath: "$.message.order.fulfillments[*].vehicle.category"
       useCode:
       - METRO
@@ -27007,7 +27077,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_CODE_49
       attr: "$.context.location.city.code"
-      _RETURN_: attr are present
+      reg: ['^std:\\d{3,5}$']
+      _RETURN_: attr follow regex reg
       useCasePath: "$.message.order.fulfillments[*].vehicle.category"
       useCode:
       - BUS
@@ -27049,7 +27120,8 @@ x-validations:
       _CONTINUE_: "!(useCasePath all in useCode)"
     - _NAME_: REQUIRED_CONTEXT_VERSION_55
       attr: "$.context.version"
-      _RETURN_: attr are present
+      version: ["2.0.0"]
+      _RETURN_: attr equal to version
       useCasePath: "$.message.order.fulfillments[*].vehicle.category"
       useCode:
       - BUS

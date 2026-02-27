@@ -103639,7 +103639,7 @@ x-validations:
             - _NAME_: TAGS_BPP_TERMS_VALID_TAGS
               _CONTINUE_: "!(attr are present)"
               attr: "$.message.order.payment.tags[?(@.code=='bpp_terms')].list[*].code"
-              valid: ["max_liability_cap","max_liability","mandatory_arbitration","court_jurisdiction","delay_interest","np_type","tax_number","provider_tax_number","accept_bap_terms"]
+              valid: ["max_liability_cap","max_liability","mandatory_arbitration","court_jurisdiction","delay_interest","np_type","tax_number","provider_tax_number","accept_bap_terms","collect_payment"]
               _RETURN_: attr all in valid
             # - _NAME_: TAGS_BPP_TERMS_MAX_LIABILITY_CAP
             #   _CONTINUE_: "!(attr are present)"
@@ -103948,7 +103948,7 @@ x-validations:
             - _NAME_: TAGS_BPP_TERMS_VALID_TAGS
               _CONTINUE_: "!(attr are present)"
               attr: "$.message.order.tags[?(@.code=='bpp_terms')].list[*].code"
-              valid: ["max_liability_cap","max_liability","mandatory_arbitration","court_jurisdiction","delay_interest","np_type", "tax_number","provider_tax_number","accept_bap_terms"]
+              valid: ["max_liability_cap","max_liability","mandatory_arbitration","court_jurisdiction","delay_interest","np_type", "tax_number","provider_tax_number","accept_bap_terms","collect_payment"]
               _RETURN_: attr all in valid
             - _NAME_: TAGS_BPP_TERMS_NP_TYPE
               _CONTINUE_: "!(attr are present)"

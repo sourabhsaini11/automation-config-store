@@ -387,7 +387,7 @@ export const init = async (data: any) => {
   const txnId = context?.transaction_id;
 
   try {
-    await contextChecker(context, result, constants.INIT, constants.ON_SELECT);
+    await contextChecker(context, result, constants.INIT, constants.INIT);
   } catch (err: any) {
     result.push({
       valid: false,

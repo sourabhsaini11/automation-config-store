@@ -30,8 +30,33 @@ export async function updateDefaultGenerator(existingPayload: any, sessionData: 
     existingPayload.message.order = existingPayload.message.order || {};
     existingPayload.message.order.id = sessionData.order_id;
   }
-  
 
+  // Update provider.id from session data
+  if ((sessionData.selected_provider?.id || sessionData.provider_id) && existingPayload.message?.order?.provider) {
+    existingPayload.message.order.provider.id = sessionData.selected_provider?.id || sessionData.provider_id;
+  }
+
+  // Carry forward item.id and parent_item_id from session data
+  const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  if (childItem?.id && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = childItem.id;
+    if (childItem.parent_item_id) {
+      existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
+    }
+  }
+
+  // Resolve fulfillment ID (handle both string and array from session)
+  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
+
+  // Carry forward fulfillment.id from session data
+  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
+  }
+
+  // Carry forward quote.id from session data
+  if (sessionData.quote_id && existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = sessionData.quote_id;
+  }
 
   return existingPayload;
 } 

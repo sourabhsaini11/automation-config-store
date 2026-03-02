@@ -17,6 +17,8 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
     console.log("check for form +++")
     existingPayload.message.catalog.providers[0].items = existingPayload.message.catalog.providers[0].items.map((item: any) => {
       if (item.xinput?.form) {
+        // Generate dynamic form ID
+        item.xinput.form.id = crypto.randomUUID();
         // Generate dynamic form URL with session data
         const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/family_information_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
         console.log("Form URL generated:", url);

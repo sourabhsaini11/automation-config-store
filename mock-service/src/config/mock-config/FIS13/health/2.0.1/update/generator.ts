@@ -1,12 +1,4 @@
-/**
- * Update Generator for FIS12 Gold Loans
- * 
- * Logic:
- * 1. Update context with current timestamp
- * 2. Update transaction_id and message_id from session data
- * 3. Load order_id and update_target from session data
- * 4. Handle Gold Loan specific update scenarios (foreclosure, missed EMI, part payment)
- */
+
 
 export async function updateDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("Gold Loan Update generator - Available session data:", {
@@ -22,16 +14,47 @@ export async function updateDefaultGenerator(existingPayload: any, sessionData: 
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
-  
+
   // Update transaction_id from session data
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
+   if (sessionData.message_id && existingPayload.context) {
+   existingPayload.context.message_id = crypto.randomUUID();
+  }
+
   // Load order_id into order.id (structure uses order.id)
   if (sessionData.order_id && existingPayload.message) {
     existingPayload.message.order = existingPayload.message.order || {};
     existingPayload.message.order.id = sessionData.order_id;
+  }
+
+  // Update provider.id from session data
+  if ((sessionData.selected_provider?.id || sessionData.provider_id) && existingPayload.message?.order?.provider) {
+    existingPayload.message.order.provider.id = sessionData.selected_provider?.id || sessionData.provider_id;
+  }
+
+  // Carry forward item.id and parent_item_id from session data
+  const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  if (childItem?.id && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = childItem.id;
+    if (childItem.parent_item_id) {
+      existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
+    }
+  }
+
+  // Resolve fulfillment ID (handle both string and array from session)
+  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
+
+  // Carry forward fulfillment.id from session data
+  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
+  }
+
+  // Carry forward quote.id from session data
+  if (sessionData.quote_id && existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = sessionData.quote_id;
   }
   
   // Load update_target from session data
@@ -40,51 +63,6 @@ export async function updateDefaultGenerator(existingPayload: any, sessionData: 
   }
 
   // Normalize message.update_target to string and map payment label/amount
-  if (existingPayload.message) {
-    // Ensure update_target is a simple string 'payments'
-    if (!existingPayload.message.update_target) existingPayload.message.update_target = 'payments';
 
-    existingPayload.message.order = existingPayload.message.order || {};
-    existingPayload.message.order.payments = existingPayload.message.order.payments || [{}];
-
-    const payment = existingPayload.message.order.payments[0];
-    payment.time = payment.time || {};
-
-    // Choose label based on flow_id, user_inputs, or saved update_label
-    let labelFromSession = sessionData.update_label;
-    
-    // Map flow IDs to specific payment labels
-    if (sessionData.flow_id) {
-      if (sessionData.flow_id.includes('Missed_EMI')) {
-        labelFromSession = 'MISSED_EMI_PAYMENT';
-      } else if (sessionData.flow_id.includes('Foreclosure')) {
-        labelFromSession = 'FORECLOSURE';
-      } else if (sessionData.flow_id.includes('Part_Payment') || sessionData.flow_id.includes('Pre_Part')) {
-        labelFromSession = 'PRE_PART_PAYMENT';
-      }
-    }
-    
-    // Fallback to user_inputs if no flow-based mapping found
-    if (!labelFromSession) {
-      labelFromSession = sessionData.user_inputs?.foreclosure_amount ? 'FORECLOSURE'
-        : sessionData.user_inputs?.missed_emi_amount ? 'MISSED_EMI_PAYMENT'
-        : sessionData.user_inputs?.part_payment_amount ? 'PRE_PART_PAYMENT'
-        : payment.time.label;
-    }
-    
-    if (labelFromSession) {
-      payment.time.label = labelFromSession;
-      console.log(`Payment label set to: ${labelFromSession} based on flow_id: ${sessionData.flow_id}`);
-    }
-
-    // Amount mapping for part payment (optional for other labels)
-    if (sessionData.user_inputs?.part_payment_amount) {
-      payment.params = payment.params || {};
-      payment.params.amount = String(sessionData.user_inputs.part_payment_amount);
-      payment.params.currency = payment.params.currency || sessionData.update_currency || 'INR';
-    }
-  }
-  
-  console.log("Gold Loan update payload generated successfully");
   return existingPayload;
 } 

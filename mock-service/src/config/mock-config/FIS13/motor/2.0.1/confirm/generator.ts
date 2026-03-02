@@ -52,7 +52,7 @@ export async function confirmDefaultGenerator(existingPayload: any, sessionData:
   // Update quote breakup item references with dynamic child item ID
   if (existingPayload.message?.order?.quote?.breakup && childItem?.id) {
     existingPayload.message.order.quote.breakup.forEach((b: any) => {
-      if (b.item?.id) b.item.id = childItem.id;
+      if (b.item?.id && b.title !== 'ADD_ONS') b.item.id = childItem.id;
     });
   }
 
@@ -87,6 +87,32 @@ export async function confirmDefaultGenerator(existingPayload: any, sessionData:
       existingPayload.message.order.items[0].add_ons = userAddOns;
     } else {
       delete existingPayload.message.order.items[0].add_ons;
+    }
+  }
+
+  // Update ADD_ONS entries in quote breakup with dynamic add-on IDs from session
+  if (existingPayload.message?.order?.quote?.breakup) {
+    // Remove existing hardcoded ADD_ONS entries
+    existingPayload.message.order.quote.breakup = existingPayload.message.order.quote.breakup.filter(
+      (b: any) => b.title !== 'ADD_ONS'
+    );
+    // Add back ADD_ONS entries with dynamic IDs and prices if add-ons are selected
+    const selectedAddOns = sessionData.user_selected_add_ons;
+    if (Array.isArray(selectedAddOns) && selectedAddOns.length > 0) {
+      selectedAddOns.forEach((addon: any) => {
+        existingPayload.message.order.quote.breakup.push({
+          title: 'ADD_ONS',
+          item: { id: addon.id },
+          price: addon.price || { value: "0", currency: "INR" }
+        });
+      });
+    }
+    // Recalculate total quote price from all breakup items
+    const totalPrice = existingPayload.message.order.quote.breakup.reduce(
+      (sum: number, b: any) => sum + (parseFloat(b.price?.value) || 0), 0
+    );
+    if (existingPayload.message.order.quote.price) {
+      existingPayload.message.order.quote.price.value = String(totalPrice);
     }
   }
 

@@ -18,6 +18,13 @@ export async function onStatusGenerator(existingPayload: any, sessionData: any) 
     existingPayload.context.message_id = sessionData.message_id;
   }
   
+  // Update order ID from session data
+  if (sessionData.order_id) {
+    existingPayload.message = existingPayload.message || {};
+    existingPayload.message.order = existingPayload.message.order || {};
+    existingPayload.message.order.id = sessionData.order_id;
+  }
+
   // Update provider information from session data (carry-forward from previous flows)
   if (sessionData.selected_provider?.id || sessionData.provider_id) {
     existingPayload.message = existingPayload.message || {};
@@ -44,9 +51,12 @@ export async function onStatusGenerator(existingPayload: any, sessionData: any) 
     const item = existingPayload.message.order.items[0];
 
     // Ensure item ID matches previous calls (carry-forward from previous flows)
-    const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-    if (selectedItem?.id) {
-      item.id = selectedItem.id;
+    const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+    if (childItem?.id) {
+      item.id = childItem.id;
+      if (childItem.parent_item_id) {
+        item.parent_item_id = childItem.parent_item_id;
+      }
     } else if (sessionData.item_id) {
       item.id = sessionData.item_id;
     }
@@ -107,6 +117,32 @@ export async function onStatusGenerator(existingPayload: any, sessionData: any) 
       existingPayload.message.order.items[0].add_ons = userAddOns;
     } else {
       delete existingPayload.message.order.items[0].add_ons;
+    }
+  }
+
+  // Update ADD_ONS entries in quote breakup with dynamic add-on IDs from session
+  if (existingPayload.message?.order?.quote?.breakup) {
+    // Remove existing hardcoded ADD_ONS entries
+    existingPayload.message.order.quote.breakup = existingPayload.message.order.quote.breakup.filter(
+      (b: any) => b.title !== 'ADD_ONS'
+    );
+    // Add back ADD_ONS entries with dynamic IDs and prices if add-ons are selected
+    const selectedAddOns = sessionData.user_selected_add_ons;
+    if (Array.isArray(selectedAddOns) && selectedAddOns.length > 0) {
+      selectedAddOns.forEach((addon: any) => {
+        existingPayload.message.order.quote.breakup.push({
+          title: 'ADD_ONS',
+          item: { id: addon.id },
+          price: addon.pricevalu || { value: "0", currency: "INR" }
+        });
+      });
+    }
+    // Recalculate total quote price from all breakup items
+    const totalPrice = existingPayload.message.order.quote.breakup.reduce(
+      (sum: number, b: any) => sum + (parseFloat(b.price?.value) || 0), 0
+    );
+    if (existingPayload.message.order.quote.price) {
+      existingPayload.message.order.quote.price.value = String(totalPrice);
     }
   }
 

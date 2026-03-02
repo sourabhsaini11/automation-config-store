@@ -48,6 +48,15 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
 
    
 
+    // Map item.id and parent_item_id from session data
+    const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+    if (childItem?.id && order.items?.[0]) {
+      order.items[0].id = childItem.id;
+      if (childItem.parent_item_id) {
+        order.items[0].parent_item_id = childItem.parent_item_id;
+      }
+    }
+
     // Map quote.id from session data (carry-forward from confirm)
     if (sessionData.quote_id && order.quote) {
       order.quote.id = sessionData.quote_id;
@@ -71,6 +80,32 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
       existingPayload.message.order.items[0].add_ons = userAddOns;
     } else {
       delete existingPayload.message.order.items[0].add_ons;
+    }
+  }
+
+  // Update ADD_ONS entries in quote breakup with dynamic add-on IDs from session
+  if (existingPayload.message?.order?.quote?.breakup) {
+    // Remove existing hardcoded ADD_ONS entries
+    existingPayload.message.order.quote.breakup = existingPayload.message.order.quote.breakup.filter(
+      (b: any) => b.title !== 'ADD_ONS'
+    );
+    // Add back ADD_ONS entries with dynamic IDs and prices if add-ons are selected
+    const selectedAddOns = sessionData.user_selected_add_ons;
+    if (Array.isArray(selectedAddOns) && selectedAddOns.length > 0) {
+      selectedAddOns.forEach((addon: any) => {
+        existingPayload.message.order.quote.breakup.push({
+          title: 'ADD_ONS',
+          item: { id: addon.id },
+          price: addon.price || { value: "0", currency: "INR" }
+        });
+      });
+    }
+    // Recalculate total quote price from all breakup items
+    const totalPrice = existingPayload.message.order.quote.breakup.reduce(
+      (sum: number, b: any) => sum + (parseFloat(b.price?.value) || 0), 0
+    );
+    if (existingPayload.message.order.quote.price) {
+      existingPayload.message.order.quote.price.value = String(totalPrice);
     }
   }
 

@@ -69,6 +69,8 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
     console.log("check for form +++")
     existingPayload.message.order.items = existingPayload.message.order.items.map((item: any) => {
       if (item.xinput?.form) {
+        // Generate dynamic form ID
+        item.xinput.form.id = crypto.randomUUID();
         const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/consumer_information_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
         console.log("Form URL generated:", url);
         item.xinput.form.url = url;
@@ -84,6 +86,32 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
       existingPayload.message.order.items[0].add_ons = userAddOns;
     } else {
       delete existingPayload.message.order.items[0].add_ons;
+    }
+  }
+
+  // Update ADD_ONS entries in quote breakup with dynamic add-on IDs from session
+  if (existingPayload.message?.order?.quote?.breakup) {
+    // Remove existing hardcoded ADD_ONS entries
+    existingPayload.message.order.quote.breakup = existingPayload.message.order.quote.breakup.filter(
+      (b: any) => b.title !== 'ADD_ONS'
+    );
+    // Add back ADD_ONS entries with dynamic IDs and prices if add-ons are selected
+    const selectedAddOns = sessionData.user_selected_add_ons;
+    if (Array.isArray(selectedAddOns) && selectedAddOns.length > 0) {
+      selectedAddOns.forEach((addon: any) => {
+        existingPayload.message.order.quote.breakup.push({
+          title: 'ADD_ONS',
+          item: { id: addon.id },
+          price: addon.price.value || { value: "0", currency: "INR" }
+        });
+      });
+    }
+    // Recalculate total quote price from all breakup items
+    const totalPrice = existingPayload.message.order.quote.breakup.reduce(
+      (sum: number, b: any) => sum + (parseFloat(b.price?.value) || 0), 0
+    );
+    if (existingPayload.message.order.quote.price) {
+      existingPayload.message.order.quote.price.value = String(totalPrice);
     }
   }
 

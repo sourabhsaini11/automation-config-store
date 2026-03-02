@@ -75,7 +75,7 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
 
       if (existingPayload.message?.order?.items?.[0]) {
         existingPayload.message.order.items[0].add_ons = selectedAddOns;
-        console.log("Added user-selected add_ons:", JSON.stringify(selectedAddOns));
+        
       }
     } else {
       // Remove add_ons if none selected

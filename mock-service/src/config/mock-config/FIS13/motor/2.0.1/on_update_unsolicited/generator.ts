@@ -95,7 +95,9 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
       selectedAddOns.forEach((addon: any) => {
         existingPayload.message.order.quote.breakup.push({
           title: 'ADD_ONS',
-          item: { id: addon.id },
+          item: {
+            id: addon.id,
+          },
           price: addon.price || { value: "0", currency: "INR" }
         });
       });

@@ -60,17 +60,30 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
     if (addonIds.length > 0) {
       const selectedAddOns = addonIds.map((id: string, index: number) => {
         const addon = sessionData.selected_add_ons.find((a: any) => a.id === id);
+        const qty = addonQuantities[index] || 1;
         if (addon) {
+          // Calculate total price based on selected quantity
+          const unitPrice = parseFloat(addon.price?.value) || 0;
+          const totalPrice = unitPrice * qty;
           return {
             id: addon.id,
+            descriptor: addon.descriptor,
             quantity: {
               selected: {
-                count: addonQuantities[index] || 1,
+                count: qty,
               },
             },
+            price: {
+              value: String(totalPrice),
+              currency: addon.price?.currency || "INR"
+            }
           };
         }
-        return { id, quantity: { selected: { count: addonQuantities[index] || 1 } } };
+        return {
+          id,
+          quantity: { selected: { count: qty } },
+          price: { value: "0", currency: "INR" }
+        };
       });
 
       if (existingPayload.message?.order?.items?.[0]) {

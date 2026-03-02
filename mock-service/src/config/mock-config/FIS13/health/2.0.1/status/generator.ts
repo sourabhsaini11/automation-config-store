@@ -10,7 +10,7 @@ export async function statusGenerator(existingPayload: any, sessionData: any) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
 
-  if (sessionData.message_id && existingPayload.context) {
+ if (sessionData.message_id && existingPayload.context) {
    existingPayload.context.message_id = crypto.randomUUID();
   }
 

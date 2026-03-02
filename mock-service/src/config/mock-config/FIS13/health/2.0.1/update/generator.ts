@@ -20,7 +20,7 @@ export async function updateDefaultGenerator(existingPayload: any, sessionData: 
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
 
-   if (sessionData.message_id && existingPayload.context) {
+  if (sessionData.message_id && existingPayload.context) {
    existingPayload.context.message_id = crypto.randomUUID();
   }
 
@@ -61,8 +61,6 @@ export async function updateDefaultGenerator(existingPayload: any, sessionData: 
   if (sessionData.update_target && existingPayload.message) {
     existingPayload.message.update_target = sessionData.update_target;
   }
-
-  // Normalize message.update_target to string and map payment label/amount
 
   return existingPayload;
 } 

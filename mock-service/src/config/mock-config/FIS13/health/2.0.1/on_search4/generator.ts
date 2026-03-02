@@ -31,10 +31,26 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
     existingPayload.message.catalog.providers[0].id = crypto.randomUUID();
   }
 
-  // Generate dynamic item IDs (replace hardcoded placeholders)
+  // Carry forward parent item ID from session (saved in on_search2)
+  const parentItemId = sessionData.item?.id || (Array.isArray(sessionData.items) ? sessionData.items[0]?.id : undefined);
+
+  // Generate dynamic item IDs - carry forward parent, generate new for children
   if (existingPayload.message?.catalog?.providers?.[0]?.items) {
     existingPayload.message.catalog.providers[0].items.forEach((item: any) => {
-      item.id = crypto.randomUUID();
+      if (!item.parent_item_id) {
+        // Parent item — use carried-forward ID from session
+        if (parentItemId) {
+          item.id = parentItemId;
+        } else {
+          item.id = crypto.randomUUID();
+        }
+      } else {
+        // Child item — generate new UUID, update parent_item_id to match
+        item.id = crypto.randomUUID();
+        if (parentItemId) {
+          item.parent_item_id = parentItemId;
+        }
+      }
     });
   }
 

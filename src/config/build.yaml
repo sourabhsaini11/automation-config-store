@@ -24456,6 +24456,7 @@ x-validations:
       _RETURN_: subTags all in validValues
     - _NAME_: validate_tag_4
       validTags:
+      - bpp_terms
       - bap_terms
       - lbnp_sla_terms
       tagPath: $.message.order.tags[*].code

@@ -48,31 +48,14 @@ function createItemPayload(userInputItem: any): any {
 export async function selectDefaultGenerator(existingPayload: any, sessionData: any) {
   const userInputs = sessionData.user_inputs;
 
-  // Process all items from user_inputs
   const itemPayloads = userInputs.items.map((item: any) => createItemPayload(item));
 
-  // Update the payload with all selected items
   existingPayload.message.order.items = itemPayloads;
 
-  // Set provider ID from user_inputs
   existingPayload.message.order.provider.id = userInputs.provider;
 
-  // Create fulfillment object with the selected fulfillment ID
-  const contextTimestamp = existingPayload.context?.timestamp || new Date().toISOString();
+  existingPayload.message.order.fulfillments = userInputs?.fulfillments
 
-  existingPayload.message.order.fulfillments = [
-    {
-      id: userInputs.fulfillment,
-      stops: [
-        {
-          type: "START",
-          time: {
-            timestamp: contextTimestamp
-          }
-        }
-      ]
-    }
-  ];
 
   return existingPayload;
 }

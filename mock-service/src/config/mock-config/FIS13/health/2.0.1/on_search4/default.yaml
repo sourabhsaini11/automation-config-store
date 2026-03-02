@@ -26,11 +26,11 @@ catalog:
       items:
         - id: "I1"
           category_ids:
-            - "C1"
+            - "C2"
             - "C3"
           descriptor:
-            name: "Health Gain Plus Individual"
-            short_desc: "ABC Individual Health Insurance Class A with custom addon"
+            name: "Health Gain Plus Family"
+            short_desc: "ABC Family Health Insurance Class A with custom addon"
           tags:
             - descriptor:
                 name: "General Information"
@@ -127,11 +127,11 @@ catalog:
         - id: "CHILD_ITEM_ID_I1"
           parent_item_id: "I1"
           category_ids:
-            - "C1"
+            - "C2"
             - "C3"
           descriptor:
-            name: "Health Gain Plus Individual"
-            short_desc: "ABC Individual Health Insurance Class A with custom addon"
+            name: "Health Gain Plus Family"
+            short_desc: "ABC Family Health Insurance Class A with custom addon"
           price:
             currency: "INR"
             value: "900"
@@ -278,11 +278,11 @@ catalog:
         - id: "CHILD_ITEM_ID_I2"
           parent_item_id: "I1"
           category_ids:
-            - "C1"
+            - "C2"
             - "C3"
           descriptor:
-            name: "Health Gain Plus Individual"
-            short_desc: "ABC Individual Health Insurance Class A with custom addon"
+            name: "Health Gain Plus Family"
+            short_desc: "ABC Family Health Insurance Class A with custom addon"
           price:
             currency: "INR"
             value: "1000"

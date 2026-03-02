@@ -70,35 +70,35 @@ catalog:
                     code: ROOM_CATEGORY
                   value: Deluxe
           add_ons:
-            - id: C1
+            - id: "A1"
               quantity:
                 available:
                   count: 1
               descriptor:
                 name: No Claim Bonus
                 code: NO_CLAIM_BONUS
-            - id: C2
+            - id: "A2"
               quantity:
                 available:
                   count: 1
               descriptor:
                 name: Daycare Cover
                 code: DAYCARE_COVER
-            - id: C3
+            - id: "A3"
               quantity:
                 available:
                   count: 1
               descriptor:
                 name: Daily Cash Allowance
                 code: DAILY_CASH_ALLOWANCE
-            - id: "4"
+            - id: "A4"
               quantity:
                 available:
                   count: 1
               descriptor:
                 name: Domicialiary Expenses
                 code: DOMICILIARY_EXPENSES
-            - id: "5"
+            - id: "A5"
               quantity:
                 available:
                   count: 1

@@ -386,16 +386,16 @@ export const init = async (data: any) => {
   const result: any = [];
   const txnId = context?.transaction_id;
 
-  try {
-    await contextChecker(context, result, constants.INIT, constants.INIT);
-  } catch (err: any) {
-    result.push({
-      valid: false,
-      code: 40000,
-      description: `Business Error: ${err.message}`,
-    });
-    return result;
-  }
+  // try {
+  //   await contextChecker(context, result, constants.INIT, constants.INIT);
+  // } catch (err: any) {
+  //   result.push({
+  //     valid: false,
+  //     code: 40000,
+  //     description: `Business Error: ${err.message}`,
+  //   });
+  //   return result;
+  // }
 
   try {
     const order = message.order;

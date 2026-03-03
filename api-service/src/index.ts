@@ -60,19 +60,19 @@ const moveRelevantFiles = async () => {
 		)
 	);
 
-	if (
-		fs.existsSync(
-			path.resolve(__dirname, "../src/config/L1-custom-validations")
-		)
-	) {
-		await clearAndCopy(
-			path.resolve(__dirname, "../src/config/L1-custom-validations"),
-			path.resolve(
-				__dirname,
-				"../build-output/automation-api-service/src/validations/L1-custom-validations"
-			)
-		);
-	}
+	// if (
+	// 	fs.existsSync(
+	// 		path.resolve(__dirname, "../src/config/L1-custom-validations")
+	// 	)
+	// ) {
+	// 	await clearAndCopy(
+	// 		path.resolve(__dirname, "../src/config/L1-custom-validations"),
+	// 		path.resolve(
+	// 			__dirname,
+	// 			"../build-output/automation-api-service/src/validations/L1-custom-validations"
+	// 		)
+	// 	);
+	// }
 	console.log("deleting generated folder");
 	fse.removeSync(path.resolve(__dirname, "../generated"));
 };

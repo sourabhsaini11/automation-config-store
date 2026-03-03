@@ -13,8 +13,8 @@ import {
   checkStatus,
   track,
   on_track,
-  updateRouter,
-  onUpdateRouter,
+  // updateRouter,
+  // onUpdateRouter,
 } from "./apiTests";
 
 import { validationOutput } from "./types";

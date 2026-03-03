@@ -20,32 +20,32 @@ const addError = (
 };
 
 export async function on_track(data: any) {
-  const { context, message } = data;
-  const result: ValidationError[] = [];
-  const txnId = context?.transaction_id;
+  // const { context, message } = data;
+  // const result: ValidationError[] = [];
+  // const txnId = context?.transaction_id;
 
-  try {
-    try {
-      await contextChecker(
-        context,
-        result,
-        constants.ON_TRACK,
-        constants.TRACK,
-        true
-      );
-    } catch (err: any) {
-      result.push({
-        valid: false,
-        code: 20000,
-        description: err.message,
-      });
-      return result;
-    }
+  // try {
+  //   try {
+  //     await contextChecker(
+  //       context,
+  //       result,
+  //       constants.ON_TRACK,
+  //       constants.TRACK,
+  //       true
+  //     );
+  //   } catch (err: any) {
+  //     result.push({
+  //       valid: false,
+  //       code: 20000,
+  //       description: err.message,
+  //     });
+  //     return result;
+  //   }
 
-    return result;
-  } catch (error: any) {
-    console.error(`!!Error in /${constants.ON_TRACK}: ${error.stack}`);
-    addError(result, 20000, `Internal error: ${error.message}`);
-    return result;
-  }
+  //   return result;
+  // } catch (error: any) {
+  //   console.error(`!!Error in /${constants.ON_TRACK}: ${error.stack}`);
+  //   addError(result, 20000, `Internal error: ${error.message}`);
+  //   return result;
+  // }
 }

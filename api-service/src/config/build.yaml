@@ -103367,7 +103367,7 @@ x-validations:
                 - _NAME_: ROUTING_TYPE
                   _CONTINUE_: "!(attr are present)"
                   attr: "$.message.order.fulfillments[*].tags[?(@.code=='routing')].list[?(@.code=='type')].value"
-                  var_enum: ["P2P", "H2P2P"]
+                  var_enum: ["P2P", "P2H2P"]
                   _RETURN_: attr all in var_enum
 
             - _NAME_: TAGS_TRACKING

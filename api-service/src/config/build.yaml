@@ -100618,7 +100618,7 @@ x-validations:
           _RETURN_:
           - _NAME_: PROVIDERS_ID
             attr: "$.message.catalog['bpp/providers'][*].id"
-            reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+            reg: ['^[A-Za-z0-9_-]{1,50}$']
             _RETURN_: attr follow regex reg
           - _NAME_: PROVIDERS_TIME
             _RETURN_:
@@ -100708,7 +100708,7 @@ x-validations:
             _RETURN_:
             - _NAME_: PAYMENTS_ID
               attr: "$.message.catalog['bpp/providers'][*].payments[*].id"
-              reg: ['^[0-9a-zA-Z/_-]{1,36}$']
+              reg: ['^[A-Za-z0-9_-]{1,50}$']
               _RETURN_: attr follow regex reg
 
             - _NAME_: PAYMENTS_TYPE
@@ -100749,7 +100749,7 @@ x-validations:
             _RETURN_:
             - _NAME_: CATEGORIES_ID
               attr: "$.message.catalog['bpp/providers'][*].categories[*].id"
-              reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+              reg: ['^[A-Za-z0-9_-]{1,50}$']
               _RETURN_: attr are present
             - _NAME_: CATEGORIES_DESCRIPTOR_NAME
               attr: "$.message.catalog['bpp/providers'][*].categories[*].descriptor.name"
@@ -100777,7 +100777,7 @@ x-validations:
             _RETURN_:
             - _NAME_: ITEMS_ID
               attr: "$.message.catalog['bpp/providers'][*].items[*].id"
-              reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+              reg: ['^[A-Za-z0-9_-]{1,50}$']
               _RETURN_: attr follow regex reg
             - _NAME_: ITEMS_TIME
               _RETURN_:

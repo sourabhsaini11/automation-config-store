@@ -30,14 +30,21 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
     console.log("Updated provider.id:", sessionData.selected_provider.id);
   }
   
-  // Carry forward child item ID and parent_item_id from select
-  const childItem = sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  if (childItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = childItem.id;
-    if (childItem.parent_item_id) {
-      existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
-    }
+  // Generate NEW child item ID (BPP creates a child item in on_select)
+  // The parent item ID comes from on_search (sessionData.item.id)
+  const parentItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  const selectedItem = sessionData.selected_items?.[0];
+  const childItem = selectedItem || parentItem;
 
+  if (existingPayload.message?.order?.items?.[0]) {
+    // Generate a new child item ID (distinct from parent)
+    existingPayload.message.order.items[0].id = crypto.randomUUID();
+
+    // Set parent_item_id to the parent item's dynamic ID from on_search
+    const parentItemId = parentItem?.id || selectedItem?.id;
+    if (parentItemId) {
+      existingPayload.message.order.items[0].parent_item_id = parentItemId;
+    }
   }
 
   // Resolve fulfillment ID (handle both string and array from session)

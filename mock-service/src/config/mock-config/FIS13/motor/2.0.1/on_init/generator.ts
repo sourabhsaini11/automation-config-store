@@ -25,10 +25,13 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
     console.log("Updated provider.id:", sessionData.selected_provider.id);
   }
   
-  // Carry forward item.id from session data
-  const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = selectedItem.id;
+  // Carry forward child item ID and parent_item_id from session
+  const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  if (childItem?.id && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = childItem.id;
+    if (childItem.parent_item_id) {
+      existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
+    }
   }
 
   // Generate dynamic fulfillment ID (BPP assigns fulfillment ID in on_init)

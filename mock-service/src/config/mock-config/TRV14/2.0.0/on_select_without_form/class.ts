@@ -53,11 +53,20 @@ export class MockOnSelectWithoutFormClass extends MockAction {
 
             if (sessionData.selected_items) {
                 const selectedIds = sessionData.selected_items.map((i: any) => i.id);
-                const parentIds = (sessionData.items || [])
-                    .filter((item: any) => selectedIds.includes(item.id) && item.parent_item_id)
-                    .map((item: any) => item.parent_item_id);
 
-                const validItemIds = new Set([...selectedIds, ...parentIds]);
+                // Walk the full ancestor chain for each selected item to collect all parent IDs
+                const allParentIds: string[] = [];
+                selectedIds.forEach((selectedId: string) => {
+                    const item = (sessionData.items || []).find((i: any) => i.id === selectedId);
+                    let currentParentId = item?.parent_item_id;
+                    while (currentParentId) {
+                        allParentIds.push(currentParentId);
+                        const parentItem = (sessionData.items || []).find((i: any) => i.id === currentParentId);
+                        currentParentId = parentItem?.parent_item_id;
+                    }
+                });
+
+                const validItemIds = new Set([...selectedIds, ...allParentIds]);
                 const invalidItemIds = items.filter((i: any) => !validItemIds.has(i.id)).map((i: any) => i.id);
 
                 if (invalidItemIds.length) {

@@ -135,34 +135,34 @@ function calculateQuote(items: any[]): any {
 }
 
 export async function onSelectDefaultGenerator(existingPayload: any, sessionData: any) {
-  // Note: Validation is handled in meetRequirements method of the class
-  // inject default data 
-  // sessionData.fulfillments = data.fulfillments
-
-
-  // Filter and merge items based on selected_items
   const responseItems: any[] = [];
-  const addedParentIds: Set<string> = new Set(); // Track added parent items to avoid duplicates
+  const addedParentIds: Set<string> = new Set();
 
   sessionData.selected_items.forEach((selectedItem: any) => {
-    // Find the full item details from sessionData.items
     const fullItem = sessionData.items.find((item: any) => item.id === selectedItem.id);
     if (fullItem) {
-      // If selected item has a parent_item_id, include the parent item first (for demonstration)
-      if (fullItem.parent_item_id && !addedParentIds.has(fullItem.parent_item_id)) {
-        const parentItem = sessionData.items.find((item: any) => item.id === fullItem.parent_item_id);
+      const ancestorChain: any[] = [];
+      let currentParentId = fullItem.parent_item_id;
+      while (currentParentId) {
+        const parentItem = sessionData.items.find((item: any) => item.id === currentParentId);
         if (parentItem) {
-          const parentItemCopy = { ...parentItem };
-
-          // Clean up parent item
-          delete parentItemCopy.cancellation_terms;
-          delete parentItemCopy.replacement_terms;
-
-          // Add parent item without price/quantity modifications (demonstration purposes)
-          responseItems.push(parentItemCopy);
-          addedParentIds.add(fullItem.parent_item_id);
+          ancestorChain.unshift(parentItem);
+          currentParentId = parentItem.parent_item_id;
+        } else {
+          break;
         }
       }
+
+      ancestorChain.forEach((ancestor: any) => {
+        if (!addedParentIds.has(ancestor.id)) {
+          const ancestorCopy = { ...ancestor };
+          delete ancestorCopy.cancellation_terms;
+          delete ancestorCopy.replacement_terms;
+          responseItems.push(ancestorCopy);
+          addedParentIds.add(ancestor.id);
+        }
+      });
+
       // Clean up selected item
       delete fullItem.cancellation_terms;
       delete fullItem.replacement_terms;

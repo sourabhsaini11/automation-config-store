@@ -6,6 +6,8 @@ export async function selectPurchaseCultureGenerator(existingPayload: any, sessi
   logger.info(`sessionData---- ${JSON.stringify(sessionData)}`);
   logger.info(`sessionData---first_form_testing ${JSON.stringify(sessionData?.first_form_testing)}`);
 
+  existingPayload.context.bpp_id = sessionData?.bpp_id
+
   let submission_id =
     sessionData?.first_form_testing ||
     sessionData?.submission_id ||

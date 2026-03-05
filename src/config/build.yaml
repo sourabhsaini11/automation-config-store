@@ -103419,7 +103419,7 @@ x-validations:
           - _NAME_: TAGS_ITEM_VALID_TAGS
             _CONTINUE_: "!(attr are present)"
             attr: "$.message.order.quote.breakup[*].item.tags[*].code"
-            valid: ["finance_terms","np_fees"]
+            valid: ["finance_terms","np_fees","quote","offer"]
             _RETURN_: attr all in valid
           - _NAME_: TAGS_FINANCE_TERMS
             _RETURN_: &TAGS_FINANCE_TERMS

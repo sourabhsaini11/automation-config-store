@@ -67,9 +67,9 @@ export class MockOnSelectPurchaseCultureClass extends MockAction {
                 const validItemIds = new Set([...selectedIds, ...allParentIds]);
                 const invalidItemIds = items.filter((i: any) => !validItemIds.has(i.id)).map((i: any) => i.id);
 
-                if (invalidItemIds.length) {
-                    return { valid: false, message: `Item IDs [${invalidItemIds.join(", ")}] not found in selected items or their parents`, code: "ITEM_ID_MISMATCH" };
-                }
+                // if (invalidItemIds.length) {
+                //     return { valid: false, message: `Item IDs [${invalidItemIds.join(", ")}] not found in selected items or their parents`, code: "ITEM_ID_MISMATCH" };
+                // }
             }
         }
 

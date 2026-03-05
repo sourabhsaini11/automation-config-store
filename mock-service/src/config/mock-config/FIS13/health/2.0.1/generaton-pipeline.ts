@@ -103,6 +103,16 @@ export async function createMockResponseFIS13_200(
 		logger.info(`L2 error found: ${JSON.stringify(error_message)}`);
 		return payload;
 	}
+	// Check if payment form was submitted with NOT_PAY - return NACK and break flow
+	if (sessionData.form_data?.payment_form?.idType === "NOT_PAY") {
+		delete payload.message;
+		payload.error = {
+			code: "50001",
+			message: "Payment not completed by the customer",
+		};
+		logger.info("Payment form submitted with NOT_PAY status - returning NACK");
+		return payload;
+	}
 	const mockAction = getMockAction(actionID);
 
 	const requirements = await mockAction.meetRequirements(sessionData);

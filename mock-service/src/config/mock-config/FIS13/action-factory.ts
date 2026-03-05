@@ -92,6 +92,8 @@ import { MockSearch4Class } from "./health/2.0.1/search4/class";
 import { MockOnSearchClass4 } from "./health/2.0.1/on_search4/class";
 import { MockOnConfirm2Class } from "./health/2.0.1/on_confirm2/class";
 import { MockConfirm2Class } from "./health/2.0.1/confirm2/class";
+import { MockPaymentFormClass } from "./health/2.0.1/form8/payment_form";
+import { MockPaymentFormClass as MockPaymentFormMotorClass } from "./motor/2.0.1/form8/payment_form";
 
 
 // types/helpers
@@ -166,6 +168,7 @@ const registry = {
 	nominee_details_form: MockNomineeDetailsFormClass,
 	consumer_information_form: MockConsumerInformationFormClass,
 	manual_review_form: MockVerificationStatusFormClass,
+	payment_form:MockPaymentFormClass,
 
 
 	//motor api calls//
@@ -233,6 +236,7 @@ const registry = {
 	vehicle_nominee_details_form:MotorMockVehicleNomineeDetailsFormClass,
 	personal_details_form:MotorMockPersonalDetailsFormClass,
 	consumer_information_form_motor:MotorMockConsumerInformationFormClass,//need to update
+	payment_form_motor:MockPaymentFormMotorClass,
 
 
 

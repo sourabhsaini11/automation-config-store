@@ -78,6 +78,8 @@ export interface SessionData {
 	verification_status?: string;
 	manual_review_form_motor?:string;
 	kyc_details_form?: string;
+	payment_form?:string;
+	payment_form_motor?:string;
 	parent_item_id?: string;
 	// Form submission data for on_status generators
   form_data?: Record<string, {
@@ -85,6 +87,7 @@ export interface SessionData {
    idType?: string;
  }>;
  form_id?:string;
+ 
 }
 
 export type BecknContext = {

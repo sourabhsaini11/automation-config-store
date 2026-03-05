@@ -49,6 +49,8 @@ function createItemPayload(userInputItem: any, index: number): any {
 }
 
 export async function selectForPartialCancellationGenerator(existingPayload: any, sessionData: any) {
+  existingPayload.context.bpp_id = sessionData?.bpp_id
+
   const userInputs = sessionData.user_inputs;
 
   // Process all items from user_inputs, passing index for tracking

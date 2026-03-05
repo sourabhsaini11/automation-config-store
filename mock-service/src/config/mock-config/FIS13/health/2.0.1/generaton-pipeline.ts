@@ -104,7 +104,7 @@ export async function createMockResponseFIS13_200(
 		return payload;
 	}
 	// Check if payment form was submitted with NOT_PAY - return NACK and break flow
-	if (sessionData.form_data?.payment_form?.idType === "NOT_PAY") {
+	if (sessionData.form_data?.payment_form?.idType === "NOT_PAY" || sessionData.form_data?.payment_form_motor?.idType === "NOT_PAY") {
 		delete payload.message;
 		payload.error = {
 			code: "50001",

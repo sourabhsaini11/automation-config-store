@@ -103,46 +103,54 @@ function calculateQuote(items: any[]): any {
 
 export async function onSelectWithoutFormGenerator(existingPayload: any, sessionData: any) {
   const responseItems: any[] = [];
-  const addedParentIds: Set<string> = new Set(); // Track added parent items to avoid duplicates
+  const addedItemIds: Set<string> = new Set();
+
+  const selectedFulfillmentIds = (sessionData.selected_fulfillments || []).map((f: any) => f.id);
 
   sessionData.selected_items.forEach((selectedItem: any) => {
-    // Find the full item details from sessionData.items
     const fullItem = sessionData.items.find((item: any) => item.id === selectedItem.id);
-    if (fullItem) {
-      // If selected item has a parent_item_id, include the parent item first (for demonstration)
-      if (fullItem.parent_item_id && !addedParentIds.has(fullItem.parent_item_id)) {
-        const parentItem = sessionData.items.find((item: any) => item.id === fullItem.parent_item_id);
-        if (parentItem) {
-          const parentItemCopy = { ...parentItem };
+    if (!fullItem) return;
 
-          // Clean up parent item
-          delete parentItemCopy.cancellation_terms;
-          delete parentItemCopy.replacement_terms;
+    const parentItemId = selectedItem.parent_item_id || fullItem.parent_item_id;
 
-          // Add parent item without price/quantity modifications (demonstration purposes)
-          responseItems.push(parentItemCopy);
-          addedParentIds.add(fullItem.parent_item_id);
-        }
+    if (parentItemId) {
+      let rootItem = null;
+      let currentId = fullItem.parent_item_id;
+
+      while (currentId) {
+        const ancestor = sessionData.items.find((item: any) => item.id === currentId);
+        if (!ancestor) break;
+        rootItem = ancestor;
+        currentId = ancestor.parent_item_id;
       }
-      // Clean up selected item
-      delete fullItem.cancellation_terms;
-      delete fullItem.replacement_terms;
 
-      const mergedItem = createItemWithSelection(fullItem, selectedItem);
+      if (rootItem && !addedItemIds.has(rootItem.id)) {
+        const rootCopy = { ...rootItem };
+        rootCopy.fulfillment_ids = selectedFulfillmentIds;
+        responseItems.push(rootCopy);
+        addedItemIds.add(rootItem.id);
+      }
+    }
+
+    const mergedItem = createItemWithSelection(fullItem, selectedItem);
+    mergedItem.fulfillment_ids = selectedFulfillmentIds;
+
+    if (parentItemId) {
+      mergedItem.parent_item_id = parentItemId;
+    }
+
+    if (!addedItemIds.has(mergedItem.id)) {
       responseItems.push(mergedItem);
+      addedItemIds.add(mergedItem.id);
     }
   });
 
-  // Update payload with filtered items
   existingPayload.message.order.items = responseItems;
-
-  // Calculate and set quote
   existingPayload.message.order.quote = calculateQuote(responseItems);
 
-  // Set fulfillments from session data if available and add agent data
   if (sessionData.fulfillments) {
     existingPayload.message.order.fulfillments = sessionData.fulfillments?.filter((fulfillment: any) => fulfillment.id === sessionData.selected_fulfillments[0].id);
   }
-  // No xinput form for this on_select_without_form variant
+
   return existingPayload;
-} 
+}

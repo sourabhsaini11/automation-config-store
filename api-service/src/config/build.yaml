@@ -19324,11 +19324,8 @@ x-validations:
       - _NAME_: ON_SEARCH_ITEMS_PAGE_1
         action:
           - on_search
-        _SCOPE_: $.message.catalog.tags[?(@.descriptor.code=='PAGINATION')]
-        subTags: $.list[*].descriptor.code
-        var_page:
-          - CURRENT_PAGE_NUMBER
-        _CONTINUE_: '!(var_page all in subTags)'
+        var_items_exist: $.message.catalog.providers[*].items[*].id
+        _CONTINUE_: '!(var_items_exist are present)'
         _RETURN_:
           - _NAME_: REQUIRED_ITEMS
             _RETURN_:

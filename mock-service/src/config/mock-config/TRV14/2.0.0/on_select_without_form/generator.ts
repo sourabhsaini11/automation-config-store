@@ -1,26 +1,5 @@
-/**
- * On_Select Generator for TRV14
- * 
- * Logic:
- * 1. Filter items from sessionData.items based on sessionData.selected_items
- * 2. Merge selected quantities from selected_items into full item details
- * 3. Calculate quote breakup (BASE_FARE, ADD_ONS, TAX=0) - excluding parent items
- * 4. Handle fulfillments from session data
- * Note: Parent items (items without price/quantity) are included in response for 
- * demonstration purposes but excluded from price calculations
- */
-
-/**
- * Merges add-on selection data with full add-on details
- * @param fullAddOns - Complete add-on details from sessionData.items
- * @param selectedAddOns - Selection data from sessionData.selected_items
- * @returns Merged add-ons with selection quantities
- */
 function mergeAddOnsWithSelection(fullAddOns: any[], selectedAddOns: any[]): any[] {
   return fullAddOns.map((fullAddOn: any) => {
-    // Find matching selected add-on by id
-
-
     return {
       ...fullAddOn,
       quantity: {
@@ -28,21 +7,12 @@ function mergeAddOnsWithSelection(fullAddOns: any[], selectedAddOns: any[]): any
       }
     };
 
-
-    // Return full add-on without selection if not found in selected
     return fullAddOn;
   });
 }
 
-/**
- * Creates item payload by merging full item details with selection data
- * @param fullItem - Complete item from sessionData.items
- * @param selectedItem - Selection data from sessionData.selected_items
- * @returns Merged item payload with selection quantities
- */
 function createItemWithSelection(fullItem: any, selectedItem: any): any {
   const itemPayload = { ...fullItem };
-  // Merge selected quantity
   if (selectedItem.quantity?.selected) {
     itemPayload.quantity = {
       ...itemPayload.quantity,
@@ -50,28 +20,20 @@ function createItemWithSelection(fullItem: any, selectedItem: any): any {
     };
   }
 
-  // Handle add-ons - merge selected quantities from selectedItem.add_ons
   if (selectedItem.add_ons && fullItem.add_ons) {
     itemPayload.add_ons = mergeAddOnsWithSelection(fullItem.add_ons, selectedItem.add_ons);
   }
   return itemPayload;
 }
 
-/**
- * Calculates quote breakup for selected items
- * @param items - Array of items with selection data
- * @returns Quote object with breakup and total price
- */
 function calculateQuote(items: any[]): any {
   const breakup: any[] = [];
   let totalValue = 0;
 
-  // Filter out parent items (items that don't have price or quantity) from price calculations
   const priceableItems = items.filter((item: any) =>
     item.price && item.quantity?.selected && item.price.value && item.quantity.selected.count
   );
 
-  // Calculate BASE_FARE for each priceable item (excluding parent items)
   priceableItems.forEach((item: any) => {
     const itemPrice = parseFloat(item.price.value);
     const quantity = item.quantity.selected.count;
@@ -99,7 +61,6 @@ function calculateQuote(items: any[]): any {
     totalValue += itemTotal;
   });
 
-  // Add TAX (fixed 0 for now)
   breakup.push({
     title: "TAX",
     price: {
@@ -107,8 +68,7 @@ function calculateQuote(items: any[]): any {
       value: "0"
     }
   });
-  // Calculate ADD_ONS for each priceable item (excluding parent items)
-  // Loop through priceable items and their add_ons, calculate add-on prices
+
   priceableItems.forEach((item: any) => {
     if (item.add_ons && Array.isArray(item.add_ons)) {
       item.add_ons.forEach((addOn: any) => {
@@ -142,11 +102,6 @@ function calculateQuote(items: any[]): any {
 }
 
 export async function onSelectWithoutFormGenerator(existingPayload: any, sessionData: any) {
-  // Note: Validation is handled in meetRequirements method of the class
-  // inject default data 
-
-
-  // Filter and merge items based on selected_items
   const responseItems: any[] = [];
   const addedParentIds: Set<string> = new Set(); // Track added parent items to avoid duplicates
 

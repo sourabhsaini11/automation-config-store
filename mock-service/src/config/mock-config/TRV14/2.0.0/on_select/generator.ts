@@ -135,17 +135,10 @@ function calculateQuote(items: any[]): any {
 }
 
 export async function onSelectDefaultGenerator(existingPayload: any, sessionData: any) {
-  // Note: Validation is handled in meetRequirements method of the class
-  // inject default data 
-  // sessionData.fulfillments = data.fulfillments
-
-
-  // Filter and merge items based on selected_items
   const responseItems: any[] = [];
-  const addedParentIds: Set<string> = new Set(); // Track added parent items to avoid duplicates
+  const addedParentIds: Set<string> = new Set();
 
   sessionData.selected_items.forEach((selectedItem: any) => {
-    // Find the full item details from sessionData.items
     const fullItem = sessionData.items.find((item: any) => item.id === selectedItem.id);
     if (fullItem) {
       // If selected item has a parent_item_id, include the parent item first (for demonstration)

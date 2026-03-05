@@ -47,15 +47,11 @@ export class MockOnSelectClass extends MockAction {
             }
         }
 
-        const items = order.items;
+        const items = sessionData.items;
         if (items) {
             if (sessionData.selected_items) {
                 const selectedIds = sessionData.selected_items.map((i: any) => i.id);
-                const parentIds = (sessionData.items || [])
-                    .filter((item: any) => selectedIds.includes(item.id) && item.parent_item_id)
-                    .map((item: any) => item.parent_item_id);
-
-                const validItemIds = new Set([...selectedIds, ...parentIds]);
+                const validItemIds = new Set([...selectedIds]);
                 const invalidItemIds = items.filter((i: any) => !validItemIds.has(i.id)).map((i: any) => i.id);
 
                 if (invalidItemIds.length) {

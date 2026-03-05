@@ -70,18 +70,25 @@ export async function onConfirmDefaultGenerator(existingPayload: any, sessionDat
     console.log("Updated location_ids:", selectedLocationId);
   }
   
+  // Generate dynamic payment form URL
+  if (existingPayload.message?.order?.payments?.[0]) {
+    const paymentUrl = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/payment_form_motor?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
+    existingPayload.message.order.payments[0].url = paymentUrl;
+    console.log("Generated payment form URL:", paymentUrl);
+  }
+
   // Update customer name in fulfillments if available from session data
   if (sessionData.customer_name && existingPayload.message?.order?.fulfillments?.[0]?.customer?.person) {
     existingPayload.message.order.fulfillments[0].customer.person.name = sessionData.customer_name;
     console.log("Updated customer name:", sessionData.customer_name);
   }
-  
+
   // Update customer contact information if available from session data
   if (sessionData.customer_phone && existingPayload.message?.order?.fulfillments?.[0]?.customer?.contact) {
     existingPayload.message.order.fulfillments[0].customer.contact.phone = sessionData.customer_phone;
     console.log("Updated customer phone:", sessionData.customer_phone);
   }
-  
+
   if (sessionData.customer_email && existingPayload.message?.order?.fulfillments?.[0]?.customer?.contact) {
     existingPayload.message.order.fulfillments[0].customer.contact.email = sessionData.customer_email;
     console.log("Updated customer email:", sessionData.customer_email);

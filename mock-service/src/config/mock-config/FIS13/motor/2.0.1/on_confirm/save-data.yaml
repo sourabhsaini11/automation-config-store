@@ -4,3 +4,4 @@ save-data:
     order: "$.message.order"
     created_at : "$.message.order.created_at"
     order_id: "$.message.order.id"
+    payment_form_motor: "$.message.order.payments[0].url"

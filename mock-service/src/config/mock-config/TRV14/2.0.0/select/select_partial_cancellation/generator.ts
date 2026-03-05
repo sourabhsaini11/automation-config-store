@@ -46,9 +46,8 @@ function createItemPayload(selectedItem: any): any {
 }
 
 export async function selectPartialCancellationGenerator(existingPayload: any, sessionData: any) {
-  // Note: Validation is handled in meetRequirements method of the class
+  existingPayload.context.bpp_id = sessionData?.bpp_id
 
-  // Select the first item (index 0) or second item (index 1) based on availability
   let selectedItem: any;
   if (sessionData.items.length > 1) {
     selectedItem = sessionData.items[1];

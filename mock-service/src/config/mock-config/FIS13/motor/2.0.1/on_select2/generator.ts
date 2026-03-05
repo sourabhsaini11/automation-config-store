@@ -24,10 +24,10 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
   }
   
   // Update provider.id if available from session data (carry-forward from select)
-  // if (sessionData.selected_provider?.id && existingPayload.message?.order?.provider) {
-  //   existingPayload.message.order.provider.id = sessionData.selected_provider.id;
-  //   console.log("Updated provider.id:", sessionData.selected_provider.id);
-  // }
+  if (sessionData.selected_provider?.id && existingPayload.message?.order?.provider) {
+    existingPayload.message.order.provider.id = sessionData.selected_provider.id;
+    console.log("Updated provider.id:", sessionData.selected_provider.id);
+  }
   
   // Update item.id if available from session data (carry-forward from select)
   // if (sessionData.items && Array.isArray(sessionData.items) && sessionData.items.length > 0) {

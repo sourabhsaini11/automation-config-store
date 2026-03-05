@@ -25,22 +25,45 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
   //   });
   // }
 
-  // Generate dynamic provider ID (replace hardcoded placeholder)
+  // Carry forward provider ID from session (from on_search)
   if (existingPayload.message?.catalog?.providers?.[0]) {
-    existingPayload.message.catalog.providers[0].id = crypto.randomUUID();
+    if (sessionData.provider_id || sessionData.selected_provider?.id) {
+      existingPayload.message.catalog.providers[0].id = sessionData.provider_id || sessionData.selected_provider.id;
+    } else {
+      existingPayload.message.catalog.providers[0].id = crypto.randomUUID();
+    }
   }
 
-  // Generate dynamic item IDs (replace hardcoded placeholders)
+  // Carry forward parent item ID from session and generate new child item ID
+  const parentItemId = sessionData.item?.id;
   if (existingPayload.message?.catalog?.providers?.[0]?.items) {
     existingPayload.message.catalog.providers[0].items.forEach((item: any) => {
-      item.id = crypto.randomUUID();
+      if (item.parent_item_id) {
+        // This is a child item: generate new UUID and set parent_item_id to dynamic parent ID
+        item.id = crypto.randomUUID();
+        if (parentItemId) {
+          item.parent_item_id = parentItemId;
+        }
+      } else {
+        // This is the parent item: reuse ID from on_search session
+        if (parentItemId) {
+          item.id = parentItemId;
+        } else {
+          item.id = crypto.randomUUID();
+        }
+      }
     });
   }
 
-  // Generate dynamic fulfillment IDs (replace hardcoded placeholders)
+  // Carry forward fulfillment IDs from session (from on_search)
   if (existingPayload.message?.catalog?.providers?.[0]?.fulfillments) {
-    existingPayload.message.catalog.providers[0].fulfillments.forEach((f: any) => {
-      f.id = crypto.randomUUID();
+    const sessionFulfillmentIds = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids : [];
+    existingPayload.message.catalog.providers[0].fulfillments.forEach((f: any, index: number) => {
+      if (sessionFulfillmentIds[index]) {
+        f.id = sessionFulfillmentIds[index];
+      } else {
+        f.id = crypto.randomUUID();
+      }
     });
   }
 

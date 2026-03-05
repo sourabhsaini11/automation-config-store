@@ -46,7 +46,7 @@ export async function onCancelGenerator(
         newBreakup.push({
           price: {
             currency: item.price.currency,
-            value: item.price.value
+            value: `-${item.price.value}`
           },
           title: "REFUND"
         });
@@ -54,7 +54,7 @@ export async function onCancelGenerator(
         newBreakup.push({
           price: {
             currency: item.price.currency,
-            value: item.price.value
+            value: `-${item.price.value}`
           },
           title: "REFUND"
         });

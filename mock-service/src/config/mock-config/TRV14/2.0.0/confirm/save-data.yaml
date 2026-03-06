@@ -5,3 +5,8 @@ save-data:
   created_at: "$.context.timestamp"
   updated_at: "$.context.timestamp"
   last_call_ttl: "$.context.ttl"
+  bap_id: "$.context.bap_id"
+  bap_uri: "$.context.bap_uri"
+  bpp_id: "$.context.bpp_id"
+  bpp_uri: "$.context.bpp_uri"
+

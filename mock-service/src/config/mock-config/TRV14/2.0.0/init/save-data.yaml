@@ -5,3 +5,7 @@ save-data:
   payments: "$.message.order.payments[*]"
   payment_collected_by: "$.message.intent.payment.collected_by"
   bap_terms_tags: "$.message.order.tags[*]"
+  bap_id: "$.context.bap_id"
+  bap_uri: "$.context.bap_uri"
+  bpp_id: "$.context.bpp_id"
+  bpp_uri: "$.context.bpp_uri"

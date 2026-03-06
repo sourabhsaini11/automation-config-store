@@ -2,17 +2,17 @@ import { SessionData } from "../../../../session-types";
 
 export async function search_1_generator(
   existingPayload: any,
-  sessionData: SessionData
+  sessionData: SessionData,
 ) {
   delete existingPayload.context.bpp_uri;
   delete existingPayload.context.bpp_id;
 
   const date = new Date(existingPayload?.context?.timestamp);
   const adultTicketCount = Number(
-    sessionData?.user_inputs?.adult_ticket_count || 3
+    sessionData?.user_inputs?.adult_ticket_count || 3,
   );
   const childTicketCount = Number(
-    sessionData?.user_inputs?.child_ticket_count || 2
+    sessionData?.user_inputs?.child_ticket_count || 2,
   );
   // const journeyDate =
   //   sessionData?.user_inputs?.journey_date ?? new Date().toISOString();
@@ -49,22 +49,26 @@ export async function search_1_generator(
         name: "Adult Ticket",
       },
       quantity: {
-        selected:{
-        count: adultTicketCount,
-        }
+        selected: {
+          count: adultTicketCount,
+        },
       },
     },
-    {
-      descriptor: {
-        code: "CHILD_TICKET",
-        name: "Child Ticket",
-      },
-      quantity: {
-        selected:{
-        count: childTicketCount,
-        }
-      },
-    },
+    ...(sessionData?.user_inputs?.child_ticket_count
+      ? [
+          {
+            descriptor: {
+              code: "CHILD_TICKET",
+              name: "Child Ticket",
+            },
+            quantity: {
+              selected: {
+                count: childTicketCount,
+              },
+            },
+          },
+        ]
+      : []),
   ];
 
   return existingPayload;

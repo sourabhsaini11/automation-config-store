@@ -46,7 +46,6 @@ function createItemPayload(userInputItem: any): any {
 }
 
 export async function selectDefaultGenerator(existingPayload: any, sessionData: any) {
-  existingPayload.context.bpp_id = sessionData?.bpp_id
 
   const userInputs = sessionData.user_inputs;
 

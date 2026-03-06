@@ -4,3 +4,4 @@ save-data:
   items_search_2: "$.message.catalog.providers[*].items[*]"
   fulfillments_search_2: "$.message.catalog.providers[0].fulfillments[*]"
   category_ids_search_2: "$.message.catalog.providers[*].items[*].category_ids[*]"
+  bpp_id: "$.context.bpp_id"

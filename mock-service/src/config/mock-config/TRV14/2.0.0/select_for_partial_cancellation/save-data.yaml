@@ -5,3 +5,7 @@ save-data:
   selected_fulfillments: "$.message.order.fulfillments[*]"
   # selected_fulfillment_id: "$.message.order.fulfillments[0].id"
   selected_provider: "$.message.order.provider"
+  bap_id: "$.context.bap_id"
+  bap_uri: "$.context.bap_uri"
+  bpp_id: "$.context.bpp_id"
+  bpp_uri: "$.context.bpp_uri"

@@ -104980,7 +104980,7 @@ x-validations:
           _RETURN_: &INIT_PROVIDER
           - _NAME_: PROVIDER_ID
             attr: "$.message.order.provider.id"
-            reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+            reg: ['^[A-Za-z0-9_-]{1,50}$']
             _RETURN_: attr are present && attr follow regex reg
 
           - _NAME_: PROVIDER_LOCATIONS_PRESENT

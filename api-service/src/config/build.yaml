@@ -100823,7 +100823,7 @@ x-validations:
                 _RETURN_: attr are present
               - _NAME_: ITEMS_QUANTITY_MAXIMUM_COUNT
                 attr: "$.message.catalog['bpp/providers'][*].items[*].quantity.maximum.count"
-                reg: ['^[0-9]{1,2}$']
+                reg: ['^[1-9][0-9]*$']
                 _RETURN_: attr follow regex reg
             - _NAME_: ITEMS_PRICE
               _RETURN_:

@@ -33,11 +33,20 @@ codes:
     action_id: init_METRO_200
     action: init
     default: METRO/2.0.0/init/default.yaml
+  - code: 1006
+    action_id: init_without_select_METRO_201
+    action: init
+    default: METRO/2.0.1/init_without_select/default.yaml
     message_id: true
   - code: 107
     action_id: on_init_METRO_200
     action: on_init
     default: METRO/2.0.0/on_init/default.yaml
+    message_id: false
+  - code: 1007
+    action_id: on_init_without_select_METRO_201
+    action: on_init
+    default: METRO/2.0.1/on_init_without_select/default.yaml
     message_id: false
   - code: 108
     action_id: confirm_METRO_200

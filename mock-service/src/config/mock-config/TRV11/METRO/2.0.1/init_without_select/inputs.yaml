@@ -1,0 +1,13 @@
+inputs:
+  - name: billing_name
+    label: Enter billing name
+    type: text
+    payloadField: $.message.order.billing.name
+  - name: billing_email
+    label: Enter billing email
+    type: text
+    payloadField: $.message.order.billing.email
+  - name: billing_phone
+    label: Enter billing phone
+    type: text
+    payloadField: $.message.order.billing.phone

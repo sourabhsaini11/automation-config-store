@@ -5,7 +5,7 @@ import { MockAction, MockOutput, saveType } from "../../../classes/mock-action";
 import { onInitGenerator } from "./generator";
 import { SessionData } from "../../../session-types";
 
-export class MockOnInitMetro201Class extends MockAction {
+export class MockOnInitwithoutSelectMetro201Class extends MockAction {
   get saveData(): saveType {
     return yaml.load(
       readFileSync(path.resolve(__dirname, "./save-data.yaml"), "utf8")
@@ -117,31 +117,31 @@ export class MockOnInitMetro201Class extends MockAction {
     }
 
     // Check for items
-    if (!sessionData.items || sessionData.items.length === 0) {
-      return {
-        valid: false,
-        message: "No items available in session data",
-        code: "MISSING_ITEMS",
-      };
-    }
+    // if (!sessionData.items || sessionData.items.length === 0) {
+    //   return {
+    //     valid: false,
+    //     message: "No items available in session data",
+    //     code: "MISSING_ITEMS",
+    //   };
+    // }
 
-    // Check for fulfillments
-    if (!sessionData.fulfillments || sessionData.fulfillments.length === 0) {
-      return {
-        valid: false,
-        message: "No fulfillments available in session data",
-        code: "MISSING_FULFILLMENTS",
-      };
-    }
+    // // Check for fulfillments
+    // if (!sessionData.fulfillments || sessionData.fulfillments.length === 0) {
+    //   return {
+    //     valid: false,
+    //     message: "No fulfillments available in session data",
+    //     code: "MISSING_FULFILLMENTS",
+    //   };
+    // }
 
-    // Check for quote
-    if (!sessionData.quote) {
-      return {
-        valid: false,
-        message: "No quote available in session data",
-        code: "MISSING_QUOTE",
-      };
-    }
+    // // Check for quote
+    // if (!sessionData.quote) {
+    //   return {
+    //     valid: false,
+    //     message: "No quote available in session data",
+    //     code: "MISSING_QUOTE",
+    //   };
+    // }
 
     // All requirements satisfied
     return { valid: true };

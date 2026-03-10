@@ -194,11 +194,11 @@ const onSelect = async (data: any) => {
         } else {
             const timeDifference = timeDiff(context.timestamp, tmpstmp);
             console.info(timeDifference);
-            if (timeDifference > 5000) {
+            if (timeDifference > 9000) {
                 result.push({
                     valid: false,
                     code: 20000,
-                    description: `context/timestamp difference between /${constants.ON_SELECT} and /${constants.SELECT} should be less than 5 sec`,
+                    description: `context/timestamp difference between /${constants.ON_SELECT} and /${constants.SELECT} should be less than 9 sec`,
                 });
             }
         }

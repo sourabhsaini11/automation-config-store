@@ -183,11 +183,11 @@ const onInit = async (data: any) => {
       } else {
         const timeDiff = timeDifference(context.timestamp, tmpstmp);
         console.info(timeDiff);
-        if (timeDiff > 5000) {
+        if (timeDiff > 9000) {
           result.push({
             valid: false,
             code: 20000,
-            description: `context/timestamp difference between /${constants.ON_INIT} and /${constants.INIT} should be less than 5 sec`,
+            description: `context/timestamp difference between /${constants.ON_INIT} and /${constants.INIT} should be less than 9 sec`,
           });
         }
       }

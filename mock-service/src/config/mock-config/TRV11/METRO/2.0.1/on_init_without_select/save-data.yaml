@@ -1,0 +1,13 @@
+save-data:
+  payments: "$.message.order.payments[*]"
+  payment_id: "$.message.order.payments[*].id"
+  message_id: "$.context.message_id"
+  transaction_id: "$.context.transaction_id"
+
+  price: "$.message.order.quote.price.value"
+  items: "$.message.order.items[*]"
+  fulfillments: "$.message.order.fulfillments[*]"
+  quote: "$.message.order.quote"
+  provider: "$.message.order.provider"
+  time_range: "$.message.order.provider.time"
+ 

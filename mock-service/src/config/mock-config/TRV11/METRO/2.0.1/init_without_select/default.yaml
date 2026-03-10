@@ -1,0 +1,48 @@
+message:
+  order:
+    items:
+      - id: I1
+        quantity:
+          selected:
+            count: 2
+    provider:
+      id: P1
+    billing:
+      name: John Doe
+      email: john.doe@example.com
+      phone: +91-9897867564
+    payments:
+      - collected_by: BAP
+        status: NOT-PAID
+        type: PRE-ORDER
+        tags:
+          - descriptor:
+              code: BUYER_FINDER_FEES
+            display: false
+            list:
+              - descriptor:
+                  code: BUYER_FINDER_FEES_PERCENTAGE
+                value: "1"
+          - descriptor:
+              code: SETTLEMENT_TERMS
+            display: false
+            list:
+              - descriptor:
+                  code: SETTLEMENT_AMOUNT
+                value: "59"
+              - descriptor:
+                  code: SETTLEMENT_TYPE
+                value: NEFT
+              - descriptor:
+                  code: DELAY_INTEREST
+                value: "2.5"
+              - descriptor:
+                  code: STATIC_TERMS
+                value: https://www.abc.com/settlement-terms/
+              - descriptor:
+                  code: MANDATORY_ARBITRATION
+                value: "TRUE"
+              - descriptor:
+                  code: COURT_JURISDICTION
+                value: New Delhi
+   

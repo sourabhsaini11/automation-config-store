@@ -111,6 +111,8 @@ import { MockOnIssueProcessingMetro_100_Class } from "./METRO/2.0.1/on_issue/on_
 import { MockOnIssueResolvedMetro_100_Class } from "./METRO/2.0.1/on_issue/on_issue_100/on_issue_resolved/class";
 import { MockOnInitMonthlyPassBus201Class } from "./BUS/2.0.1/on_init/on_init_monthly_pass/class";
 import { MockInitUnlimitedPassBus201Class } from "./BUS/2.0.1/init/init_unlimited_pass/class";
+import { MockInitWithoutSelectMetro201Class } from "./METRO/2.0.1/init_without_select/class";
+import { MockOnInitwithoutSelectMetro201Class } from "./METRO/2.0.1/on_init_without_select/class";
 
 // helpers
 type Ctor<T> = new () => T;
@@ -124,6 +126,8 @@ const registry = {
   confirm_BUS_Without_Update: MockConfirmVehConWithoutBus201Class,
   confirm_veh_con_BUS_201: MockConfirmVehConBus201Class,
   init_BUS_201: MockInitBus201Class,
+  init_without_select_METRO_201: MockInitWithoutSelectMetro201Class,
+  on_init_without_select_METRO_201: MockOnInitwithoutSelectMetro201Class,
   on_cancel_BUS_201: MockOnCancelBus201Class,
   on_cancel_hard_BUS_201: MockOnCancelHardBus201Class,
   on_cancel_init_BUS_201: MockOnCancelInitBus201Class,
@@ -132,7 +136,7 @@ const registry = {
   on_confirm_BUS_Without_update: MockOnConfirmVehConWithoutUpdateBus201Class,
   on_confirm_delayed_BUS_201: MockOnConfirmDelayedBus201Class,
   on_confirm_veh_con_BUS_201: MockOnConfirmVehConBus201Class,
-  on_confirm_BUS_QR_201 :MockOnConfirmVehConBusQr201Class,
+  on_confirm_BUS_QR_201: MockOnConfirmVehConBusQr201Class,
   // on_confirm_user_confirmation :MockOnConfirmUserConfirmationBusClass,
   on_init_BUS_201: MockOnInitBus201Class,
   on_search_BUS_201: MockOnSearch1Bus201Class,
@@ -158,7 +162,7 @@ const registry = {
   on_search0_BUS_201: MockOnSearch0Bus201Class,
   init_unlimited_pass_BUS_201: MockInitUnlimitedPassBus201Class,
   on_init_monthly_pass_BUS_201: MockOnInitMonthlyPassBus201Class,
-  
+
   // METRO 2.0.1
   cancel_METRO_201: MockCancelMetro201Class,
   cancel_hard_METRO_201: MockCancelHardMetro201Class,
@@ -262,18 +266,18 @@ const registry = {
   on_search_monthly_pass1_BUS_201: MockOnSearchMonthlyPass1Bus201Class,
   on_confirm_monthly_pass_BUS_201: MockOnConfirmMonthlyPassesBus201Class,
 
-        // _____________IGM_1.0.0 BUS______________
-  issue_open_100:  MockIssueOpenBus_100_Class,
+  // _____________IGM_1.0.0 BUS______________
+  issue_open_100: MockIssueOpenBus_100_Class,
   issue_close_100: MockIssueCloseBus_100_Class,
   on_issue_processing_100: MockOnIssueProcessingBus_100_Class,
   on_issue_resolved_100: MockOnIssueResolvedBus_100_Class,
 
-   // _____________IGM_1.0.0 METRO______________
-  issue_open_metro_100:  MockIssueOpenMetro_100_Class,
+  // _____________IGM_1.0.0 METRO______________
+  issue_open_metro_100: MockIssueOpenMetro_100_Class,
   issue_close_metro_100: MockIssueCloseMetro_100_Class,
   on_issue_processing_metro_100: MockOnIssueProcessingMetro_100_Class,
   on_issue_resolved_metro_100: MockOnIssueResolvedMetro_100_Class
-    
+
 } as const satisfies Record<string, Ctor<MockAction>>;
 
 type MockActionId = keyof typeof registry;

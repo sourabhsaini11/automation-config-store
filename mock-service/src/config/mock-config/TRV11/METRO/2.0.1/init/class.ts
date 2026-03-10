@@ -85,64 +85,64 @@ export class MockInitMetro201Class extends MockAction {
     return { valid: true };
   }
   async meetRequirements(sessionData: SessionData): Promise<MockOutput> {
-  // Check for collected_by
-  if (!sessionData.collected_by) {
-    return {
-      valid: false,
-      message: "No collected_by available in session data",
-      code: "MISSING_COLLECTED_BY",
-    };
-  }
+    // Check for collected_by
+    if (!sessionData.collected_by) {
+      return {
+        valid: false,
+        message: "No collected_by available in session data",
+        code: "MISSING_COLLECTED_BY",
+      };
+    }
 
-  // Check for buyer_app_fee
-  if (
-    sessionData.buyer_app_fee === undefined ||
-    sessionData.buyer_app_fee === null
-  ) {
-    return {
-      valid: false,
-      message: "No buyer_app_fee available in session data",
-      code: "MISSING_BUYER_APP_FEE",
-    };
-  }
+    // Check for buyer_app_fee
+    if (
+      sessionData.buyer_app_fee === undefined ||
+      sessionData.buyer_app_fee === null
+    ) {
+      return {
+        valid: false,
+        message: "No buyer_app_fee available in session data",
+        code: "MISSING_BUYER_APP_FEE",
+      };
+    }
 
-  // Check for price
-  if (!sessionData.price) {
-    return {
-      valid: false,
-      message: "No price available in session data",
-      code: "MISSING_PRICE",
-    };
-  }
+    // Check for price
+    if (!sessionData.price) {
+      return {
+        valid: false,
+        message: "No price available in session data",
+        code: "MISSING_PRICE",
+      };
+    }
 
-  // Check for billing
-  if (!sessionData.billing) {
-    return {
-      valid: false,
-      message: "No billing available in session data",
-      code: "MISSING_BILLING",
-    };
-  }
+    // Check for billing
+    if (!sessionData.billing) {
+      return {
+        valid: false,
+        message: "No billing available in session data",
+        code: "MISSING_BILLING",
+      };
+    }
 
-  // Check for selected_items
-  if (!sessionData.selected_items || sessionData.selected_items.length === 0) {
-    return {
-      valid: false,
-      message: "No selected_items available in session data",
-      code: "MISSING_SELECTED_ITEMS",
-    };
-  }
+    // Check for selected_items
+    if (!sessionData.selected_items || sessionData.selected_items.length === 0) {
+      return {
+        valid: false,
+        message: "No selected_items available in session data",
+        code: "MISSING_SELECTED_ITEMS",
+      };
+    }
 
-  // Check for provider_id
-  if (!sessionData.provider_id) {
-    return {
-      valid: false,
-      message: "No provider_id available in session data",
-      code: "MISSING_PROVIDER_ID",
-    };
-  }
+    // Check for provider_id
+    if (!sessionData.provider_id) {
+      return {
+        valid: false,
+        message: "No provider_id available in session data",
+        code: "MISSING_PROVIDER_ID",
+      };
+    }
 
-  // All requirements satisfied
-  return { valid: true };
-}
+    // All requirements satisfied
+    return { valid: true };
+  }
 }

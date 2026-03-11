@@ -29,166 +29,166 @@ export class MockOnStatusCancelMetro201Class extends MockAction {
     return onStatusCancelGenerator(existingPayload, sessionData);
   }
   async validate(
-  targetPayload: any,
-  sessionData: SessionData
-): Promise<MockOutput> {
-  const order = targetPayload?.message?.order;
+    targetPayload: any,
+    sessionData: SessionData
+  ): Promise<MockOutput> {
+    const order = targetPayload?.message?.order;
 
-  // 0. check order id
-  if (order?.id !== sessionData.order_id) {
-    return {
-      valid: false,
-      message: `Order ID mismatch. Expected ${sessionData.order_id}, got ${order?.id}`,
-    };
-  }
-
-  // 0.1 check order state
-  if (order?.status !== "COMPLETE") {
-    return {
-      valid: false,
-      message: `Invalid order state. Expected "COMPLETE", got ${order?.status}`,
-    };
-  }
-
-  const items = order?.items || [];
-  const fulfillments = order?.fulfillments || [];
-
-  // Extract all fulfillment ids from payload
-  const payloadFulfillmentIds = fulfillments.map((f: any) => f.id);
-
-  for (const item of items) {
-    // 1. check item id in sessionData.selected_item_ids
-    if (!sessionData.selected_item_ids.includes(item.id)) {
+    // 0. check order id
+    if (order?.id !== sessionData.order_id) {
       return {
         valid: false,
-        message: `Item id ${item.id} not found in sessionData.selected_item_ids: ${sessionData.selected_item_ids}`,
+        message: `Order ID mismatch. Expected ${sessionData.order_id}, got ${order?.id}`,
       };
     }
 
-    // 2. check item.fulfillment_ids are present in payload.fulfillments
-    const itemFulfillmentIds = item.fulfillment_ids || [];
+    // 0.1 check order state
+    if (order?.status !== "COMPLETED") {
+      return {
+        valid: false,
+        message: `Invalid order state. Expected "COMPLETED", got ${order?.status}`,
+      };
+    }
+
+    const items = order?.items || [];
+    const fulfillments = order?.fulfillments || [];
+
+    // Extract all fulfillment ids from payload
+    const payloadFulfillmentIds = fulfillments.map((f: any) => f.id);
+
+    for (const item of items) {
+      // 1. check item id in sessionData.selected_item_ids
+      if (!sessionData.selected_item_ids.includes(item.id)) {
+        return {
+          valid: false,
+          message: `Item id ${item.id} not found in sessionData.selected_item_ids: ${sessionData.selected_item_ids}`,
+        };
+      }
+
+      // 2. check item.fulfillment_ids are present in payload.fulfillments
+      const itemFulfillmentIds = item.fulfillment_ids || [];
+      if (
+        !itemFulfillmentIds.every((fid: string) =>
+          payloadFulfillmentIds.includes(fid)
+        )
+      ) {
+        return {
+          valid: false,
+          message: `Item ${item.id} has invalid fulfillment ids. Expected subset of ${payloadFulfillmentIds}, got ${itemFulfillmentIds}`,
+        };
+      }
+
+      // 3. check quantity within min and max for that item in sessionData.items
+      const sessionItem = sessionData.items?.find((i: any) => i.id === item.id);
+      const selectedCount = item?.quantity?.selected?.count;
+
+      if (!sessionItem) {
+        return {
+          valid: false,
+          message: `Item ${item.id} not found in sessionData.items`,
+        };
+      }
+
+      const min = sessionItem?.quantity?.minimum?.count ?? 1;
+      const max = sessionItem?.quantity?.maximum?.count ?? Infinity;
+
+      if (selectedCount < min || selectedCount > max) {
+        return {
+          valid: false,
+          message: `Item ${item.id} quantity out of range. Expected between ${min} and ${max}, got ${selectedCount}`,
+        };
+      }
+    }
+
+    // 4. check quote value & currency matches sessionData.quote
+    const payloadQuote = order?.quote?.price;
+    const sessionQuote = sessionData?.quote?.price;
+
+    if (!payloadQuote || !sessionQuote) {
+      return {
+        valid: false,
+        message: `Quote missing in payload or sessionData`,
+      };
+    }
+
     if (
-      !itemFulfillmentIds.every((fid: string) =>
-        payloadFulfillmentIds.includes(fid)
-      )
+      payloadQuote.value !== sessionQuote.value ||
+      payloadQuote.currency !== sessionQuote.currency
     ) {
       return {
         valid: false,
-        message: `Item ${item.id} has invalid fulfillment ids. Expected subset of ${payloadFulfillmentIds}, got ${itemFulfillmentIds}`,
+        message: `Quote mismatch. Expected ${sessionQuote.currency} ${sessionQuote.value}, got ${payloadQuote.currency} ${payloadQuote.value}`,
       };
     }
 
-    // 3. check quantity within min and max for that item in sessionData.items
-    const sessionItem = sessionData.items?.find((i: any) => i.id === item.id);
-    const selectedCount = item?.quantity?.selected?.count;
-
-    if (!sessionItem) {
-      return {
-        valid: false,
-        message: `Item ${item.id} not found in sessionData.items`,
-      };
-    }
-
-    const min = sessionItem?.quantity?.minimum?.count ?? 1;
-    const max = sessionItem?.quantity?.maximum?.count ?? Infinity;
-
-    if (selectedCount < min || selectedCount > max) {
-      return {
-        valid: false,
-        message: `Item ${item.id} quantity out of range. Expected between ${min} and ${max}, got ${selectedCount}`,
-      };
-    }
+    return { valid: true };
   }
-
-  // 4. check quote value & currency matches sessionData.quote
-  const payloadQuote = order?.quote?.price;
-  const sessionQuote = sessionData?.quote?.price;
-
-  if (!payloadQuote || !sessionQuote) {
-    return {
-      valid: false,
-      message: `Quote missing in payload or sessionData`,
-    };
-  }
-
-  if (
-    payloadQuote.value !== sessionQuote.value ||
-    payloadQuote.currency !== sessionQuote.currency
-  ) {
-    return {
-      valid: false,
-      message: `Quote mismatch. Expected ${sessionQuote.currency} ${sessionQuote.value}, got ${payloadQuote.currency} ${payloadQuote.value}`,
-    };
-  }
-
-  return { valid: true };
-}
 
   async meetRequirements(sessionData: SessionData): Promise<MockOutput> {
-  // Check for updated_payments
-  if (!sessionData.updated_payments || sessionData.updated_payments.length === 0) {
-    return {
-      valid: false,
-      message: "No updated_payments available in session data",
-      code: "MISSING_UPDATED_PAYMENTS",
-    };
-  }
+    // Check for updated_payments
+    if (!sessionData.updated_payments || sessionData.updated_payments.length === 0) {
+      return {
+        valid: false,
+        message: "No updated_payments available in session data",
+        code: "MISSING_UPDATED_PAYMENTS",
+      };
+    }
 
-  // Check for price
-  if (!sessionData.price) {
-    return {
-      valid: false,
-      message: "No price available in session data",
-      code: "MISSING_PRICE",
-    };
-  }
+    // Check for price
+    if (!sessionData.price) {
+      return {
+        valid: false,
+        message: "No price available in session data",
+        code: "MISSING_PRICE",
+      };
+    }
 
-  // Check for items
-  if (!sessionData.items || sessionData.items.length === 0) {
-    return {
-      valid: false,
-      message: "No items available in session data",
-      code: "MISSING_ITEMS",
-    };
-  }
+    // Check for items
+    if (!sessionData.items || sessionData.items.length === 0) {
+      return {
+        valid: false,
+        message: "No items available in session data",
+        code: "MISSING_ITEMS",
+      };
+    }
 
-  // Check for fulfillments
-  if (!sessionData.fulfillments || sessionData.fulfillments.length === 0) {
-    return {
-      valid: false,
-      message: "No fulfillments available in session data",
-      code: "MISSING_FULFILLMENTS",
-    };
-  }
+    // Check for fulfillments
+    if (!sessionData.fulfillments || sessionData.fulfillments.length === 0) {
+      return {
+        valid: false,
+        message: "No fulfillments available in session data",
+        code: "MISSING_FULFILLMENTS",
+      };
+    }
 
-  // Check for order_id
-  if (!sessionData.order_id) {
-    return {
-      valid: false,
-      message: "No order_id available in session data",
-      code: "MISSING_ORDER_ID",
-    };
-  }
+    // Check for order_id
+    if (!sessionData.order_id) {
+      return {
+        valid: false,
+        message: "No order_id available in session data",
+        code: "MISSING_ORDER_ID",
+      };
+    }
 
-  // Check for quote
-  if (!sessionData.quote) {
-    return {
-      valid: false,
-      message: "No quote available in session data",
-      code: "MISSING_QUOTE",
-    };
-  }
+    // Check for quote
+    if (!sessionData.quote) {
+      return {
+        valid: false,
+        message: "No quote available in session data",
+        code: "MISSING_QUOTE",
+      };
+    }
 
-  // Check for created_at
-  if (!sessionData.created_at) {
-    return {
-      valid: false,
-      message: "No created_at available in session data",
-      code: "MISSING_CREATED_AT",
-    };
-  }
+    // Check for created_at
+    if (!sessionData.created_at) {
+      return {
+        valid: false,
+        message: "No created_at available in session data",
+        code: "MISSING_CREATED_AT",
+      };
+    }
 
-  // All requirements satisfied
-  return { valid: true };
-}
+    // All requirements satisfied
+    return { valid: true };
+  }
 }

@@ -21,7 +21,9 @@ export async function onUpdateStopEndGenerator(
   if (sessionData.items.length > 0) {
     existingPayload.message.order.items = sessionData.items;
   }
-
+  if (sessionData.billing) {
+    existingPayload.message.order.billing = sessionData.billing;
+  }
   if (sessionData.payments.length > 0) {
     existingPayload.message.order.payments = sessionData.payments;
     const updatedPrice =

@@ -205,6 +205,9 @@ export async function onInitGenerator(
 	if (sessionData.items.length > 0) {
 		existingPayload.message.order.items = items;
 	}
+	if (sessionData.billing) {
+		existingPayload.message.order.billing = sessionData.billing;
+	}
 	if (sessionData.fulfillments.length > 0) {
 		existingPayload.message.order.fulfillments = fulfillments;
 	}

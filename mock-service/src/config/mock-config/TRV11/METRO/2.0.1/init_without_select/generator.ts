@@ -44,7 +44,8 @@ function updateSettlementAmount(payload: any, sessionData: SessionData) {
         (entry: any) => entry.descriptor?.code === "SETTLEMENT_AMOUNT"
       );
 
-      const price: any = sessionData.price;
+
+      const price: any = totalPrice(payload.message.order.items, sessionData?.items)?.price.value
       const feePercentage: any = sessionData.buyer_app_fee;
       const feeAmount = (price * feePercentage) / 100;
 
@@ -64,7 +65,29 @@ function updateSettlementAmount(payload: any, sessionData: SessionData) {
 
   return payload;
 }
+const totalPrice = (items: any, onsearchItem: any): any => {
+  let total = 0;
+  let currency = "INR";
 
+  items.forEach((sel: any) => {
+    const item = onsearchItem.find((i: any) => i.id === sel.id);
+    if (item) {
+      const itemTotal =
+        Number(item.price.value) * sel.quantity.selected.count;
+
+      total += itemTotal;
+      currency = item.price.currency;
+    }
+  });
+
+  return {
+    price: {
+      value: total.toFixed(2),
+      currency: currency
+    },
+
+  };
+};
 export async function initGenerator(
   existingPayload: any,
   sessionData: any
@@ -79,10 +102,6 @@ export async function initGenerator(
   if (userInput.billing) {
     existingPayload.message.order.billing = userInput?.billing;
   }
-  // if (sessionData?.billing && Object.keys(sessionData.billing).length > 0) {
-  //   existingPayload.message.order.billing = sessionData?.billing;
-  // }
-
 
   if (sessionData.provider_id) {
     existingPayload.message.order.provider.id = sessionData.provider_id;

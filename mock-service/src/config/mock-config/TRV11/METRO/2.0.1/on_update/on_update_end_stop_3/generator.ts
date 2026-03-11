@@ -1,10 +1,10 @@
 
 function generateUuid(): string {
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
-        const random = (Math.random() * 16) | 0;
-        const value = char === "x" ? random : (random & 0x3) | 0x8;
-        return value.toString(16);
-    });
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (char) => {
+    const random = (Math.random() * 16) | 0;
+    const value = char === "x" ? random : (random & 0x3) | 0x8;
+    return value.toString(16);
+  });
 }
 
 
@@ -22,6 +22,9 @@ export async function onUpdateStopEndGenerator(
 
   if (sessionData.fulfillments.length > 0) {
     existingPayload.message.order.fulfillments = sessionData.fulfillments;
+  }
+  if (sessionData.billing) {
+    existingPayload.message.order.billing = sessionData.billing;
   }
   if (sessionData.order_id) {
     existingPayload.message.order.id = sessionData.order_id;

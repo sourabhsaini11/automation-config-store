@@ -6,4 +6,4 @@ save-data:
   buyer_side_fulfillment_ids: "$.message.order.fulfillments[*]"
   selected_item_ids: "$.message.order.items[*].id"
   selected_items: "$.message.order.items[*]"
-  buyer_side_fulfillment_ids: "$.message.order.fulfillments[*]"
+ 

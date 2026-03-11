@@ -81,6 +81,12 @@ export interface SessionData {
 	payment_form?:string;
 	payment_form_motor?:string;
 	parent_item_id?: string;
+	claim_form?: string;
+	renew_form?: string;
+	claim_form_motor?: string;
+	claim_doc_url?: string;
+	renew_doc_url?: string;
+	claim_doc_url_motor?: string;
 	// Form submission data for on_status generators
   form_data?: Record<string, {
    form_submission_id?: string;

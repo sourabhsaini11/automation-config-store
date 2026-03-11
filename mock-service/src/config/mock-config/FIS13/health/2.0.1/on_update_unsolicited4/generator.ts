@@ -62,6 +62,21 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
     if (sessionData.quote_id && order.quote) {
       order.quote.id = sessionData.quote_id;
     }
+  // Update PROPOSAL_ID tag value with dynamic quote ID from session
+  if (sessionData.quote_id) {
+    const items = existingPayload.message?.order?.items;
+    if (items) {
+      items.forEach((item: any) => {
+        item.tags?.forEach((tag: any) => {
+          tag.list?.forEach((listItem: any) => {
+            if (listItem.descriptor?.code === 'PROPOSAL_ID') {
+              listItem.value = sessionData.quote_id;
+            }
+          });
+        });
+      });
+    }
+  }
 
     // Map fulfillment.id from session data
     if (fulfillmentId && order.fulfillments?.[0]) {
@@ -108,6 +123,23 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
     }
+    // Sync payment amount with calculated quote price
+    if (existingPayload.message?.order?.payments?.[0]?.params) {
+      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
+    }
+  }
+
+  // Update document URLs from session data
+  if (existingPayload.message?.order?.documents) {
+    existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {
+      if (doc.descriptor?.code === 'CLAIM_DOC' && doc.mime_type === 'application/html' && sessionData.claim_doc_url) {
+        doc.url = sessionData.claim_doc_url;
+      }
+      if (doc.descriptor?.code === 'RENEW_DOC' && doc.mime_type === 'application/html' && sessionData.renew_doc_url) {
+        doc.url = sessionData.renew_doc_url;
+      }
+      return doc;
+    });
   }
 
   return existingPayload;

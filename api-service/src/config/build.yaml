@@ -44139,21 +44139,21 @@ x-validations:
             attr: $.message.order.payments[*].params.amount
             _RETURN_: attr are present
 
-          - _NAME_: PAYMENT_PARAMS_BANK_ACCOUNT_NUMBER
-            attr: $.message.order.payments[*].params.bank_account_number
-            _RETURN_: attr are present
+          # - _NAME_: PAYMENT_PARAMS_BANK_ACCOUNT_NUMBER
+          #   attr: $.message.order.payments[*].params.bank_account_number
+          #   _RETURN_: attr are present
 
-          - _NAME_: PAYMENT_PARAMS_BANK_CODE
-            attr: $.message.order.payments[*].params.bank_code
-            _RETURN_: attr are present
+          # - _NAME_: PAYMENT_PARAMS_BANK_CODE
+          #   attr: $.message.order.payments[*].params.bank_code
+          #   _RETURN_: attr are present
 
           - _NAME_: PAYMENT_CURRENCY
             attr: $.message.order.payments[*].params.currency
             _RETURN_: attr are present
 
-          - _NAME_: PAYMENT_TRANSACTION_ID
-            attr: $.message.order.payments[*].params.transaction_id
-            _RETURN_: attr are present
+          # - _NAME_: PAYMENT_TRANSACTION_ID
+          #   attr: $.message.order.payments[*].params.transaction_id
+          #   _RETURN_: attr are present
 
       - _NAME_: ON_UPDATE_ORDER_PAYMENT_TAG_VALIDATIONS
         _RETURN_:
@@ -44245,31 +44245,31 @@ x-validations:
             _RETURN_: attr are present
 
       # ---------------- DOCUMENTS ----------------
-      - _NAME_: ON_UPDATE_DOCUMENTS
-        _RETURN_:
-          - _NAME_: DOCUMENT_CODE
-            attr: $.message.order.documents[*].descriptor.code
-            _RETURN_: attr are present
+      # - _NAME_: ON_UPDATE_DOCUMENTS
+      #   _RETURN_:
+      #     - _NAME_: DOCUMENT_CODE
+      #       attr: $.message.order.documents[*].descriptor.code
+      #       _RETURN_: attr are present
 
-          - _NAME_: DOCUMENT_NAME
-            attr: $.message.order.documents[*].descriptor.name
-            _RETURN_: attr are present
+      #     - _NAME_: DOCUMENT_NAME
+      #       attr: $.message.order.documents[*].descriptor.name
+      #       _RETURN_: attr are present
 
-          - _NAME_: DOCUMENT_SHORT_DESC
-            attr: $.message.order.documents[*].descriptor.short_desc
-            _RETURN_: attr are present
+      #     - _NAME_: DOCUMENT_SHORT_DESC
+      #       attr: $.message.order.documents[*].descriptor.short_desc
+      #       _RETURN_: attr are present
 
-          - _NAME_: DOCUMENT_LONG_DESC
-            attr: $.message.order.documents[*].descriptor.long_desc
-            _RETURN_: attr are present
+      #     - _NAME_: DOCUMENT_LONG_DESC
+      #       attr: $.message.order.documents[*].descriptor.long_desc
+      #       _RETURN_: attr are present
 
-          - _NAME_: DOCUMENT_MIME_TYPE
-            attr: $.message.order.documents[*].mime_type
-            _RETURN_: attr are present
+      #     - _NAME_: DOCUMENT_MIME_TYPE
+      #       attr: $.message.order.documents[*].mime_type
+      #       _RETURN_: attr are present
 
-          - _NAME_: DOCUMENT_URL
-            attr: $.message.order.documents[*].url
-            _RETURN_: attr are present
+      #     - _NAME_: DOCUMENT_URL
+      #       attr: $.message.order.documents[*].url
+      #       _RETURN_: attr are present // need to add these validations in L1 custom
 
     status:
       # ---------------- CONTEXT ----------------

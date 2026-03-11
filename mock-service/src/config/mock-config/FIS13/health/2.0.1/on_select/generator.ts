@@ -87,6 +87,12 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
     const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/verification_status?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
     existingPayload.message.order.items[0].xinput.form.url = url;
   }
+  
+  const preOrderFlows = ['Health_Insurance_Application(PRE-ORDER-Individual)', 'Health_Insurance_Application(PRE-ORDER-Family)'];
+  
+  if (preOrderFlows.includes(sessionData.flow_id) && existingPayload.message?.order?.payments?.[0]) {
+     delete existingPayload.message.order.items[0].xinput
+  }
 
   // Carry forward or remove add_ons based on user selection from select step
   if (existingPayload.message?.order?.items?.[0]) {
@@ -123,6 +129,10 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
     );
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
+    }
+    // Sync payment amount with calculated quote price
+    if (existingPayload.message?.order?.payments?.[0]?.params) {
+      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
     }
   }
 

@@ -126,7 +126,9 @@ export async function onCancelSoftGenerator(
         delete stop.authorization;
       });
     });
-
+    if (sessionData.billing) {
+      existingPayload.message.order.billing = sessionData.billing;
+    }
     existingPayload.message.order = removeTicketStops(
       existingPayload.message.order
     );

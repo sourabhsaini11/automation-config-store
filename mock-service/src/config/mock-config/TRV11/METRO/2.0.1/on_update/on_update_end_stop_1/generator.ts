@@ -227,6 +227,9 @@ export async function onUpdateStopEndGenerator(
   if (sessionData.provider) {
     existingPayload.message.order.provider = sessionData.provider;
   }
+  if (sessionData.billing) {
+    existingPayload.message.order.billing = sessionData.billing;
+  }
   existingPayload.message.order.provider = sessionData.provider;
   existingPayload = updateSettlementAmount(existingPayload, sessionData);
   const now = new Date().toISOString();

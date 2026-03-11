@@ -2,7 +2,7 @@ import { randomUUID } from "crypto";
 
 
 export async function updateDefaultGenerator(existingPayload: any, sessionData: any) {
-  console.log("Gold Loan Update generator - Available session data:", {
+  console.log("Available session data:", {
     transaction_id: sessionData.transaction_id,
     message_id: sessionData.message_id,
     order_id: sessionData.order_id,

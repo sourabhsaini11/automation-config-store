@@ -108,6 +108,22 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
     }
+    // Sync payment amount with calculated quote price
+    if (existingPayload.message?.order?.payments?.[0]?.params) {
+      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
+    }
+  }
+
+  
+  // Update document URLs to use dynamic form service URLs
+  if (existingPayload.message?.order?.documents) {
+    existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {
+      if (doc.descriptor?.code === 'CLAIM_DOC' && doc.mime_type === 'application/html' && sessionData.claim_doc_url_motor) {
+        doc.url = sessionData.claim_doc_url_motor;
+      }
+     
+      return doc;
+    });
   }
 
   return existingPayload;

@@ -93,6 +93,13 @@ export async function onConfirmDefaultGenerator(existingPayload: any, sessionDat
     });
   }
 
+  // Generate dynamic payment form URL
+  if (existingPayload.message?.order?.payments?.[0]) {
+    const paymentUrl = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/payment_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
+    existingPayload.message.order.payments[0].url = paymentUrl;
+    console.log("Generated payment form URL:", paymentUrl);
+  }
+
   // Update customer name in fulfillments if available from session data
   if (sessionData.customer_name && existingPayload.message?.order?.fulfillments?.[0]?.customer?.person) {
     existingPayload.message.order.fulfillments[0].customer.person.name = sessionData.customer_name;
@@ -146,7 +153,13 @@ export async function onConfirmDefaultGenerator(existingPayload: any, sessionDat
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
     }
+    // Sync payment amount with calculated quote price
+    if (existingPayload.message?.order?.payments?.[0]?.params) {
+      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
+    }
   }
+
+
 
   return existingPayload;
 }

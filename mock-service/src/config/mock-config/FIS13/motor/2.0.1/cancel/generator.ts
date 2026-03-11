@@ -3,14 +3,21 @@ export async function cancelGenerator(existingPayload: any, sessionData: any) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
 
-  console.log("sessionData for status", sessionData);
-  
-  if (existingPayload.context?.transaction_id) {
-    existingPayload.message = existingPayload.message || {};
-    existingPayload.message.ref_id = existingPayload.context.transaction_id;
-    delete existingPayload.message.transaction_id;
-  } 
-  
+  // Update transaction_id from session data
+  if (sessionData.transaction_id && existingPayload.context) {
+    existingPayload.context.transaction_id = sessionData.transaction_id;
+  }
+
+  // Update message_id from session data
+  if (sessionData.message_id && existingPayload.context) {
+    existingPayload.context.message_id = crypto.randomUUID();
+  }
+
+  // Update order_id from session data (saved from on_confirm)
+  const orderId = sessionData.order_id || sessionData.order?.id;
+  if (orderId && existingPayload.message) {
+    existingPayload.message.order_id = orderId;
+  }
 
   return existingPayload;
 }

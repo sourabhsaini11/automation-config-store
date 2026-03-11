@@ -110,6 +110,21 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
   if (sessionData.quote_id && existingPayload.message?.order?.quote) {
     existingPayload.message.order.quote.id = sessionData.quote_id;
   }
+  // Update PROPOSAL_ID tag value with dynamic quote ID from session
+  if (sessionData.quote_id) {
+    const items = existingPayload.message?.order?.items;
+    if (items) {
+      items.forEach((item: any) => {
+        item.tags?.forEach((tag: any) => {
+          tag.list?.forEach((listItem: any) => {
+            if (listItem.descriptor?.code === 'PROPOSAL_ID') {
+              listItem.value = sessionData.quote_id;
+            }
+          });
+        });
+      });
+    }
+  }
 
   if (existingPayload.message?.order?.items?.[0]) {
     const item = existingPayload.message.order.items[0];
@@ -169,6 +184,10 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
     );
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
+    }
+    // Sync payment amount with calculated quote price
+    if (existingPayload.message?.order?.payments?.[0]?.params) {
+      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
     }
   }
 

@@ -70,7 +70,6 @@ import { MockOnUpdateUnsolicited2Class as MotorMockOnUpdateUnsolicited2Class } f
 import { MockOnUpdateUnsolicited3Class as MotorMockOnUpdateUnsolicited3Class } from "./motor/2.0.1/on_update_unsolicited3/class";
 import { MockOnUpdateUnsolicited4Class as MotorMockOnUpdateUnsolicited4Class } from "./motor/2.0.1/on_update_unsolicited4/class";
 import { MockOnUpdateUnsolicited5Class as MotorMockOnUpdateUnsolicited5Class } from "./motor/2.0.1/on_update_unsolicited5/class";
-import { MockOnUpdateUnsolicited6Class as MotorMockOnUpdateUnsolicited6Class } from "./motor/2.0.1/on_update_unsolicited6/class";
 import { MockCancelClass as MotorMockCancelClass } from "./motor/2.0.1/cancel/class";
 import { MockOnCancelClass as MotorMockOnCancelClass } from "./motor/2.0.1/on_cancel/class";
 import { MockVehicleDetailsFormClass as MotorMockVehicleDetailsFormClass } from "./motor/2.0.1/form/vehicle_details_form";
@@ -94,6 +93,10 @@ import { MockOnConfirm2Class } from "./health/2.0.1/on_confirm2/class";
 import { MockConfirm2Class } from "./health/2.0.1/confirm2/class";
 import { MockPaymentFormClass } from "./health/2.0.1/form8/payment_form";
 import { MockPaymentFormClass as MockPaymentFormMotorClass } from "./motor/2.0.1/form8/payment_form";
+import { MockClaimFormClass } from "./health/2.0.1/form9/claim_form";
+import { MockClaimFormMotorClass } from "./motor/2.0.1/form9/claim_form_motor";
+
+import { MockRenewFormClass } from "./health/2.0.1/form10/renew_form";
 
 
 // types/helpers
@@ -169,6 +172,8 @@ const registry = {
 	consumer_information_form: MockConsumerInformationFormClass,
 	manual_review_form: MockVerificationStatusFormClass,
 	payment_form:MockPaymentFormClass,
+	claim_form:MockClaimFormClass,
+	renew_form:MockRenewFormClass,
 
 
 	//motor api calls//
@@ -221,7 +226,7 @@ const registry = {
 	on_update_unsolicited3_motor: MotorMockOnUpdateUnsolicited3Class,
 	on_update_unsolicited4_motor: MotorMockOnUpdateUnsolicited4Class,
 	on_update_unsolicited5_motor: MotorMockOnUpdateUnsolicited5Class,
-	on_update_unsolicited6_motor: MotorMockOnUpdateUnsolicited6Class,
+
 
 	//cancel
     cancel_motor: MotorMockCancelClass,
@@ -237,6 +242,7 @@ const registry = {
 	personal_details_form:MotorMockPersonalDetailsFormClass,
 	consumer_information_form_motor:MotorMockConsumerInformationFormClass,//need to update
 	payment_form_motor:MockPaymentFormMotorClass,
+	claim_form_motor:MockClaimFormMotorClass,
 
 
 

@@ -52,6 +52,21 @@ export async function confirmDefaultGenerator(existingPayload: any, sessionData:
   if ((sessionData.quote_id || sessionData.quote?.id) && existingPayload.message?.order?.quote) {
     existingPayload.message.order.quote.id = sessionData.quote_id || sessionData.quote?.id;
   }
+  // Update PROPOSAL_ID tag value with dynamic quote ID from session
+  if (sessionData.quote_id) {
+    const items = existingPayload.message?.order?.items;
+    if (items) {
+      items.forEach((item: any) => {
+        item.tags?.forEach((tag: any) => {
+          tag.list?.forEach((listItem: any) => {
+            if (listItem.descriptor?.code === 'PROPOSAL_ID') {
+              listItem.value = sessionData.quote_id;
+            }
+          });
+        });
+      });
+    }
+  }
 
   // Update quote breakup item references with dynamic child item ID
   if (existingPayload.message?.order?.quote?.breakup && childItem?.id) {
@@ -119,6 +134,10 @@ export async function confirmDefaultGenerator(existingPayload: any, sessionData:
     );
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
+    }
+    // Sync payment amount with calculated quote price
+    if (existingPayload.message?.order?.payments?.[0]?.params) {
+      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
     }
   }
 

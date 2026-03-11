@@ -62,6 +62,21 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
     if (sessionData.quote_id && order.quote) {
       order.quote.id = sessionData.quote_id;
     }
+  // Update PROPOSAL_ID tag value with dynamic quote ID from session
+  if (sessionData.quote_id) {
+    const items = existingPayload.message?.order?.items;
+    if (items) {
+      items.forEach((item: any) => {
+        item.tags?.forEach((tag: any) => {
+          tag.list?.forEach((listItem: any) => {
+            if (listItem.descriptor?.code === 'PROPOSAL_ID') {
+              listItem.value = sessionData.quote_id;
+            }
+          });
+        });
+      });
+    }
+  }
 
     // Map fulfillment.id from session data
     if (fulfillmentId && order.fulfillments?.[0]) {
@@ -111,6 +126,77 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
     }
+    // Sync payment amount with calculated quote price
+    if (existingPayload.message?.order?.payments?.[0]?.params) {
+      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
+    }
+  }
+
+  // Use claim form submitted data to populate CLAIM fulfillment tags
+  const claimFormData = sessionData.form_data?.claim_form;
+  if (claimFormData && existingPayload.message?.order?.fulfillments) {
+    const claimFulfillment = existingPayload.message.order.fulfillments.find(
+      (f: any) => f.type === 'CLAIM'
+    );
+    if (claimFulfillment) {
+      // Find or create INFO tag group
+      if (!claimFulfillment.tags) {
+        claimFulfillment.tags = [];
+      }
+      let infoTag = claimFulfillment.tags.find(
+        (t: any) => t.descriptor?.code === 'INFO'
+      );
+      if (!infoTag) {
+        infoTag = { descriptor: { code: 'INFO' }, display: true, list: [] };
+        claimFulfillment.tags.push(infoTag);
+      }
+      if (!infoTag.list) {
+        infoTag.list = [];
+      }
+
+      // Set REQUESTED_CLAIM_AMOUNT from claim form data
+      if (claimFormData.claimAmount) {
+        const amountEntry = infoTag.list.find(
+          (item: any) => item.descriptor?.code === 'REQUESTED_CLAIM_AMOUNT'
+        );
+        if (amountEntry) {
+          amountEntry.value = `${claimFormData.claimAmount} INR`;
+        } else {
+          infoTag.list.push({
+            descriptor: { code: 'REQUESTED_CLAIM_AMOUNT' },
+            value: `${claimFormData.claimAmount} INR`,
+          });
+        }
+      }
+
+      // Set CLAIM_TYPE from form idType
+      if (claimFormData.idType) {
+        const claimTypeEntry = infoTag.list.find(
+          (item: any) => item.descriptor?.code === 'CLAIM_TYPE'
+        );
+        if (claimTypeEntry) {
+          claimTypeEntry.value = claimFormData.idType;
+        } else {
+          infoTag.list.push({
+            descriptor: { code: 'CLAIM_TYPE' },
+            value: claimFormData.idType,
+          });
+        }
+      }
+    }
+  }
+
+  // Update document URLs from session data (use claim_doc_url/renew_doc_url to avoid overwrite by form submission_id)
+  if (existingPayload.message?.order?.documents) {
+    existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {
+      if (doc.descriptor?.code === 'CLAIM_DOC' && doc.mime_type === 'application/html' && sessionData.claim_doc_url) {
+        doc.url = sessionData.claim_doc_url;
+      }
+      if (doc.descriptor?.code === 'RENEW_DOC' && doc.mime_type === 'application/html' && sessionData.renew_doc_url) {
+        doc.url = sessionData.renew_doc_url;
+      }
+      return doc;
+    });
   }
 
   return existingPayload;

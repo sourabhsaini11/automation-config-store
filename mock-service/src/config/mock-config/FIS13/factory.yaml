@@ -336,16 +336,16 @@ codes:
     action: on_update
     default: FIS13/motor/2.0.1/on_update_unsolicited5/default.yaml
     message_id: true
-  - code: 327
-    action_id: on_update_unsolicited6_motor
-    action: on_update
-    default: FIS13/motor/2.0.1/on_update_unsolicited6/default.yaml
-    message_id: true
-  - code: 328
-    action_id: on_update_unsolicited7_motor
-    action: on_update
-    default: FIS13/motor/2.0.1/on_update_unsolicited7/default.yaml
-    message_id: true
+  # - code: 327
+  #   action_id: on_update_unsolicited6_motor
+  #   action: on_update
+  #   default: FIS13/motor/2.0.1/on_update_unsolicited6/default.yaml
+  #   message_id: true
+  # - code: 328
+  #   action_id: on_update_unsolicited7_motor
+  #   action: on_update
+  #   default: FIS13/motor/2.0.1/on_update_unsolicited7/default.yaml
+  #   message_id: true
   - code: 329
     action_id: status_motor
     action: status

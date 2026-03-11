@@ -15,13 +15,14 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
     existingPayload.context.message_id = generateUUID();
   }
 
-     if (existingPayload.message?.order) {
+    if (existingPayload.message?.order) {
     const now = new Date().toISOString();
     if (existingPayload.message.order.updated_at) {
       existingPayload.message.order.updated_at = now;
       existingPayload.message.order.created_at = sessionData.created_at;
     }
   }
+
   // Helper function to generate UUID v4
   function generateUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -45,7 +46,6 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
       order.provider.id = sessionData.selected_provider.id;
     }
 
-   
 
     // Map item.id and parent_item_id from session data
     const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
@@ -69,6 +69,7 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
       order.fulfillments[0].id = fulfillmentId;
     }
   }
+
 
 
   // Carry forward or remove add_ons based on user selection from select step
@@ -106,6 +107,10 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
     );
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
+    }
+    // Sync payment amount with calculated quote price
+    if (existingPayload.message?.order?.payments?.[0]?.params) {
+      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
     }
   }
 

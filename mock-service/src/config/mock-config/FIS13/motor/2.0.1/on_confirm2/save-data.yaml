@@ -4,3 +4,5 @@ save-data:
     order: "$.message.order"
     created_at : "$.message.order.created_at"
     order_id: "$.message.order.id"
+    claim_form_motor: "$.message.order.documents[?(@.descriptor.code=='CLAIM_DOC')].url"
+    renew_form: "$.message.order.documents[?(@.descriptor.code=='RENEW_DOC')].url"

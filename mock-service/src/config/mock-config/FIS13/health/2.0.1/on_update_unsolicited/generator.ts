@@ -62,6 +62,21 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
     if (sessionData.quote_id && order.quote) {
       order.quote.id = sessionData.quote_id;
     }
+  // Update PROPOSAL_ID tag value with dynamic quote ID from session
+  if (sessionData.quote_id) {
+    const items = existingPayload.message?.order?.items;
+    if (items) {
+      items.forEach((item: any) => {
+        item.tags?.forEach((tag: any) => {
+          tag.list?.forEach((listItem: any) => {
+            if (listItem.descriptor?.code === 'PROPOSAL_ID') {
+              listItem.value = sessionData.quote_id;
+            }
+          });
+        });
+      });
+    }
+  }
 
     // Map fulfillment.id from session data
     if (fulfillmentId && order.fulfillments?.[0]) {
@@ -108,7 +123,32 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
     }
+    // Sync payment amount with calculated quote price
+    if (existingPayload.message?.order?.payments?.[0]?.params) {
+      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
+    }
   }
 
+  
+  // Update document URLs to use dynamic form service URLs
+if (existingPayload.message?.order?.documents) {
+    existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {
+        const renewFlows = ['Renew_Health_Insurance(Individual)', 'Renew_Health_Insurance(Family)'];
+         const claimFlows = ['Claim_Health_Insurance(Individual)', ' Claim_Health_Insurance(Family)'];
+    
+      if (doc.descriptor?.code === 'RENEW_DOC' && doc.mime_type === 'application/html'&& renewFlows.includes(sessionData.flow_id)) {
+        doc.url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/renew_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
+      }
+      if (doc.descriptor?.code === 'CLAIM_DOC' && doc.mime_type === 'application/html' && claimFlows.includes(sessionData.flow_id)) {
+        doc.url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/claim_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
+      }
+      
+      return doc;
+    });
+  }
+
+ 
+
+ 
   return existingPayload;
 }

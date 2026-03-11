@@ -135,6 +135,10 @@ export async function onStatusGenerator(existingPayload: any, sessionData: any) 
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
     }
+    // Sync payment amount with calculated quote price
+    if (existingPayload.message?.order?.payments?.[0]?.params) {
+      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
+    }
   }
 
   return existingPayload;

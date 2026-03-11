@@ -4,3 +4,6 @@ save-data:
     order: "$.message.order"
     order_id: "$.message.order.id"
     created_at : "$.message.order.created_at"
+    payment_form: "$.message.order.payments[0].url"
+    claim_form: "$.message.order.documents[1].url"
+    renew_form: "$.message.order.documents[2].url"

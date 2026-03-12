@@ -14,7 +14,16 @@ export async function onStatusCancelGenerator(existingPayload: any, sessionData:
   }
 
   if (sessionData.fulfillments.length > 0) {
-    existingPayload.message.order.fulfillments = sessionData.fulfillments;
+    existingPayload.message.order.fulfillments = sessionData.fulfillments?.forEach((fulfillment: any) => {
+      if (fulfillment.type == "TICKET") {
+        fulfillment.stops?.forEach((stop: any) => {
+          if (stop.authorization) {
+            stop.authorization.status = "CLAIMED";
+          }
+        });
+      }
+    });
+
   }
   if (sessionData.order_id) {
     existingPayload.message.order.id = sessionData.order_id;

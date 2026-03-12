@@ -27847,15 +27847,15 @@ x-validations:
           - SETTLEMENT_TERMS
         _RETURN_: subTags all in validValues
       - _NAME_: REQUIRED_CANCELLATION_DURATION
-        _SCOPE_: "$.message.order.cancellation_terms[*].cancel_by"
+        _SCOPE_: "$.message.order.cancellation_terms[?(@.cancel_by)].cancel_by"
         subTags: "$.duration"
         _RETURN_: subTags are present
       - _NAME_: REQUIRED_CANCELLATION_PERCENTAGE
-        _SCOPE_: "$.message.order.cancellation_terms[*].cancellation_fee"
+        _SCOPE_: "$.message.order.cancellation_terms[?(@.cancel_by)].cancellation_fee"
         subTags: "$.percentage"
         _RETURN_: subTags are present
       - _NAME_: VALIDATE_CANCELLATION_DURATION_FORMAT
-        _SCOPE_: "$.message.order.cancellation_terms[*].cancel_by"
+        _SCOPE_: "$.message.order.cancellation_terms[?(@.cancel_by)].cancel_by"
         subTags: "$.duration"
         match1: ["^P(\\d+D)?(T(\\d+H)?(\\d+M)?)?$"]
         _RETURN_: subTags follow regex match1

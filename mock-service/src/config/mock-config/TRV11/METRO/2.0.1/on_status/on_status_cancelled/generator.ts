@@ -14,7 +14,8 @@ export async function onStatusCancelGenerator(existingPayload: any, sessionData:
   }
 
   if (sessionData.fulfillments.length > 0) {
-    existingPayload.message.order.fulfillments = sessionData.fulfillments?.forEach((fulfillment: any) => {
+    existingPayload.message.order.fulfillments = sessionData?.fulfillments
+    existingPayload.message.order.fulfillments.forEach((fulfillment: any) => {
       if (fulfillment.type == "TICKET") {
         fulfillment.stops?.forEach((stop: any) => {
           if (stop.authorization) {
@@ -35,7 +36,7 @@ export async function onStatusCancelGenerator(existingPayload: any, sessionData:
     existingPayload.message.order.provider = sessionData.provider
   }
 
-  if (sessionData.flow_id === "DELAYED_CANCELLATION_FLOW_REJECTED") {
+  if (sessionData.flow_id === "DELAYED_CANCELLATION_FLOW_REJECTED" || sessionData.flow_id === "DELAYED_CANCELLATION_FLOW_REJECTED (W/O Select)") {
     existingPayload.message.order.cancellation = {
       ...existingPayload.message.order.cancellation,
       additional_description: {

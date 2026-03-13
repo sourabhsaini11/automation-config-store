@@ -40,19 +40,33 @@ export class MockOnSearchSellerPagination1Class extends MockAction {
         return onSearchSellerPagination1Generator(existingPayload, sessionData);
     }
     async validate(targetPayload: any): Promise<MockOutput> {
-        // Example validation: check required fields
-        // if (!targetPayload || typeof targetPayload !== "object") {
-        //     return { valid: false, message: "Payload must be an object" };
-        // }
-        // if (typeof targetPayload.page !== "number" || targetPayload.page < 1) {
-        //     return { valid: false, message: "'page' must be a positive number" };
-        // }
-        // if (typeof targetPayload.pageSize !== "number" || targetPayload.pageSize < 1) {
-        //     return { valid: false, message: "'pageSize' must be a positive number" };
-        // }
-        // if (!targetPayload.sellerId) {
-        //     return { valid: false, message: "'sellerId' is required" };
-        // }
+        const allowedCategoryCodes = [
+            "CULTURE_HERITAGE",
+            "MONUMENT_HISTORICAL_SITE",
+            "MUSEUM",
+            "MEMORIAL",
+            "EXHIBITION",
+            "OTHERS",
+            "HANDICRAFT",
+            "HANDLOOM"
+        ];
+        const providers = targetPayload?.message?.catalog?.providers;
+        if (providers && Array.isArray(providers)) {
+            for (const provider of providers) {
+                if (provider.categories && Array.isArray(provider.categories)) {
+                    for (const cat of provider.categories) {
+                        const code = cat?.descriptor?.code;
+                        if (code && !allowedCategoryCodes.includes(code)) {
+                            return {
+                                valid: false,
+                                message: `Invalid category code: ${code}. Allowed codes are: ${allowedCategoryCodes.join(", ")}`,
+                                code: "INVALID_CATEGORY_CODE"
+                            };
+                        }
+                    }
+                }
+            }
+        }
         return { valid: true };
     }
     async meetRequirements(sessionData: SessionData): Promise<MockOutput> {

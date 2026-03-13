@@ -28,8 +28,36 @@ export class MockOnSearchIncrementalPull1Class extends MockAction {
     generator(existingPayload: any, sessionData: SessionData): Promise<any> {
         return onSearchIncrementalPull1Generator(existingPayload, sessionData);
     }
-    async validate(targetPayload: any): Promise<MockOutput> {
-        return { valid: true };
+    async validate(targetPayload: any, sessionData: SessionData): Promise<MockOutput> {
+        const allowedCategoryCodes = [
+            "CULTURE_HERITAGE",
+            "MONUMENT_HISTORICAL_SITE",
+            "MUSEUM",
+            "MEMORIAL",
+            "EXHIBITION",
+            "OTHERS",
+            "HANDICRAFT",
+            "HANDLOOM"
+        ];
+        const providers = targetPayload?.message?.catalog?.providers;
+        if (providers && Array.isArray(providers)) {
+            for (const provider of providers) {
+                if (provider.categories && Array.isArray(provider.categories)) {
+                    for (const cat of provider.categories) {
+                        const code = cat?.descriptor?.code;
+                        if (code && !allowedCategoryCodes.includes(code)) {
+                            return {
+                                valid: false,
+                                message: `Invalid category code: ${code}. Allowed codes are: ${allowedCategoryCodes.join(", ")}`,
+                                code: "INVALID_CATEGORY_CODE"
+                            };
+                        }
+                    }
+                }
+            }
+        }
+
+        return { valid: false };
     }
     async meetRequirements(sessionData: SessionData): Promise<MockOutput> {
         if (!sessionData.collected_by) {

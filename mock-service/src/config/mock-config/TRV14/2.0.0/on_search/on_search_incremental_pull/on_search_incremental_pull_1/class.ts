@@ -57,7 +57,7 @@ export class MockOnSearchIncrementalPull1Class extends MockAction {
             }
         }
 
-        return { valid: false };
+        return { valid: true };
     }
     async meetRequirements(sessionData: SessionData): Promise<MockOutput> {
         if (!sessionData.collected_by) {

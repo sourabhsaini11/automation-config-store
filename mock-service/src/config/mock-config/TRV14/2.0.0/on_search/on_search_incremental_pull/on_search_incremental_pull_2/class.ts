@@ -31,7 +31,33 @@ export class MockOnSearchIncrementalPull2Class extends MockAction {
     async validate(targetPayload: any, sessionData: SessionData): Promise<MockOutput> {
         const provider = targetPayload?.message?.catalog?.providers?.[0];
         if (!provider) return { valid: false, message: "Provider not found", code: "MISSING_PROVIDER" };
-
+        const allowedCategoryCodes = [
+            "CULTURE_HERITAGE",
+            "MONUMENT_HISTORICAL_SITE",
+            "MUSEUM",
+            "MEMORIAL",
+            "EXHIBITION",
+            "OTHERS",
+            "HANDICRAFT",
+            "HANDLOOM"
+        ];
+        const providers = targetPayload?.message?.catalog?.providers;
+        if (providers && Array.isArray(providers)) {
+            for (const provider of providers) {
+                if (provider.categories && Array.isArray(provider.categories)) {
+                    for (const cat of provider.categories) {
+                        const code = cat?.descriptor?.code;
+                        if (code && !allowedCategoryCodes.includes(code)) {
+                            return {
+                                valid: false,
+                                message: `Invalid category code: ${code}. Allowed codes are: ${allowedCategoryCodes.join(", ")}`,
+                                code: "INVALID_CATEGORY_CODE"
+                            };
+                        }
+                    }
+                }
+            }
+        }
         if (sessionData.provider_id && provider.id !== sessionData.provider_id)
             return { valid: false, message: `Provider ID mismatch: ${sessionData.provider_id}`, code: "ID_MISMATCH" };
 

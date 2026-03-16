@@ -13,7 +13,7 @@ export async function initGenerator(
   existingPayload.message.order.fulfillments = transformFulfillments(
     fulfillments
   );
-  console.log(" existingPayload.message.order.fulfillments in init_station_code", existingPayload.message.order.fulfillments);
+  console.log(" existingPayload.message.order.fulfillments in init_station_code", JSON.stringify(existingPayload.message.order.fulfillments));
 
   existingPayload.message.order.provider = { id: sessionData.provider_id };
 
@@ -71,7 +71,7 @@ export async function initGenerator(
 }
 
 function transformFulfillments(fulfillments: any) {
-  console.log("TRV12/Intercity/2.0.0/init/init_station_code/generator fulfillments", fulfillments);
+  console.log("TRV12/Intercity/2.0.0/init/init_station_code/generator fulfillments", JSON.stringify(fulfillments));
 
   const customers = [
     {
@@ -82,20 +82,36 @@ function transformFulfillments(fulfillments: any) {
       person: { name: "RACHEL ADAMS", age: "27", gender: "FEMALE" },
       contact: { phone: "+91-9723797890" },
     },
+    {
+      person: { name: "John Doe", age: "35", gender: "MALE" },
+      contact: { phone: "+91-9876543210" },
+    },
+    {
+      person: { name: "Jane Smith", age: "29", gender: "FEMALE" },
+      contact: { phone: "+91-9123456789" },
+    },
   ];
 
   return fulfillments?.map((f: any, index: number) => {
-    if (f.id === "F1") {
+    const transformedFulfillment = { ...f };
+
+    if (f.id === "F1" || f.id === "FT-1") {
       return f;
     }
 
-    return {
-      id: f.id,
-      customer: customers[index - 1],
-      tags: f.tags?.map((tag: any) => ({
+    const customer = customers[index % customers.length];
+    if (customer) {
+      transformedFulfillment.customer = customer;
+    }
+
+    if (f.tags) {
+      transformedFulfillment.tags = f.tags.map((tag: any) => ({
         descriptor: tag.descriptor,
-        list: tag.list.filter((item: any) => item.descriptor.code === "NUMBER"),
-      })),
-    };
+        list: tag.list?.filter((item: any) => item.descriptor.code === "NUMBER"),
+      }));
+    }
+    console.log("transformedFulfillment-init", JSON.stringify(transformedFulfillment));
+
+    return transformedFulfillment;
   });
 }

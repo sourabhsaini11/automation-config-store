@@ -261,7 +261,7 @@ async function validateLSPterms(
       Array.isArray(tag.list) &&
       tag.list.some(
         (item: { code: string; value: string }) =>
-          item.code === "accept_bpp_terms" && item.value === "yes"
+          item.code === "accept_bpp_terms" && item.value === "Y"
       )
   );
 }

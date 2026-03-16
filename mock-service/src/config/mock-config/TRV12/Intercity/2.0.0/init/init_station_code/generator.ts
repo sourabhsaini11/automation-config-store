@@ -13,6 +13,7 @@ export async function initGenerator(
   existingPayload.message.order.fulfillments = transformFulfillments(
     fulfillments
   );
+  console.log(" existingPayload.message.order.fulfillments in init_station_code", existingPayload.message.order.fulfillments);
 
   existingPayload.message.order.provider = { id: sessionData.provider_id };
 
@@ -70,6 +71,8 @@ export async function initGenerator(
 }
 
 function transformFulfillments(fulfillments: any) {
+  console.log("TRV12/Intercity/2.0.0/init/init_station_code/generator fulfillments", fulfillments);
+
   const customers = [
     {
       person: { name: "Joe Adams", age: "30", gender: "MALE" },
@@ -89,7 +92,7 @@ function transformFulfillments(fulfillments: any) {
     return {
       id: f.id,
       customer: customers[index - 1],
-      tags: f.tags.map((tag: any) => ({
+      tags: f.tags?.map((tag: any) => ({
         descriptor: tag.descriptor,
         list: tag.list.filter((item: any) => item.descriptor.code === "NUMBER"),
       })),

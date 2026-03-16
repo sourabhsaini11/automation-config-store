@@ -2,10 +2,7 @@ export async function onSearch_2_Generator(
   existingPayload: any,
   sessionData: any
 ) {
-  delete existingPayload.context.bpp_uri;
-  delete existingPayload.context.bpp_id;
 
-  console.log(sessionData?.search_1_fulfillment);
   const dateOfJourney = sessionData?.search_1_fulfillment?.stops?.find(
     (stop: any) => stop.type === "START"
   )?.time?.timestamp;

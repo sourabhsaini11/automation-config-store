@@ -2,8 +2,6 @@ export async function onCancelSoftUserCancellationGenerator(
   existingPayload: any,
   sessionData: any
 ) {
-  delete existingPayload.context.bpp_uri;
-  delete existingPayload.context.bpp_id;
 
   existingPayload.message.order.id = sessionData?.confirm_order_id ?? "O1";
   existingPayload.message.order.cancellation = {

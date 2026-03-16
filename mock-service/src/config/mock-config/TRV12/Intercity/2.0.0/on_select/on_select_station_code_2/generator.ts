@@ -9,7 +9,7 @@ export async function onSelectGenerator(
   existingPayload.message.order.items = [sessionData.on_select_items];
   existingPayload.message.order.provider = sessionData.provider;
   existingPayload.message.order.fulfillments = transformFulfillments(
-    sessionData.on_select_fulfillments?.[0],
+    sessionData.on_select_fulfillments?.flat(),
     sessionData?.on_select_fulfillments_tags,
     sessionData?.select_2_fulfillments,
 
@@ -31,8 +31,8 @@ function calculateQuote(sessionData: SessionData, existingPayload: any) {
   const totalSeatFare = seatFare * seatCount;
   const total = baseFare + tax + convenienceFee + totalSeatFare;
   const ticketIds =
-  existingPayload.message.order.fulfillments?.filter((f: any) => f.type === "TICKET")
-    .map((f: any, index: number) => f.id || `FT${index + 1}`) ?? [];
+    existingPayload.message.order.fulfillments?.filter((f: any) => f.type === "TICKET")
+      .map((f: any, index: number) => f.id || `FT${index + 1}`) ?? [];
 
   const seatFareBreakups = ticketIds.map((fid: string) => ({
     title: "SEAT_FARE",
@@ -78,7 +78,7 @@ function calculateQuote(sessionData: SessionData, existingPayload: any) {
         title: "CONVENIENCE_FEE",
         price: { currency: "INR", value: convenienceFee.toString() },
       },
-       ...seatFareBreakups,
+      ...seatFareBreakups,
       ...(sessionData.on_select_fulfillments || [])
         .filter((f: { type: string }) => f.type === "TICKET")
         .map((f: { id: any }, idx: number) => ({
@@ -114,27 +114,27 @@ function transformFulfillments(
   select_fulfillments: any[]
 ) {
   const seatNumbers = select_fulfillments
-        .filter((sf: any) => sf.id.startsWith("FT"))
-        .flatMap((sf: any) => {
-          const seatGridTag = sf.tags?.find(
-            (t: any) => t.descriptor?.code === "SEAT_GRID"
-          );
-          const numberItem = seatGridTag?.list?.find(
-            (i: any) => i.descriptor?.code === "NUMBER"
-          );
-          return numberItem ? numberItem.value : [];
-        });
+    .filter((sf: any) => sf.id.startsWith("FT"))
+    .flatMap((sf: any) => {
+      const seatGridTag = sf.tags?.find(
+        (t: any) => t.descriptor?.code === "SEAT_GRID"
+      );
+      const numberItem = seatGridTag?.list?.find(
+        (i: any) => i.descriptor?.code === "NUMBER"
+      );
+      return numberItem ? numberItem.value : [];
+    });
 
-  return fulfillments.map((f,index) => {
+  return fulfillments.map((f, index) => {
     if (f.type === "TRIP") {
       const { tags, ...rest } = f;
       return rest;
     } else if (f.type === "TICKET") {
-      const updatedTags = JSON.parse(JSON.stringify(ticketTags)); 
-      
+      const updatedTags = JSON.parse(JSON.stringify(ticketTags));
+
       updatedTags.list = updatedTags.list.map((item: any, idx: number) => {
-        if (item.descriptor?.code === "NUMBER" && seatNumbers[index-1]) {
-          return { ...item, value: seatNumbers[index-1] };
+        if (item.descriptor?.code === "NUMBER" && seatNumbers[index - 1]) {
+          return { ...item, value: seatNumbers[index - 1] };
         }
         return item;
       });

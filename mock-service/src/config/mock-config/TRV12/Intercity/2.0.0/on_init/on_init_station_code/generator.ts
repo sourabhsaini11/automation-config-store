@@ -12,7 +12,7 @@ export async function onInitGenerator(
     descriptor: sessionData.catalog_descriptor,
   };
   existingPayload.message.order.cancellation_terms =
-    sessionData?.cancellation_terms?.[0];
+    sessionData?.cancellation_terms?.flat();
   existingPayload.message.order.quote = sessionData.quote;
   existingPayload.message.order.payments = sessionData.payments?.map(
     (p: any) => ({

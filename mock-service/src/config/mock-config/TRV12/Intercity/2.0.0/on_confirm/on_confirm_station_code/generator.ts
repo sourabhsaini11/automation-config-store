@@ -5,13 +5,13 @@ export async function onConfirmGenerator(
   sessionData: SessionData
 ) {
   existingPayload.context.location.city.code = sessionData.city_code;
-	const randomId = Math.random().toString(36).substring(2, 15);
+  const randomId = Math.random().toString(36).substring(2, 15);
   existingPayload.message.order.id = randomId;
   existingPayload.message.order.status = "ACTIVE";
   existingPayload.message.order.items = [sessionData.on_select_items];
   existingPayload.message.order.provider = sessionData.on_init_provider;
   existingPayload.message.order.cancellation_terms =
-    sessionData?.cancellation_terms?.[0];
+    sessionData?.cancellation_terms?.flat();
   existingPayload.message.order.quote = sessionData.quote;
   existingPayload.message.order.payments = sessionData.payments?.map(
     (p: any) => ({
@@ -21,7 +21,7 @@ export async function onConfirmGenerator(
   );
 
   existingPayload.message.order.fulfillments =
-    sessionData.on_init_fulfillments.map((f: any) => {
+    sessionData.on_init_fulfillments?.flat().map((f: any) => {
       const updatedFulfillment: any = {
         ...f,
         state: {

@@ -25,7 +25,7 @@ export async function onInitGenerator(
     })
   );
   existingPayload.message.order.fulfillments = buildFulfillments(
-    sessionData.on_select_fulfillments[0],
+    sessionData.on_select_fulfillments.flat(),
     sessionData.fulfillments
   );
 

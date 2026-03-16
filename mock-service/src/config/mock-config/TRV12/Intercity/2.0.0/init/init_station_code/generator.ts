@@ -7,9 +7,11 @@ export async function initGenerator(
   existingPayload.context.location.city.code = sessionData.city_code;
 
   existingPayload.message.order.items = [sessionData.select_items];
-
+  const fulfillments = Array.isArray(sessionData.select_2_fulfillments)
+    ? sessionData.select_2_fulfillments.flat()
+    : [sessionData.select_2_fulfillments];
   existingPayload.message.order.fulfillments = transformFulfillments(
-    sessionData.select_2_fulfillments
+    fulfillments
   );
 
   existingPayload.message.order.provider = { id: sessionData.provider_id };

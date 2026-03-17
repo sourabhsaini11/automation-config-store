@@ -92,17 +92,21 @@ function transformFulfillments(fulfillments: any) {
     },
   ];
 
-  return fulfillments?.map((f: any, index: number) => {
-    if (index === 0) {
-      return {
-        id: f.id,
-        stops: f.stops || [],
-      };
-    }
+  const stopsFulfillment = fulfillments.find((f: any) => f.stops);
+  const tagFulfillments = fulfillments.filter((f: any) => f.tags);
 
-    const customer = customers[(index - 1) % customers.length];
+  const result: any[] = [];
 
-    return {
+  if (stopsFulfillment) {
+    result.push({
+      id: stopsFulfillment.id,
+      stops: stopsFulfillment.stops,
+    });
+  }
+
+  tagFulfillments.forEach((f: any, index: number) => {
+    const customer = customers[index % customers.length];
+    result.push({
       id: f.id,
       customer,
       tags: (f.tags || []).map((tag: any) => ({
@@ -111,6 +115,8 @@ function transformFulfillments(fulfillments: any) {
           (item: any) => item.descriptor?.code === "NUMBER"
         ),
       })),
-    };
+    });
   });
+
+  return result;
 }

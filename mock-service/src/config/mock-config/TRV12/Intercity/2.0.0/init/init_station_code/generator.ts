@@ -93,25 +93,24 @@ function transformFulfillments(fulfillments: any) {
   ];
 
   return fulfillments?.map((f: any, index: number) => {
-    const transformedFulfillment = { ...f };
-
-    if (f.id === "F1" || f.id === "FT-1") {
-      return f;
+    if (index === 0) {
+      return {
+        id: f.id,
+        stops: f.stops || [],
+      };
     }
 
-    const customer = customers[index % customers.length];
-    if (customer) {
-      transformedFulfillment.customer = customer;
-    }
+    const customer = customers[(index - 1) % customers.length];
 
-    if (f.tags) {
-      transformedFulfillment.tags = f.tags.map((tag: any) => ({
+    return {
+      id: f.id,
+      customer,
+      tags: (f.tags || []).map((tag: any) => ({
         descriptor: tag.descriptor,
-        list: tag.list?.filter((item: any) => item.descriptor.code === "NUMBER"),
-      }));
-    }
-    console.log("transformedFulfillment-init", JSON.stringify(transformedFulfillment));
-
-    return transformedFulfillment;
+        list: (tag.list || []).filter(
+          (item: any) => item.descriptor?.code === "NUMBER"
+        ),
+      })),
+    };
   });
 }

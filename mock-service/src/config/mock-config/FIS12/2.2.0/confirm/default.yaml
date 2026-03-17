@@ -1,11 +1,11 @@
 order:
   provider:
-    id: "PROVIDER_ID"
+    id: "P1"
   items:
     - id: CHILD_ITEM_ID_I1
       parent_item_id: ITEM_ID_ELECTRONICS
   payments:
-    - id: "PAYMENT_ID_PURCHASE_FINANCE"
+    - id: "PID-8000"
       collected_by: "BPP"
       type: "ON_ORDER"
       status: "NOT-PAID"
@@ -72,7 +72,7 @@ order:
             - descriptor:
                 code: "OFFLINE_CONTRACT"
               value: "true"
-    - id: "PAYMENT_ID_DOWNPAYMENT"
+    - id: "PID-5555"
       type: "PRE_ORDER"
       status: "PAID"
       collected_by: "BPP"

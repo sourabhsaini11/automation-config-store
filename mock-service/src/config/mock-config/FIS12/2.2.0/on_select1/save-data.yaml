@@ -8,3 +8,4 @@ save-data:
   Ekyc_details_verification_status: "$..form.url"
   form_id: "$..form.id"
   item: "$.message.order.items[1]"
+  order: "$.message.order"

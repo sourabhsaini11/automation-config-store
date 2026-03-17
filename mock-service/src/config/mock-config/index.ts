@@ -49,7 +49,7 @@ export const defaultSessionData = (domain: string = defaultDomain) => {
 			sessionDataPath = path.join(__dirname, `./${domain}/session-data.yaml`);
 			break;
 	}
-	
+
 	return yaml.load(readFileSync(sessionDataPath, "utf8")) as { session_data: MockSessionData };
 };
 
@@ -65,8 +65,8 @@ export async function generateMockResponse(
 		console.log("generateMockResponse - domain:", domain);
 		console.log("generateMockResponse - defaultDomain:", defaultDomain);
 		console.log("generateMockResponse - sessionData", sessionData);
-		
-		let response =await createFIS12MockResponse(
+
+		let response = await createFIS12MockResponse(
 			session_id,
 			sessionData,
 			action_id,
@@ -81,7 +81,7 @@ export async function generateMockResponse(
 }
 
 export function getMockActionObject(actionId: string, domain: string = defaultDomain) {
-		return getFIS12MockAction(actionId);
+	return getFIS12MockAction(actionId);
 }
 
 export function getActionData(code: number, domain: string = defaultDomain) {
@@ -89,7 +89,7 @@ export function getActionData(code: number, domain: string = defaultDomain) {
 	if (!config) {
 		throw new Error(`Domain ${domain} not supported`);
 	}
-	
+
 	const actionData = config.codes.find(
 		(action: any) => action.code === code
 	);
@@ -101,7 +101,7 @@ export function getActionData(code: number, domain: string = defaultDomain) {
 
 export function getSaveDataContent(version: string, action: string, domain: string = defaultDomain) {
 	let actionFolderPath: string;
-	
+
 	switch (domain) {
 		case "ONDC:FIS14":
 		case "ONDC:FIS13":
@@ -120,7 +120,7 @@ export function getSaveDataContent(version: string, action: string, domain: stri
 			);
 			break;
 	}
-	
+
 	const saveDataFilePath = path.join(actionFolderPath, "save-data.yaml");
 	const fileContent = readFileSync(saveDataFilePath, "utf8");
 	const cont = yaml.load(fileContent) as any;
@@ -129,8 +129,8 @@ export function getSaveDataContent(version: string, action: string, domain: stri
 }
 
 export function getUiMetaKeys(): (keyof MockSessionData)[] {
-	return ["down_payment_form","personal_details_information_form","product_details_form","individual_information_form",
-		"family_information_form","Ekyc_details_verification_status","Proposer_Details_form","nominee_details_form","consumer_information_form",
-		"vehicle_details_form","vehicle_nominee_details_form","pan_details_form","personal_details_form","verification_status",
-		"kyc_verification_status","Emanadate_verification_status","E_sign_verification_status","E_sign_verification_status"];
+	return ["down_payment_form", "personal_details_information_form", "product_details_form", "individual_information_form",
+		"family_information_form", "Ekyc_details_verification_status", "Proposer_Details_form", "nominee_details_form", "consumer_information_form",
+		"vehicle_details_form", "vehicle_nominee_details_form", "pan_details_form", "personal_details_form", "verification_status",
+		"kyc_verification_status", "Emanadate_verification_status", "E_sign_verification_status", "E_sign_verification_status", "payment_url_form"];
 }

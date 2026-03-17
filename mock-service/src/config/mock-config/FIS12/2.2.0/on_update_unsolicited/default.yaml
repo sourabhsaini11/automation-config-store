@@ -2,7 +2,7 @@ order:
   id: "LOAN_LEAD_ID_OR_SIMILAR_ORDER_ID"
   status: "ACTIVE"
   provider:
-    id: "PROVIDER_ID"
+    id: "P1"
     descriptor:
       images:
         - url: "https://www.icicibank.com/content/dam/icicibank/india/assets/images/header/logo.png"
@@ -97,7 +97,7 @@ order:
             - descriptor:
                 code: "APPLICATION_FEE"
                 name: "Application Fees"
-              value: "1000 INR"
+              value: "0"
             - descriptor:
                 code: "FORECLOSURE_FEE"
                 name: "Foreclosure Penalty"
@@ -106,7 +106,7 @@ order:
             - descriptor:
                 code: "INTEREST_RATE_CONVERSION_CHARGE"
                 name: "interest rate conversion charges"
-              value: "1000 INR"
+              value: "0"
             - descriptor:
                 code: "DELAY_PENALTY_FEE"
                 name: "Delayed payments penalty"
@@ -267,7 +267,7 @@ order:
       cancellation_fee:
         percentage: "5%"
   payments:
-    - id: "PAYMENT_ID_PURCHASE_FINANCE"
+    - id: "PID-8000"
       type: "ON_ORDER"
       status: "NOT-PAID"
       collected_by: "BPP"
@@ -330,7 +330,7 @@ order:
             - descriptor:
                 code: "OFFLINE_CONTRACT"
               value: "true"
-    - id: "PAYMENT_ID_DOWNPAYMENT"
+    - id: "PID-5555"
       type: "PRE_ORDER"
       status: "PAID"
       collected_by: "BPP"
@@ -339,7 +339,7 @@ order:
         currency: "INR"
         transaction_id: "3b5a664d-077e-47f0-96d1-06e68d397c78"
     - type: "POST_FULFILLMENT"
-      id: "INSTALLMENT_ID_PURCHASE_FINANCE"
+      id: "PID-5001"
       params:
         amount: "9857"
         currency: "INR"
@@ -365,7 +365,7 @@ order:
                 short_desc: "Loan Interest"
               value: "571 INR"
     - type: "POST_FULFILLMENT"
-      id: "INSTALLMENT_ID_PURCHASE_FINANCE"
+      id: "PID-5002"
       params:
         amount: "9857"
         currency: "INR"
@@ -391,7 +391,7 @@ order:
                 short_desc: "Loan Interest"
               value: "571 INR"
     - type: "POST_FULFILLMENT"
-      id: "INSTALLMENT_ID_PURCHASE_FINANCE"
+      id: "PID-5003"
       params:
         amount: "9857"
         currency: "INR"
@@ -417,7 +417,7 @@ order:
                 short_desc: "Loan Interest"
               value: "571 INR"
     - type: "POST_FULFILLMENT"
-      id: "INSTALLMENT_ID_PURCHASE_FINANCE"
+      id: "PID-5004"
       params:
         amount: "9857"
         currency: "INR"
@@ -443,7 +443,7 @@ order:
                 short_desc: "Loan Interest"
               value: "571 INR"
     - type: "POST_FULFILLMENT"
-      id: "INSTALLMENT_ID_PURCHASE_FINANCE"
+      id: "PID-5005"
       params:
         amount: "9857"
         currency: "INR"
@@ -469,7 +469,7 @@ order:
                 short_desc: "Loan Interest"
               value: "571 INR"
     - type: "POST_FULFILLMENT"
-      id: "INSTALLMENT_ID_PURCHASE_FINANCE"
+      id: "PID-5006"
       params:
         amount: "9857"
         currency: "INR"
@@ -495,7 +495,7 @@ order:
                 short_desc: "Loan Interest"
               value: "571 INR"
     - type: "POST_FULFILLMENT"
-      id: "INSTALLMENT_ID_PURCHASE_FINANCE"
+      id: "PID-5007"
       params:
         amount: "9857"
         currency: "INR"

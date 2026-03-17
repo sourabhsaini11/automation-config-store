@@ -16,7 +16,7 @@ export class MockOnSearchClass5 extends MockAction {
             readFileSync(path.resolve(__dirname, "./default.yaml"), "utf8")
         );
     }
-    
+
     get inputs(): any {
         return {
         };

@@ -24,11 +24,12 @@ export async function searchDefaultGenerator(
     existingPayload.context.location.city.code =
       sessionData.user_inputs.city_code;
   }
-
+  const userInputs = sessionData.user_inputs
   // Update form_response with status and submission_id (preserve existing structure)
   if (
-    existingPayload.message?.intent?.provider?.items?.[0]?.xinput?.form_response
+    userInputs
   ) {
+    existingPayload.message.intent.provider = userInputs?.provider
     existingPayload.message.intent.provider.items[0].xinput.form.id =
       "product_details_form";
     existingPayload.message.intent.provider.items[0].xinput.form_response.status =

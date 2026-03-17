@@ -20,6 +20,9 @@ session_data:
   item_ids: []
   items: []
   selected_items: []
+  selected_items_1: []
+  selected_items_2: []
+  selected_items_id: null
   selected_item_id: null
   billing: {}
   payments: []
@@ -41,6 +44,8 @@ session_data:
   updated_price: null
   selected_add_ons: []
   created_at: null
+  updated_at: null
   cancellation_reason_id: null
   cancellation_quote: []
+  form_data: {}
   selected_fulfillment_id: null

@@ -5,7 +5,7 @@ import { MockOnSearchClass } from "./2.2.0/on_search/class";
 import { MockOnSearchClass2 } from "./2.2.0/on_search2/class";
 import { MockOnSearchClass3 } from "./2.2.0/on_search3/class";
 import { MockProductDetailsFormClass } from "./2.2.0/form/product_details_form";
-import { MockSelectClass} from "./2.2.0/select/class";
+import { MockSelectClass } from "./2.2.0/select/class";
 import { MockOnSelectClass } from "./2.2.0/on_select/class";
 import type { MockAction } from "./classes/mock-action";
 import { MockPersonalDetailsInformationFormClass } from "./2.2.0/form2/personal_details_information_form";
@@ -48,6 +48,7 @@ import { MockOnSearchClass6 } from "./2.2.0/on_search6/class";
 import { MockManadateDetailsFormClass } from "./2.2.0/form5/Emanadate_verification_status";
 import { MockEkycDetailsFormClass } from "./2.2.0/form4/Ekyc_details_verification_status";
 import { MockKycVerificationStatusClass } from "./2.2.0/form6/E_sign_verification_status";
+import { MockPaymentFormClass } from "./2.2.0/form7/payment_url_form";
 
 // types/helpers
 type Ctor<T> = new () => T;
@@ -79,9 +80,10 @@ const registry = {
 	Ekyc_details_verification_status: MockEkycDetailsFormClass,
 	Emanadate_verification_status: MockManadateDetailsFormClass,
 	E_sign_verification_status: MockKycVerificationStatusClass,
+	payment_url_form: MockPaymentFormClass,
 
 	// select
-	select_purchase_finance : MockSelectClass,
+	select_purchase_finance: MockSelectClass,
 	select1_purchase_finance: MockSelect1Class,
 	select2_purchase_finance: MockSelect2Class,
 	on_select_purchase_finance: MockOnSelectClass,
@@ -103,8 +105,8 @@ const registry = {
 	// // status / on_status
 	status_purchase_finance: MockStatusClass,
 	on_status_purchase_finance: MockOnStatusClass,
-	on_status_purchase_finance1:MockOnStatusClass,
-	on_status_purchase_finance2:MockOnStatusClass,
+	on_status_purchase_finance1: MockOnStatusClass,
+	on_status_purchase_finance2: MockOnStatusClass,
 	on_status_unsolicited: MockOnStatusUnsolicitedClass,
 
 	// // update / on_update

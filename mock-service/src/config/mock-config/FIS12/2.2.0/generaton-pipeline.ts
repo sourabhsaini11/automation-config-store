@@ -23,7 +23,7 @@ function getDetailsByActionId(
 ): { default: string; action: string; message_id: boolean } {
 	console.log("getDetailsByActionId - actionId:", actionId);
 	console.log("getDetailsByActionId - available codes:", factoryData.codes.map((item: any) => item.action_id));
-	
+
 	const entry = factoryData.codes.find(
 		(item: any) => item.action_id === actionId
 	);
@@ -54,7 +54,7 @@ function yamlToJson(filePath: string): object {
 	}
 }
 
-export async function createMockResponseFIS12_220(
+export async function createMockResponseFIS12_221(
 	actionID: string,
 	sessionData: SessionData
 ) {
@@ -102,6 +102,17 @@ export async function createMockResponseFIS12_220(
 		delete payload.message;
 		payload.error = error_message;
 		logger.info(`L2 error found: ${JSON.stringify(error_message)}`);
+		return payload;
+	}
+
+	// Check if payment form was submitted with NOT_PAY - return NACK and break flow
+	if (sessionData.form_data?.payment_url_form?.idType === "NOT-PAID") {
+		delete payload.message;
+		payload.error = {
+			code: "50001",
+			message: "Payment not completed by the customer",
+		};
+		logger.info("Payment form submitted with NOT-PAID status - returning NACK");
 		return payload;
 	}
 	const mockAction = getMockAction(actionID);

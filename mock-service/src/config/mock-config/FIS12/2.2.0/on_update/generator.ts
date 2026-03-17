@@ -9,22 +9,25 @@
  * 5. Set time ranges based on context timestamp for MISSED_EMI_PAYMENT
  */
 
+import { loadMockSessionData } from "../../../../../services/data-services";
+import { generateInstallmentPayments, injectLoanDetails, injectSettlementAmount } from "../settlement-utils";
+
 export async function onUpdateDefaultGenerator(existingPayload: any, sessionData: any) {
   // Update context timestamp
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
-  
+
   // Update transaction_id from session data
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   // Update message_id from session data
   if (sessionData.message_id && existingPayload.context) {
     existingPayload.context.message_id = sessionData.message_id;
   }
-  
+
   // Load order from session data
   if (existingPayload.message) {
     const order = existingPayload.message.order || (existingPayload.message.order = {});
@@ -41,8 +44,76 @@ export async function onUpdateDefaultGenerator(existingPayload: any, sessionData
 
     // Map item.id from session data (carry-forward from confirm)
     const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? (sessionData.items?.[1] ?? sessionData.items?.[0]) : undefined);
-    if (selectedItem?.id && order.items?.[0]) {
-      order.items[0].id = selectedItem.id;
+    // if (selectedItem?.id && order.items?.[0]) {
+    //   order.items[0].id = selectedItem.id;
+    // }
+
+    if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
+      existingPayload.message.order.items[0].id = sessionData.selected_items_id;
+      existingPayload.message.order.items[0].parent_item_id = selectedItem.parent_item_id
+      existingPayload.message.order.items[0].category_ids = selectedItem.category_ids
+      existingPayload.message.order.items[0].price = selectedItem.price,
+        existingPayload.message.order.items[0].tags =
+        [
+          {
+            "display": true,
+            "descriptor": {
+              "name": "Checklists",
+              "code": "CHECKLISTS"
+            },
+            "list":
+              sessionData?.flow_id?.includes("Single_Redirection") ?
+                [
+                  {
+                    "descriptor": {
+                      "name": "Set Loan Amount",
+                      "code": "SET_DOWN_PAYMENT"
+                    },
+                    "value": "COMPLETED"
+                  },
+                  {
+                    "descriptor": {
+                      "name": "KYC, enach, esign",
+                      "code": "KYC_ENACH_ESIGN"
+                    },
+                    "value": "COMPLETED"
+                  }
+                ] :
+                [
+                  {
+                    "descriptor": {
+                      "name": "Set Loan Amount",
+                      "code": "SET_DOWN_PAYMENT"
+                    },
+                    "value": "COMPLETED"
+                  },
+                  {
+                    "descriptor": {
+                      "name": "KYC",
+                      "code": "KYC"
+                    },
+                    "value": "COMPLETED"
+                  },
+                  {
+                    "descriptor": {
+                      "name": "Emandate",
+                      "code": "EMANDATE"
+                    },
+                    "value": "COMPLETED"
+                  },
+                  {
+                    "descriptor": {
+                      "name": "Esign",
+                      "code": "ESIGN"
+                    },
+                    "value": "COMPLETED"
+                  }
+                ]
+          }]
+    }
+
+    if (sessionData.payments && order.payments) {
+      order.payments = sessionData.payments[0];
     }
 
     // Map quote.id from session data (carry-forward from confirm)
@@ -51,160 +122,18 @@ export async function onUpdateDefaultGenerator(existingPayload: any, sessionData
     }
   }
 
-  // Helper to upsert a breakup line
-  function upsertBreakup(order: any, title: string, value: string, currency: string = 'INR') {
-    order.quote = order.quote || { price: { currency: 'INR', value: '0' }, breakup: [] };
-    order.quote.breakup = Array.isArray(order.quote.breakup) ? order.quote.breakup : [];
-    const idx = order.quote.breakup.findIndex((b: any) => (b.title || '').toUpperCase() === title.toUpperCase());
-    const row = { title, price: { value, currency } };
-    if (idx >= 0) order.quote.breakup[idx] = row; else order.quote.breakup.push(row);
-  }
+  const currentDate = new Date(existingPayload.context.timestamp).toISOString();
 
-  // Helper to generate time range based on context timestamp
-  function generateTimeRangeFromContext(contextTimestamp: string) {
-    const contextDate = new Date(contextTimestamp);
-    const year = contextDate.getUTCFullYear();
-    const month = contextDate.getUTCMonth();
-    
-    // Create start of month
-    const start = new Date(Date.UTC(year, month, 1, 0, 0, 0, 0));
-    // Create end of month
-    const end = new Date(Date.UTC(year, month + 1, 0, 23, 59, 59, 999));
-    
-    return {
-      start: start.toISOString(),
-      end: end.toISOString()
-    };
-  }
+  existingPayload.message.order.created_at = sessionData.created_at;
+  existingPayload.message.order.updated_at = currentDate;
+  const form_data = await loadMockSessionData(`form_data_${sessionData.transaction_id}`, "");
+  sessionData.form_data = form_data
+  // ── Dynamic Loan Details: quote breakup + item tags ───────────────────────────
+  injectLoanDetails(existingPayload, sessionData);
 
-  // Helper to add delayed installment
-  function addDelayedInstallment(order: any, contextTimestamp: string) {
-    if (!order.payments) order.payments = [];
-    
-    const contextDate = new Date(contextTimestamp);
-    const year = contextDate.getUTCFullYear();
-    const month = contextDate.getUTCMonth();
-    
-    // Create start of month
-    const start = new Date(Date.UTC(year, month, 1, 0, 0, 0, 0));
-    // Create end of month
-    const end = new Date(Date.UTC(year, month + 1, 0, 23, 59, 59, 999));
-    
-    const delayedPayment = {
-      id: "INSTALLMENT_ID_GOLD_LOAN",
-      type: "POST_FULFILLMENT",
-      params: {
-        amount: "46360",
-        currency: "INR"
-      },
-      status: "DELAYED",
-      time: {
-        label: "INSTALLMENT",
-        range: {
-          start: start.toISOString(),
-          end: end.toISOString()
-        }
-      }
-    };
-    
-    order.payments.push(delayedPayment);
-  }
-
-  // Helper to mark all installments before the delayed one as PAID
-  function markPreviousInstallmentsAsPaid(order: any, contextTimestamp: string) {
-    if (!order.payments || !Array.isArray(order.payments)) return;
-    
-    const contextDate = new Date(contextTimestamp);
-    
-    order.payments.forEach((payment: any) => {
-      if (payment.time?.label === 'INSTALLMENT' && payment.type === 'POST_FULFILLMENT' && payment.time?.range?.start) {
-        const paymentStartDate = new Date(payment.time.range.start);
-        
-        // If this installment is before the context date (current delayed month), mark as PAID
-        if (paymentStartDate < contextDate && payment.status !== 'DELAYED') {
-          payment.status = 'PAID';
-        }
-      }
-    });
-  }
-
-  // Branch by update label
-  const orderRef = existingPayload.message?.order || {};
-  const label = sessionData.update_label
-    || orderRef?.payments?.[0]?.time?.label
-    || sessionData.user_inputs?.foreclosure_amount && 'FORECLOSURE'
-    || sessionData.user_inputs?.missed_emi_amount && 'MISSED_EMI_PAYMENT'
-    || sessionData.user_inputs?.part_payment_amount && 'PRE_PART_PAYMENT'
-    || 'FORECLOSURE';
-
-  // Ensure payments structure exists
-  orderRef.payments = orderRef.payments || [{}];
-  const firstPayment = orderRef.payments[0];
-  firstPayment.time = firstPayment.time || {};
-  firstPayment.time.label = label;
-
-  if (label === 'MISSED_EMI_PAYMENT') {
-    // Set payment params for missed EMI (matching on_confirm installment amount)
-    firstPayment.params = firstPayment.params || {};
-    firstPayment.params.amount = "46360"; // Matches INSTALLMENT_AMOUNT from on_confirm
-    firstPayment.params.currency = "INR";
-    
-    // Set time range based on context timestamp
-    const contextTimestamp = existingPayload.context?.timestamp || new Date().toISOString();
-    firstPayment.time.range = generateTimeRangeFromContext(contextTimestamp);
-    
-    // Mark all installments before the delayed one as PAID
-    markPreviousInstallmentsAsPaid(orderRef, contextTimestamp);
-    
-    // Add delayed installment
-    addDelayedInstallment(orderRef, contextTimestamp);
-    
-    // Set payment URL
-    const refId = sessionData.message_id || orderRef.id || 'b5487595-42c3-4e20-bd43-ae21400f60f0';
-    firstPayment.url = `https://pg.icici.com/?amount=46360&ref_id=${encodeURIComponent(refId)}`;
-  }
-
-  if (label === 'FORECLOSURE') {
-    // Add foreclosure charges to quote.breakup (0.5% of principal amount from on_confirm)
-    // Principal amount from on_confirm is 200000, so 0.5% = 1000, but using 9536 as specified
-    upsertBreakup(orderRef, 'FORCLOSUER_CHARGES', '9536');
-    
-    // Calculate foreclosure amount: Outstanding Principal + Outstanding Interest + Foreclosure Charges
-    // From on_update default.yaml: OUTSTANDING_PRINCIPAL=139080, OUTSTANDING_INTEREST=0, FORCLOSUER_CHARGES=9536
-    const outstandingPrincipal = orderRef.quote?.breakup?.find((b: any) => b.title === 'OUTSTANDING_PRINCIPAL')?.price?.value || '139080';
-    const outstandingInterest = orderRef.quote?.breakup?.find((b: any) => b.title === 'OUTSTANDING_INTEREST')?.price?.value || '0';
-    const foreclosureCharges = '9536';
-    const foreclosureAmount = String(parseInt(outstandingPrincipal) + parseInt(outstandingInterest) + parseInt(foreclosureCharges));
-    
-    // Set payment params for foreclosure
-    firstPayment.params = firstPayment.params || {};
-    firstPayment.params.amount = foreclosureAmount; // Outstanding principal + interest + charges
-    firstPayment.params.currency = "INR";
-    
-    // Remove time range for foreclosure
-    if (firstPayment.time.range) delete firstPayment.time.range;
-    
-    // Set payment URL
-    const refId = sessionData.message_id || orderRef.id || 'b5487595-42c3-4e20-bd43-ae21400f60f0';
-    firstPayment.url = `https://pg.icici.com/?amount=${foreclosureAmount}&ref_id=${encodeURIComponent(refId)}`;
-  }
-  
-  if (label === 'PRE_PART_PAYMENT') {
-    // Add pre payment charge to quote.breakup
-    upsertBreakup(orderRef, 'PRE_PAYMENT_CHARGE', '4500');
-    
-    // Set payment params for pre part payment (installment amount + pre payment charge)
-    firstPayment.params = firstPayment.params || {};
-    firstPayment.params.amount = "50860"; // 46360 (installment) + 4500 (pre payment charge)
-    firstPayment.params.currency = "INR";
-    
-    // Remove time range for pre part payment
-    if (firstPayment.time.range) delete firstPayment.time.range;
-    
-    // Set payment URL
-    const refId = sessionData.message_id || orderRef.id || 'b5487595-42c3-4e20-bd43-ae21400f60f0';
-    firstPayment.url = `https://pg.icici.com/?amount=50860&ref_id=${encodeURIComponent(refId)}`;
-  }
-  
+  // ── Dynamic Installment Payments (POST_FULFILLMENT) ─────────────────────────
+  generateInstallmentPayments(existingPayload, sessionData);
+  // ── Dynamic SETTLEMENT_AMOUNT: inject pre-calculated value from session ──
+  injectSettlementAmount(existingPayload, sessionData);
   return existingPayload;
 }

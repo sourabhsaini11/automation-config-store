@@ -22,18 +22,18 @@ export async function updateDefaultGenerator(existingPayload: any, sessionData: 
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
-  
+
   // Update transaction_id from session data
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   // Load order_id into order.id (structure uses order.id)
   if (sessionData.order_id && existingPayload.message) {
     existingPayload.message.order = existingPayload.message.order || {};
     existingPayload.message.order.id = sessionData.order_id;
   }
-  
+
   // Load update_target from session data
   if (sessionData.update_target && existingPayload.message) {
     existingPayload.message.update_target = sessionData.update_target;
@@ -52,7 +52,7 @@ export async function updateDefaultGenerator(existingPayload: any, sessionData: 
 
     // Choose label based on flow_id, user_inputs, or saved update_label
     let labelFromSession = sessionData.update_label;
-    
+
     // Map flow IDs to specific payment labels
     if (sessionData.flow_id) {
       if (sessionData.flow_id.includes('Missed_EMI')) {
@@ -63,28 +63,27 @@ export async function updateDefaultGenerator(existingPayload: any, sessionData: 
         labelFromSession = 'PRE_PART_PAYMENT';
       }
     }
-    
+
     // Fallback to user_inputs if no flow-based mapping found
     if (!labelFromSession) {
       labelFromSession = sessionData.user_inputs?.foreclosure_amount ? 'FORECLOSURE'
         : sessionData.user_inputs?.missed_emi_amount ? 'MISSED_EMI_PAYMENT'
-        : sessionData.user_inputs?.part_payment_amount ? 'PRE_PART_PAYMENT'
-        : payment.time.label;
+          : sessionData.user_inputs?.pre_part_payment ? 'PRE_PART_PAYMENT'
+            : payment.time.label;
     }
-    
+
     if (labelFromSession) {
       payment.time.label = labelFromSession;
       console.log(`Payment label set to: ${labelFromSession} based on flow_id: ${sessionData.flow_id}`);
     }
 
     // Amount mapping for part payment (optional for other labels)
-    if (sessionData.user_inputs?.part_payment_amount) {
+    if (sessionData.user_inputs?.pre_part_payment) {
       payment.params = payment.params || {};
-      payment.params.amount = String(sessionData.user_inputs.part_payment_amount);
+      payment.params.amount = String(sessionData.user_inputs.pre_part_payment);
       payment.params.currency = payment.params.currency || sessionData.update_currency || 'INR';
     }
   }
-  
-  console.log("Gold Loan update payload generated successfully");
+
   return existingPayload;
 } 

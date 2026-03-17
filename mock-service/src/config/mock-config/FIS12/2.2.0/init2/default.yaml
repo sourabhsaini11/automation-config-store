@@ -1,6 +1,6 @@
 order:
   provider:
-    id: "PROVIDER_ID"
+    id: P1
   items:
     - id: CHILD_ITEM_ID_I1
       parent_item_id: ITEM_ID_ELECTRONICS
@@ -11,7 +11,7 @@ order:
           status: "SUCCESS"
           submission_id: "F05_SUBMISSION_ID"
   payments:
-    - id: "PAYMENT_ID_PERSONAL_LOAN"
+    - id: "PID-8000"
       collected_by: "BPP"
       type: "ON_ORDER"
       status: "NOT-PAID"
@@ -46,11 +46,4 @@ order:
             - descriptor:
                 code: "OFFLINE_CONTRACT"
               value: "true"
-    - id: "PAYMENT_ID_DOWNPAYMENT"
-      type: "PRE_ORDER"
-      status: "PAID"
-      collected_by: "BPP"
-      params:
-        amount: "1000"
-        currency: "INR"
-        transaction_id: "3b5a664d-077e-47f0-96d1-06e68d397c78"
+

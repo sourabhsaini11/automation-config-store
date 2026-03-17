@@ -1,3 +1,5 @@
+import { injectSettlementAmount } from "../settlement-utils";
+
 export async function onStatusUnsolicitedGenerator(existingPayload: any, sessionData: any) {
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
@@ -9,16 +11,16 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
   console.log("form_data ------->", sessionData?.form_data?.E_sign_verification_status);
 
   const form_status = sessionData?.form_data?.E_sign_verification_status?.idType;
-  
+
   // Update transaction_id and message_id from session data (carry-forward mapping)
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   if (sessionData.message_id && existingPayload.context) {
     existingPayload.context.message_id = sessionData.message_id;
   }
-  
+
   // Update order ID from session data if available
   if (sessionData.order_id) {
     existingPayload.message = existingPayload.message || {};
@@ -33,15 +35,19 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
     existingPayload.message.order.provider = existingPayload.message.order.provider || {};
     existingPayload.message.order.provider.id = sessionData.provider_id;
   }
-  
+
   // Update item.id from session data (carry-forward from on_select_2)
   const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? (sessionData.items?.[1] ?? sessionData.items?.[0]) : undefined);
+
   if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = selectedItem.id;
+    existingPayload.message.order.items[0].id = sessionData.selected_items_id;
+    existingPayload.message.order.items[0].parent_item_id = selectedItem.parent_item_id
+
     console.log("Updated item.id:", selectedItem.id);
+    console.log('sessionData>>>', sessionData)
   }
-  
-  
+
+
   // Update form ID to FO3 (carry-forward from on_select_2)
   if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
     existingPayload.message.order.items[0].xinput.form.id = "FO3";
@@ -56,7 +62,7 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
     // } else {
     //   formResponse.status = "APPROVED";
     // }
-    
+
     // Update submission ID if provided
     if (sessionData.submission_id) {
       formResponse.submission_id = sessionData.submission_id;
@@ -82,9 +88,17 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
     existingPayload.message.order.items[0].price.value = sessionData.loan_amount;
   }
 
-  if(existingPayload.message?.order?.items?.[0]?.xinput?.form_response){
+  if (existingPayload.message?.order?.items?.[0]?.xinput?.form_response) {
     existingPayload.message.order.items[0].xinput.form_response.submission_id = submission_id;
   }
+  const currentDate = new Date(existingPayload.context.timestamp).toISOString();
+
+  existingPayload.message.order.created_at = sessionData.created_at;
+  existingPayload.message.order.updated_at = currentDate;
+
+  // ── Dynamic SETTLEMENT_AMOUNT: inject pre-calculated value from session ──
+  injectSettlementAmount(existingPayload, sessionData);
+  // ─────────────────────────────────────────────────────────────────────────
 
   return existingPayload;
 }

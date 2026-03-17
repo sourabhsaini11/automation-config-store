@@ -6,3 +6,5 @@ save-data:
   start_time: "$.message.intent.fulfillment.stops[?(@.type=='START')].time.range.start"
   end_time: "$.message.intent.fulfillment.stops[?(@.type=='START')].time.range.end"
   city_code: "$.context.location.city.code"
+  provider_id: "$.message.intent.provider.id"
+  item_id: "$.message.intent.provider.items[*].id"

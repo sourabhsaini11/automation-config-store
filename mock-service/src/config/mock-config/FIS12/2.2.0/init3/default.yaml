@@ -1,6 +1,6 @@
 order:
   provider:
-    id: "PROVIDER_ID"
+    id: P1
   items:
     - id: CHILD_ITEM_ID_I1
       parent_item_id: ITEM_ID_ELECTRONICS
@@ -11,7 +11,7 @@ order:
           status: "SUCCESS"
           submission_id: "F06_SUBMISSION_ID"
   payments:
-    - id: "PAYMENT_ID_PERSONAL_LOAN"
+    - id: "PID-8000"
       collected_by: "BPP"
       type: "ON_ORDER"
       status: "NOT-PAID"
@@ -31,10 +31,6 @@ order:
             - descriptor:
                 code: "BUYER_FINDER_FEES_PERCENTAGE"
               value: "1"
-        - descriptor:
-            code: "SETTLEMENT_TERMS"
-          display: false
-          list:
             - descriptor:
                 code: "SETTLEMENT_AMOUNT"
               value: "1159"
@@ -50,7 +46,7 @@ order:
             - descriptor:
                 code: "OFFLINE_CONTRACT"
               value: "true"
-    - id: "PAYMENT_ID_DOWNPAYMENT"
+    - id: "PID-5555"
       type: "PRE_ORDER"
       status: "PAID"
       collected_by: "BPP"

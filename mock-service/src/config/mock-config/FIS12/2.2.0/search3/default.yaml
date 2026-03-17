@@ -3,7 +3,7 @@ intent:
     descriptor:
       code: "PURCHASE_FINANCE"
   provider:
-    id: "PROVIDER_ID"
+    id: P1
     items:
       - id: "ITEM_ID_ELECTRONICS"
         xinput:

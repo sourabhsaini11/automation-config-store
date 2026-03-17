@@ -2,7 +2,7 @@ catalog:
   descriptor:
     name: "ICICI Bank"
   providers:
-    - id: "PROVIDER_ID"
+    - id: "P1"
       descriptor:
         images:
           - url: "https://www.icicibank.com/content/dam/icicibank/india/assets/images/header/logo.png"
@@ -36,7 +36,7 @@ catalog:
           xinput:
             head:
               descriptor:
-                name: "Customer Information"
+                name: "Merchant & Product Details"
               index:
                 min: 0
                 cur: 0
@@ -61,7 +61,7 @@ catalog:
           xinput:
             head:
               descriptor:
-                name: "Customer Information"
+                name: "Merchant & Product Details"
               index:
                 min: 0
                 cur: 0

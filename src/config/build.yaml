@@ -24938,6 +24938,7 @@ x-validations:
       - fulfill_response
       - special_req
       - linked_package
+      - shipping_label
       tagPath: $.message.order.fulfillments[*].tags[*].code
       _CONTINUE_: "!(tagPath are present)"
       _RETURN_: tagPath all in validTags

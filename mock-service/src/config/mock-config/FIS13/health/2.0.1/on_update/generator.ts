@@ -1,20 +1,24 @@
 
+import { resolveSessionIds, updateProposalIdTag, applyFlowTypeOverrides } from '../id-helper';
+
 export async function onUpdateDefaultGenerator(existingPayload: any, sessionData: any) {
   // Update context timestamp
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
-  
+
   // Update transaction_id from session data
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   // Update message_id from session data
   if (sessionData.message_id && existingPayload.context) {
     existingPayload.context.message_id = sessionData.message_id;
   }
-  
+
+  const ids = resolveSessionIds(sessionData);
+
     // Setupdated_at to current date
    if (existingPayload.message?.order) {
     const now = new Date().toISOString();
@@ -23,58 +27,64 @@ export async function onUpdateDefaultGenerator(existingPayload: any, sessionData
       existingPayload.message.order.created_at = sessionData.created_at;
     }
   }
-  // Resolve fulfillment ID (handle both string and array from session)
-  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
 
   // Load order from session data
   if (existingPayload.message) {
     const order = existingPayload.message.order || (existingPayload.message.order = {});
 
     // Map order.id from session data (carry-forward from confirm)
-    if (sessionData.order_id) {
-      order.id = sessionData.order_id;
+    if (ids.orderId) {
+      order.id = ids.orderId;
     }
 
     // Map provider.id from session data (carry-forward from confirm)
-    if (sessionData.selected_provider?.id && order.provider) {
-      order.provider.id = sessionData.selected_provider.id;
+    if (ids.providerId && order.provider) {
+      order.provider.id = ids.providerId;
     }
 
     // Map item.id and parent_item_id from session data
-    const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-    if (childItem?.id && order.items?.[0]) {
-      order.items[0].id = childItem.id;
-      if (childItem.parent_item_id) {
-        order.items[0].parent_item_id = childItem.parent_item_id;
+    if (ids.childItemId && order.items?.[0]) {
+      order.items[0].id = ids.childItemId;
+      if (ids.parentItemId) {
+        order.items[0].parent_item_id = ids.parentItemId;
+      }
+      if (ids.categoryIds?.length) {
+        order.items[0].category_ids = ids.categoryIds;
+      }
+      if (ids.fulfillmentId && order.items[0].fulfillment_ids) {
+        order.items[0].fulfillment_ids = [ids.fulfillmentId];
       }
     }
 
     // Map quote.id from session data (carry-forward from confirm)
-    if (sessionData.quote_id && order.quote) {
-      order.quote.id = sessionData.quote_id;
+    if (ids.quoteId && order.quote) {
+      order.quote.id = ids.quoteId;
     }
+
   // Update PROPOSAL_ID tag value with dynamic quote ID from session
-  if (sessionData.quote_id) {
-    const items = existingPayload.message?.order?.items;
-    if (items) {
-      items.forEach((item: any) => {
-        item.tags?.forEach((tag: any) => {
-          tag.list?.forEach((listItem: any) => {
-            if (listItem.descriptor?.code === 'PROPOSAL_ID') {
-              listItem.value = sessionData.quote_id;
-            }
-          });
-        });
-      });
-    }
-  }
+  updateProposalIdTag(existingPayload, ids.quoteId);
 
     // Map fulfillment.id from session data
-    if (fulfillmentId && order.fulfillments?.[0]) {
-      order.fulfillments[0].id = fulfillmentId;
+    if (ids.fulfillmentId && order.fulfillments?.[0]) {
+      order.fulfillments[0].id = ids.fulfillmentId;
     }
   }
 
+  // Update SETTLEMENT_AMOUNT from session data
+  if (sessionData.settlement_amount && existingPayload.message?.order?.payments?.[0]?.tags) {
+    existingPayload.message.order.payments[0].tags.forEach((tag: any) => {
+      if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
+        tag.list.forEach((listItem: any) => {
+          if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
+            listItem.value = sessionData.settlement_amount;
+          }
+        });
+      }
+    });
+  }
+
+  // Apply flow-type overrides (Individual vs Family)
+  applyFlowTypeOverrides(existingPayload, sessionData);
 
   // Carry forward or remove add_ons based on user selection from select step
   if (existingPayload.message?.order?.items?.[0]) {
@@ -118,7 +128,7 @@ export async function onUpdateDefaultGenerator(existingPayload: any, sessionData
     }
   }
 
-  
+
   // Update document URLs from session data
   if (existingPayload.message?.order?.documents) {
     existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {

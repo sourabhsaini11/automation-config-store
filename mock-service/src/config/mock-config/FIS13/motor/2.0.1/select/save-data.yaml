@@ -4,4 +4,6 @@ save-data:
   selected_provider: "$.message.order.provider"
   selected_items: "$.message.order.items[*]"
   user_selected_add_ons: "$.message.order.items[0].add_ons[*]"
+  child_item_id: "$.message.order.items[0].id"
+  parent_item_id: "$.message.order.items[0].parent_item_id"
   # selected_fulfillments: "$.message.order.fulfillments[*]"

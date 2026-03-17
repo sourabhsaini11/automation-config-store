@@ -1,4 +1,6 @@
 
+import { resolveSessionIds } from '../id-helper';
+
 export async function selectDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("Select generator - Available session data:", {
     selected_provider: !!sessionData.selected_provider,
@@ -12,42 +14,46 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
-  
+
   // Update transaction_id from session data (carry-forward mapping)
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   // Update message_id from session data
   if (sessionData.message_id && existingPayload.context) {
    existingPayload.context.message_id = crypto.randomUUID();
   }
-  
+
+  const ids = resolveSessionIds(sessionData);
+
   // Update provider.id if available from session data (carry-forward from on_search)
-  if (sessionData.selected_provider?.id && existingPayload.message?.order?.provider) {
-    existingPayload.message.order.provider.id = sessionData.selected_provider.id;
-    console.log("Updated provider.id:", sessionData.selected_provider.id);
+  if (ids.providerId && existingPayload.message?.order?.provider) {
+    existingPayload.message.order.provider.id = ids.providerId;
+    console.log("Updated provider.id:", ids.providerId);
   }
-  
+
   // Generate child item ID and set parent_item_id from on_search item
   const parentItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
   if (parentItem?.id && existingPayload.message?.order?.items?.[0]) {
     existingPayload.message.order.items[0].parent_item_id = parentItem.id;
-    existingPayload.message.order.items[0].id = crypto.randomUUID();
+    // existingPayload.message.order.items[0].id = crypto.randomUUID();
+    existingPayload.message.order.items[0].id = sessionData.items[1].id;
     console.log("Generated child item ID:", existingPayload.message.order.items[0].id, "parent_item_id:", parentItem.id);
+
+    // Save resolved IDs back to sessionData for downstream generators
+    sessionData.child_item_id = existingPayload.message.order.items[0].id;
+    sessionData.parent_item_id = parentItem.id;
   }
 
-  // Resolve fulfillment ID (handle both string and array from session)
-  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
-
   // Carry forward fulfillment.id from session data
-  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
+  if (ids.fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = ids.fulfillmentId;
   }
 
   // Carry forward quote.id from session data
-  if ((sessionData.quote_id || sessionData.quote?.id) && existingPayload.message?.order?.quote) {
-    existingPayload.message.order.quote.id = sessionData.quote_id || sessionData.quote?.id;
+  if (ids.quoteId && existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = ids.quoteId;
   }
 
   // Build add_ons from user-selected addon IDs and session data
@@ -88,7 +94,7 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
 
       if (existingPayload.message?.order?.items?.[0]) {
         existingPayload.message.order.items[0].add_ons = selectedAddOns;
-        
+
       }
     } else {
       // Remove add_ons if none selected
@@ -106,4 +112,4 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
   }
 
   return existingPayload;
-} 
+}

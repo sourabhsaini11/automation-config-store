@@ -1,3 +1,5 @@
+import { resolveSessionIds, updateProposalIdTag, applyFlowTypeOverrides } from '../id-helper';
+
 export async function onStatusUnsolicitedGenerator(existingPayload: any, sessionData: any) {
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
@@ -7,12 +9,12 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
   const submission_id = sessionData?.form_data?.kyc_verification_status?.form_submission_id;
 
   const form_status = sessionData?.form_data?.kyc_verification_status?.idType;
-  
+
   // Update transaction_id and message_id from session data (carry-forward mapping)
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   if (sessionData.message_id && existingPayload.context) {
      existingPayload.context.message_id = crypto.randomUUID();
   }
@@ -26,6 +28,8 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
     }
   }
 
+  const ids = resolveSessionIds(sessionData);
+
   // Update order ID from session data if available
   if (sessionData.order_id) {
     existingPayload.message = existingPayload.message || {};
@@ -34,50 +38,39 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
   }
 
   // Update provider information from session data (carry-forward from on_select_2)
-  if (sessionData.selected_provider?.id || sessionData.provider_id) {
+  if (ids.providerId) {
     existingPayload.message = existingPayload.message || {};
     existingPayload.message.order = existingPayload.message.order || {};
     existingPayload.message.order.provider = existingPayload.message.order.provider || {};
-    existingPayload.message.order.provider.id = sessionData.selected_provider?.id || sessionData.provider_id;
+    existingPayload.message.order.provider.id = ids.providerId;
   }
 
-  // Carry forward child item ID and parent_item_id from session data
-  const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  if (childItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = childItem.id;
-    if (childItem.parent_item_id) {
-      existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
+  // Apply child item ID and parent_item_id
+  if (ids.childItemId && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = ids.childItemId;
+    if (ids.parentItemId) {
+      existingPayload.message.order.items[0].parent_item_id = ids.parentItemId;
     }
-
+    if (ids.categoryIds?.length) {
+      existingPayload.message.order.items[0].category_ids = ids.categoryIds;
+    }
+    if (ids.fulfillmentId && existingPayload.message.order.items[0].fulfillment_ids) {
+      existingPayload.message.order.items[0].fulfillment_ids = [ids.fulfillmentId];
+    }
   }
 
-  // Resolve fulfillment ID (handle both string and array from session)
-  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
-
-  // Carry forward fulfillment.id from session data
-  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
+  // Apply fulfillment ID
+  if (ids.fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = ids.fulfillmentId;
   }
 
-  // Carry forward quote.id from session data
-  if (sessionData.quote_id && existingPayload.message?.order?.quote) {
-    existingPayload.message.order.quote.id = sessionData.quote_id;
+  // Apply quote ID
+  if (ids.quoteId && existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = ids.quoteId;
   }
+
   // Update PROPOSAL_ID tag value with dynamic quote ID from session
-  if (sessionData.quote_id) {
-    const items = existingPayload.message?.order?.items;
-    if (items) {
-      items.forEach((item: any) => {
-        item.tags?.forEach((tag: any) => {
-          tag.list?.forEach((listItem: any) => {
-            if (listItem.descriptor?.code === 'PROPOSAL_ID') {
-              listItem.value = sessionData.quote_id;
-            }
-          });
-        });
-      });
-    }
-  }
+  updateProposalIdTag(existingPayload, ids.quoteId);
 
   // Update form ID to FO3 (carry-forward from on_select_2)
   if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
@@ -88,7 +81,7 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
   // Update form response status - on_status_unsolicited uses APPROVED status
   if (existingPayload.message?.order?.items?.[0]?.xinput?.form_response) {
     const formResponse = existingPayload.message.order.items[0].xinput.form_response;
-   
+
     // Update submission ID if provided
     if (sessionData.submission_id) {
       formResponse.submission_id = sessionData.submission_id;
@@ -113,6 +106,22 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
   if(existingPayload.message?.order?.items?.[0]?.xinput?.form_response){
     existingPayload.message.order.items[0].xinput.form_response.submission_id = submission_id;
   }
+
+  // Update SETTLEMENT_AMOUNT from session data
+  if (sessionData.settlement_amount && existingPayload.message?.order?.payments?.[0]?.tags) {
+    existingPayload.message.order.payments[0].tags.forEach((tag: any) => {
+      if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
+        tag.list.forEach((listItem: any) => {
+          if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
+            listItem.value = sessionData.settlement_amount;
+          }
+        });
+      }
+    });
+  }
+
+  // Apply flow-type overrides (Individual vs Family)
+  applyFlowTypeOverrides(existingPayload, sessionData);
 
   // Carry forward or remove add_ons based on user selection from select step
   if (existingPayload.message?.order?.items?.[0]) {
@@ -156,7 +165,7 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
     }
   }
 
-  
+
   // Update document URLs from session data
   if (existingPayload.message?.order?.documents) {
     existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {

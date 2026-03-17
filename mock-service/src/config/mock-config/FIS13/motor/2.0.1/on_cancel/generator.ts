@@ -1,15 +1,18 @@
+import { resolveSessionIds } from '../id-helper';
 
 export async function onCancelDefaultGenerator(existingPayload: any, sessionData: any) {
   // Update context timestamp
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
-  
+
+  const ids = resolveSessionIds(sessionData);
+
   // Update transaction_id from session data
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   // Update message_id from session data
   if (sessionData.message_id && existingPayload.context) {
     existingPayload.context.message_id = sessionData.message_id;
@@ -28,44 +31,38 @@ export async function onCancelDefaultGenerator(existingPayload: any, sessionData
   if (existingPayload.message) {
     const order = existingPayload.message.order || (existingPayload.message.order = {});
 
-    // Map order.id from session data (carry-forward from confirm)
-    if (sessionData.order.id) {
-      order.id = sessionData.order.id;
+    // Map order.id from resolved IDs
+    if (ids.orderId) {
+      order.id = ids.orderId;
     }
 
-    // Map provider.id from session data (carry-forward from confirm)
-    if (sessionData.selected_provider?.id && order.provider) {
-      order.provider.id = sessionData.selected_provider.id;
+    // Map provider.id from resolved IDs
+    if (ids.providerId && order.provider) {
+      order.provider.id = ids.providerId;
     }
 
-    // Map item.id from session data (carry-forward from confirm)
-    const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-    if (childItem?.id && order.items?.[0]) {
-      order.items[0].id = childItem.id;
-      if (childItem.parent_item_id) {
-        order.items[0].parent_item_id = childItem.parent_item_id;
+    // Map item.id, parent_item_id, category_ids, and fulfillment_ids from resolved IDs
+    if (ids.childItemId && order.items?.[0]) {
+      order.items[0].id = ids.childItemId;
+      if (ids.parentItemId) {
+        order.items[0].parent_item_id = ids.parentItemId;
       }
-      if (childItem.category_ids) {
-        order.items[0].category_ids = childItem.category_ids;
+      if (ids.categoryIds?.length) {
+        order.items[0].category_ids = ids.categoryIds;
+      }
+      if (ids.fulfillmentId && order.items[0].fulfillment_ids) {
+        order.items[0].fulfillment_ids = [ids.fulfillmentId];
       }
     }
 
-    // Map quote.id from session data (carry-forward from confirm)
-    if (sessionData.quote_id && order.quote) {
-      order.quote.id = sessionData.quote_id;
+    // Map quote.id from resolved IDs
+    if (ids.quoteId && order.quote) {
+      order.quote.id = ids.quoteId;
     }
 
-    // Resolve fulfillment ID (handle both string and array from session)
-    const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
-
-    // Map fulfillment.id from session data
-    if (fulfillmentId && order.fulfillments?.[0]) {
-      order.fulfillments[0].id = fulfillmentId;
-    }
-
-    // Update fulfillment_ids within items to use dynamic fulfillment ID
-    if (fulfillmentId && order.items?.[0]?.fulfillment_ids) {
-      order.items[0].fulfillment_ids = [fulfillmentId];
+    // Map fulfillment.id from resolved IDs
+    if (ids.fulfillmentId && order.fulfillments?.[0]) {
+      order.fulfillments[0].id = ids.fulfillmentId;
     }
 
     // Carry forward or remove add_ons based on user selection from session

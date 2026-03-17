@@ -12,22 +12,11 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
   }
   console.log("sessionData.message_id", sessionData);
 
-  // Update form URLs for items with session data (preserve existing structure)
-  // if (existingPayload.message?.catalog?.providers?.[0]?.items) {
-  //   existingPayload.message.catalog.providers[0].items = existingPayload.message.catalog.providers[0].items.map((item: any) => {
-  //     if (item.xinput?.form) {
-  //       // Generate dynamic form URL with session data
-  //       const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/consumer_information_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
-  //       console.log("Form URL generated:", url);
-  //       item.xinput.form.url = url;
-  //     }
-  //     return item;
-  //   });
-  // }
+
 
   // Generate dynamic provider ID (replace hardcoded placeholder)
   if (existingPayload.message?.catalog?.providers?.[0]) {
-    existingPayload.message.catalog.providers[0].id = crypto.randomUUID();
+    existingPayload.message.catalog.providers[0].id = sessionData.provider_id || sessionData.selected_provider.id;
   }
 
   // Carry forward parent item ID from session (saved in on_search)
@@ -40,12 +29,14 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
         // Parent item — use carried-forward ID from session
         if (parentItemId) {
           item.id = parentItemId;
-        } else {
-          item.id = crypto.randomUUID();
-        }
+        } 
+        // else {
+        //   item.id = crypto.randomUUID();
+        // }
       } else {
         // Child item — generate new UUID, update parent_item_id to match
         item.id = crypto.randomUUID();
+        // item.id = crypto.randomUUID();
         if (parentItemId) {
           item.parent_item_id = parentItemId;
         }

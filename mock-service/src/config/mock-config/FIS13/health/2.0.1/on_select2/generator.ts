@@ -1,4 +1,5 @@
 
+import { resolveSessionIds, applyResolvedIdsToPayload, updateQuoteBreakupItemIds, updateProposalIdTag, applyFlowTypeOverrides } from '../id-helper';
 
 export async function onSelectDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("On Select generator - Available session data:", {
@@ -12,66 +13,33 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
-  
+
   // Update transaction_id from session data (carry-forward mapping)
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   // Update message_id from session data
   if (sessionData.message_id && existingPayload.context) {
     existingPayload.context.message_id = sessionData.message_id;
   }
-  
-  // Update provider.id if available from session data (carry-forward from select)
-  if (sessionData.selected_provider?.id && existingPayload.message?.order?.provider) {
-    existingPayload.message.order.provider.id = sessionData.selected_provider.id;
-    console.log("Updated provider.id:", sessionData.selected_provider.id);
-  }
-  
-  // Carry forward child item ID and parent_item_id from select
-  const childItem = sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  if (childItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = childItem.id;
-    if (childItem.parent_item_id) {
-      existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
-    }
 
-  }
+  const ids = resolveSessionIds(sessionData);
 
-  // Resolve fulfillment ID (handle both string and array from session)
-  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
-
-  // Carry forward fulfillment.id from session data
-  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
-  }
-
-  // Generate dynamic quote ID (replace hardcoded OFFER_ID/PROPOSAL_ID)
-  if (existingPayload.message?.order?.quote) {
-    existingPayload.message.order.quote.id = crypto.randomUUID();
+  // Apply all resolved IDs to payload (provider, items, fulfillment, quote)
+  applyResolvedIdsToPayload(existingPayload, ids);
+  if (ids.providerId) {
+    console.log("Updated provider.id:", ids.providerId);
   }
 
   // Update quote breakup item references with dynamic child item ID
-  if (existingPayload.message?.order?.quote?.breakup && childItem?.id) {
-    existingPayload.message.order.quote.breakup.forEach((b: any) => {
-      if (b.item?.id && b.title !== 'ADD_ONS') b.item.id = childItem.id;
-    });
-  }
+  updateQuoteBreakupItemIds(existingPayload, ids.childItemId);
 
   // Update PROPOSAL_ID tag value with dynamic quote ID
-  if (existingPayload.message?.order?.items?.[0]?.tags) {
-    const quoteId = existingPayload.message.order.quote?.id;
-    existingPayload.message.order.items[0].tags.forEach((tag: any) => {
-      if (tag.list) {
-        tag.list.forEach((listItem: any) => {
-          if (listItem.descriptor?.code === "PROPOSAL_ID" && quoteId) {
-            listItem.value = quoteId;
-          }
-        });
-      }
-    });
-  }
+  updateProposalIdTag(existingPayload, ids.quoteId);
+
+  // Apply flow-type overrides (Individual vs Family)
+  applyFlowTypeOverrides(existingPayload, sessionData);
 
   // Generate dynamic form ID and URL
   if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
@@ -90,6 +58,7 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
     }
   }
 
+let  totalPrice
   // Update ADD_ONS entries in quote breakup with dynamic add-on IDs from session
   if (existingPayload.message?.order?.quote?.breakup) {
     // Remove existing hardcoded ADD_ONS entries
@@ -110,17 +79,15 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
       });
     }
     // Recalculate total quote price from all breakup items
-    const totalPrice = existingPayload.message.order.quote.breakup.reduce(
+   totalPrice = existingPayload.message.order.quote.breakup.reduce(
       (sum: number, b: any) => sum + (parseFloat(b.price?.value) || 0), 0
     );
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
     }
-    // Sync payment amount with calculated quote price
-    if (existingPayload.message?.order?.payments?.[0]?.params) {
-      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
-    }
+
   }
+
 
   return existingPayload;
 }

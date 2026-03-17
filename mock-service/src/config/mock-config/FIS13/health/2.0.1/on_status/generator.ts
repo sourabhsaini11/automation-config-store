@@ -1,3 +1,5 @@
+import { resolveSessionIds, updateProposalIdTag, applyFlowTypeOverrides } from '../id-helper';
+
 export async function onStatusGenerator(existingPayload: any, sessionData: any) {
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
@@ -6,83 +8,75 @@ export async function onStatusGenerator(existingPayload: any, sessionData: any) 
   console.log("sessionData for on_status", sessionData);
 
   const submission_id = sessionData?.form_data?.kyc_verification_status?.form_submission_id;
-  
+
   const form_status = sessionData?.form_data?.kyc_verification_status?.idType;
-  
+
   // Update transaction_id and message_id from session data (carry-forward mapping)
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   if (sessionData.message_id && existingPayload.context) {
     existingPayload.context.message_id = sessionData.message_id;
   }
-  
+
+  const ids = resolveSessionIds(sessionData);
+
   // Update order ID from session data
-  if (sessionData.order_id) {
+  if (ids.orderId) {
     existingPayload.message = existingPayload.message || {};
     existingPayload.message.order = existingPayload.message.order || {};
-    existingPayload.message.order.id = sessionData.order_id;
+    existingPayload.message.order.id = ids.orderId;
   }
 
   // Update provider information from session data (carry-forward from previous flows)
-  if (sessionData.selected_provider?.id || sessionData.provider_id) {
+  if (ids.providerId) {
     existingPayload.message = existingPayload.message || {};
     existingPayload.message.order = existingPayload.message.order || {};
     existingPayload.message.order.provider = existingPayload.message.order.provider || {};
-    existingPayload.message.order.provider.id = sessionData.selected_provider?.id || sessionData.provider_id;
+    existingPayload.message.order.provider.id = ids.providerId;
   }
 
-  // Resolve fulfillment ID (handle both string and array from session)
-  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
-
   // Carry forward fulfillment.id from session data
-  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
+  if (ids.fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = ids.fulfillmentId;
   }
 
   // Carry forward quote.id from session data
-  if (sessionData.quote_id && existingPayload.message?.order?.quote) {
-    existingPayload.message.order.quote.id = sessionData.quote_id;
+  if (ids.quoteId && existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = ids.quoteId;
   }
+
   // Update PROPOSAL_ID tag value with dynamic quote ID from session
-  if (sessionData.quote_id) {
-    const items = existingPayload.message?.order?.items;
-    if (items) {
-      items.forEach((item: any) => {
-        item.tags?.forEach((tag: any) => {
-          tag.list?.forEach((listItem: any) => {
-            if (listItem.descriptor?.code === 'PROPOSAL_ID') {
-              listItem.value = sessionData.quote_id;
-            }
-          });
-        });
-      });
-    }
-  }
+  updateProposalIdTag(existingPayload, ids.quoteId);
 
   // Fix items: ensure ID consistency and form status
   if (existingPayload.message?.order?.items?.[0]) {
     const item = existingPayload.message.order.items[0];
 
     // Ensure item ID matches previous calls (carry-forward from previous flows)
-    const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-    if (childItem?.id) {
-      item.id = childItem.id;
-      if (childItem.parent_item_id) {
-        item.parent_item_id = childItem.parent_item_id;
+    if (ids.childItemId) {
+      item.id = ids.childItemId;
+      if (ids.parentItemId) {
+        item.parent_item_id = ids.parentItemId;
+      }
+      if (ids.categoryIds?.length) {
+        item.category_ids = ids.categoryIds;
+      }
+      if (ids.fulfillmentId && item.fulfillment_ids) {
+        item.fulfillment_ids = [ids.fulfillmentId];
       }
     } else if (sessionData.item_id) {
       item.id = sessionData.item_id;
     }
-    
+
     // Update location_ids from session data (carry-forward from previous flows)
     const selectedLocationId = sessionData.selected_location_id;
     if (selectedLocationId) {
       item.location_ids = [selectedLocationId];
       console.log("Updated location_ids:", selectedLocationId);
     }
-    
+
     // Update form ID from session data (carry-forward from previous flows)
     if (item.xinput?.form) {
       // Use form ID from session data or default to FO3 (from on_select_2/on_status_unsolicited)
@@ -90,7 +84,7 @@ export async function onStatusGenerator(existingPayload: any, sessionData: any) 
       item.xinput.form.id = formId;
       console.log("Updated form ID:", formId);
     }
-    
+
     // Set form status to OFFLINE_PENDING
     if (item.xinput?.form_response) {
       item.xinput.form_response.status = form_status;
@@ -123,6 +117,22 @@ export async function onStatusGenerator(existingPayload: any, sessionData: any) 
   // Update loan amount in items if provided
   if (sessionData.loan_amount && existingPayload.message?.order?.items?.[0]) {
     existingPayload.message.order.items[0].price.value = sessionData.loan_amount;
+  }
+
+  // Apply flow-type overrides (Individual vs Family)
+  applyFlowTypeOverrides(existingPayload, sessionData);
+
+  // Update SETTLEMENT_AMOUNT from session data
+  if (sessionData.settlement_amount && existingPayload.message?.order?.payments?.[0]?.tags) {
+    existingPayload.message.order.payments[0].tags.forEach((tag: any) => {
+      if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
+        tag.list.forEach((listItem: any) => {
+          if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
+            listItem.value = sessionData.settlement_amount;
+          }
+        });
+      }
+    });
   }
 
   // Carry forward or remove add_ons based on user selection from select step

@@ -47,6 +47,9 @@ order:
       price:
         currency: INR
         value: "900"
+      category_ids:
+        - C1
+        - C3  
       fulfillment_ids:
         - F1
       tags:

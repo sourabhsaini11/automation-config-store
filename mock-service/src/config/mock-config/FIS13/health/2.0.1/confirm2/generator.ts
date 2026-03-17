@@ -1,7 +1,9 @@
 
+import { resolveSessionIds, applyResolvedIdsToPayload, updateQuoteBreakupItemIds, updateProposalIdTag } from '../id-helper';
+
 export async function confirmDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("sessionData for confirm", sessionData);
-  
+
   // Update context timestamp and action
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
@@ -16,64 +18,34 @@ export async function confirmDefaultGenerator(existingPayload: any, sessionData:
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   // Generate new UUID message_id for confirm (new API call)
   if (existingPayload.context) {
     existingPayload.context.message_id = crypto.randomUUID();
     console.log("Generated new UUID message_id for confirm:", existingPayload.context.message_id);
   }
-  
-  // Update provider.id if available from session data (carry-forward from previous flows)
-  if (sessionData.selected_provider?.id && existingPayload.message?.order?.provider) {
-    existingPayload.message.order.provider.id = sessionData.selected_provider.id;
-    console.log("Updated provider.id:", sessionData.selected_provider.id);
+
+  const ids = resolveSessionIds(sessionData);
+
+  // Apply all resolved IDs to payload (provider, items, fulfillment, quote)
+  applyResolvedIdsToPayload(existingPayload, ids);
+  if (ids.providerId) {
+    console.log("Updated provider.id:", ids.providerId);
   }
-  
-  // Carry forward child item ID and parent_item_id from session
-  const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  if (childItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = childItem.id;
-    if (childItem.parent_item_id) {
-      existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
-    }
-    console.log("Carried forward child item:", childItem.id, "parent:", childItem.parent_item_id);
+  if (ids.childItemId) {
+    console.log("Carried forward child item:", ids.childItemId, "parent:", ids.parentItemId);
+  }
+  if (ids.fulfillmentId) {
+    console.log("Carried forward fulfillment ID:", ids.fulfillmentId);
   }
 
-  // Resolve fulfillment ID (handle both string and array from session)
-  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
-
-  // Carry forward fulfillment.id from session data (dynamically generated in on_init)
-  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
-    console.log("Carried forward fulfillment ID:", fulfillmentId);
-  }
-
-  // Carry forward quote.id from session data
-  if ((sessionData.quote_id || sessionData.quote?.id) && existingPayload.message?.order?.quote) {
-    existingPayload.message.order.quote.id = sessionData.quote_id || sessionData.quote?.id;
-  }
   // Update PROPOSAL_ID tag value with dynamic quote ID from session
-  if (sessionData.quote_id) {
-    const items = existingPayload.message?.order?.items;
-    if (items) {
-      items.forEach((item: any) => {
-        item.tags?.forEach((tag: any) => {
-          tag.list?.forEach((listItem: any) => {
-            if (listItem.descriptor?.code === 'PROPOSAL_ID') {
-              listItem.value = sessionData.quote_id;
-            }
-          });
-        });
-      });
-    }
-  }
+  updateProposalIdTag(existingPayload, ids.quoteId);
 
   // Update quote breakup item references with dynamic child item ID
-  if (existingPayload.message?.order?.quote?.breakup && childItem?.id) {
-    existingPayload.message.order.quote.breakup.forEach((b: any) => {
-      if (b.item?.id && b.title !== 'ADD_ONS') b.item.id = childItem.id;
-    });
-    console.log("Updated quote breakup item.id with:", childItem.id);
+  updateQuoteBreakupItemIds(existingPayload, ids.childItemId);
+  if (ids.childItemId) {
+    console.log("Updated quote breakup item.id with:", ids.childItemId);
   }
 
    if (existingPayload.message?.order?.items?.[0]) {
@@ -83,7 +55,7 @@ export async function confirmDefaultGenerator(existingPayload: any, sessionData:
       item.xinput.form.id = formId;
       console.log("Updated form ID:", formId);
     }
-    
+
     // Set form status and submission_id
     if (item.xinput) {
       // Create form_response if it doesn't exist

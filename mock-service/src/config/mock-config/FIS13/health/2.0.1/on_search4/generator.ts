@@ -28,7 +28,7 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
   console.log("session data of on_search", sessionData);
   // Generate dynamic provider ID (replace hardcoded placeholder)
   if (existingPayload.message?.catalog?.providers?.[0]) {
-    existingPayload.message.catalog.providers[0].id = crypto.randomUUID();
+    existingPayload.message.catalog.providers[0].id = sessionData.provider_id || sessionData.selected_provider.id;
   }
 
   // Carry forward parent item ID from session (saved in on_search2)

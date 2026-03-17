@@ -24,6 +24,7 @@ export interface SessionData {
 	updated_payments: any[] | undefined;
 	order_id: string | undefined;
 	quote: any | undefined;
+	total_price:string  | any;
 	status: string;
 	error_code: string | undefined;
 	error_message: string | undefined;
@@ -49,6 +50,7 @@ export interface SessionData {
 	selected_item_ids: string[] | undefined;
 	selected_item_counts: number[] | undefined;
 	tags: any[] | undefined;
+	payment_tags: any[] | undefined;
 	item: any | undefined;
 	selected_provider: any | undefined;
 	cancellation_terms: any[] | undefined;
@@ -81,6 +83,11 @@ export interface SessionData {
 	payment_form?:string;
 	payment_form_motor?:string;
 	parent_item_id?: string;
+	child_item_id?: string;
+	quote_id?: string;
+	fulfillment_id?: string;
+	selected_category_ids?: string[];
+	settlement_amount?: string;
 	claim_form?: string;
 	renew_form?: string;
 	claim_form_motor?: string;

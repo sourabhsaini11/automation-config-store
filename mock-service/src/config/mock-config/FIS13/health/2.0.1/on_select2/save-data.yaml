@@ -7,5 +7,11 @@ save-data:
   quote: "$.message.order.quote"
   quote_id: "$.message.order.quote.id"
   form_id: "$.message.order.items[0].xinput.form.id"
+  child_item_id: "$.message.order.items[0].id"
+  parent_item_id: "$.message.order.items[0].parent_item_id"
+  selected_category_ids: "$.message.order.items[0].category_ids"
+  fulfillment_id: "$.message.order.fulfillments[0].id"
+  provider_id: "$.message.order.provider.id"
   Ekyc_details_form: "$..form.url"
+  total_price: "$.message.order.quote.price.value"
   

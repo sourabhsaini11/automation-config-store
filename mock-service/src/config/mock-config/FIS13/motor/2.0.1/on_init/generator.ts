@@ -1,48 +1,57 @@
 
+import { resolveSessionIds } from '../id-helper';
 
 export async function onInitDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("sessionData for on_init", sessionData);
-  
+
   // Update context timestamp
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
-  
+
+  const ids = resolveSessionIds(sessionData);
+
   // Update transaction_id from session data (carry-forward mapping)
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   // Use the same message_id as init (matching pair)
   if (sessionData.message_id && existingPayload.context) {
     existingPayload.context.message_id = sessionData.message_id;
     console.log("Using matching message_id from init:", sessionData.message_id);
   }
-  
-  // Update provider.id if available from session data (carry-forward from init)
-  if (sessionData.selected_provider?.id && existingPayload.message?.order?.provider) {
-    existingPayload.message.order.provider.id = sessionData.selected_provider.id;
-    console.log("Updated provider.id:", sessionData.selected_provider.id);
+
+  // Update provider.id from resolved IDs
+  if (ids.providerId && existingPayload.message?.order?.provider) {
+    existingPayload.message.order.provider.id = ids.providerId;
+    console.log("Updated provider.id:", ids.providerId);
   }
-  
-  // Carry forward child item ID and parent_item_id from session
-  const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  if (childItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = childItem.id;
-    if (childItem.parent_item_id) {
-      existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
+
+  // Apply child item ID and parent_item_id from resolved IDs
+  if (ids.childItemId && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = ids.childItemId;
+    if (ids.parentItemId) {
+      existingPayload.message.order.items[0].parent_item_id = ids.parentItemId;
+    }
+    if (ids.categoryIds?.length) {
+      existingPayload.message.order.items[0].category_ids = ids.categoryIds;
+    }
+    if (ids.fulfillmentId && existingPayload.message.order.items[0].fulfillment_ids) {
+      existingPayload.message.order.items[0].fulfillment_ids = [ids.fulfillmentId];
     }
   }
 
   // Generate dynamic fulfillment ID (BPP assigns fulfillment ID in on_init)
   if (existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = crypto.randomUUID();
-
+    const newFulfillmentId = crypto.randomUUID();
+    existingPayload.message.order.fulfillments[0].id = newFulfillmentId;
+    sessionData.fulfillment_id = newFulfillmentId;
   }
 
-  // Carry forward quote.id from session data
-  if (sessionData.quote_id && existingPayload.message?.order?.quote) {
-    existingPayload.message.order.quote.id = sessionData.quote_id;
+  // Apply quote.id from resolved IDs
+  if (ids.quoteId && existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = ids.quoteId;
   }
 
   // If flow is pre-order, set payment type to PRE-ORDER
@@ -115,8 +124,47 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
       existingPayload.message.order.quote.price.value = String(totalPrice);
     }
     // Sync payment amount with calculated quote price
-    if (existingPayload.message?.order?.payments?.[0]?.params) {
+    if (existingPayload.message?.order?.payments) {
       existingPayload.message.order.payments[0].params.amount = String(totalPrice);
+    }
+
+    // Calculate and update SETTLEMENT_AMOUNT dynamically
+    if (existingPayload.message?.order?.payments?.[0]?.tags) {
+      let buyerFeeType = 'percent-annualized';
+      let buyerFeePercentage = 0;
+      let buyerFeeAmount = 0;
+      // Unwrap payment_tags from JSONPath array wrapper: [[tag1,tag2]] → [tag1,tag2]
+      const paymentTags = Array.isArray(sessionData.payment_tags?.[0]) ? sessionData.payment_tags[0] : sessionData.payment_tags;
+      if (Array.isArray(paymentTags)) {
+        const buyerFeesTag = paymentTags.find((t: any) => t.descriptor?.code === 'BUYER_FINDER_FEES');
+        if (buyerFeesTag?.list) {
+          buyerFeesTag.list.forEach((item: any) => {
+            if (item.descriptor?.code === 'BUYER_FINDER_FEES_TYPE') buyerFeeType = item.value;
+            if (item.descriptor?.code === 'BUYER_FINDER_FEES_PERCENTAGE') buyerFeePercentage = parseFloat(item.value) || 0;
+            if (item.descriptor?.code === 'BUYER_FINDER_FEES_AMOUNT') buyerFeeAmount = parseFloat(item.value) || 0;
+          });
+        }
+      }
+      // Use total_price from session (saved in on_select); unwrap JSONPath array if needed
+      const rawTotalPrice = Array.isArray(sessionData.total_price) ? sessionData.total_price[0] : sessionData.total_price;
+      const settlementBasePrice = parseFloat(rawTotalPrice) || totalPrice;
+      const buyerFee = buyerFeeType === 'amount' ? buyerFeeAmount : (buyerFeePercentage / 100) * settlementBasePrice;
+      // Unwrap collected_by from JSONPath array wrapper: ["BAP"] → "BAP"
+      const collectedBy = (Array.isArray(sessionData.collected_by) ? sessionData.collected_by[0] : sessionData.collected_by) || existingPayload.message.order.payments[0].collected_by;
+      const settlementAmount = sessionData.settlement_amount
+        ? parseFloat(sessionData.settlement_amount)
+        : (collectedBy === 'BAP' ? (settlementBasePrice - buyerFee) : buyerFee);
+      // Save settlement_amount to session for downstream generators
+      sessionData.settlement_amount = String(Math.round(settlementAmount * 100) / 100);
+      existingPayload.message.order.payments[0].tags.forEach((tag: any) => {
+        if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
+          tag.list.forEach((listItem: any) => {
+            if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
+              listItem.value = String(Math.round(settlementAmount * 100) / 100);
+            }
+          });
+        }
+      });
     }
   }
 

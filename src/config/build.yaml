@@ -24458,6 +24458,7 @@ x-validations:
       validTags:
       - bap_terms
       - lbnp_sla_terms
+      - bpp_terms
       tagPath: $.message.order.tags[*].code
       _CONTINUE_: "!(tagPath are present)"
       _RETURN_: tagPath all in validTags

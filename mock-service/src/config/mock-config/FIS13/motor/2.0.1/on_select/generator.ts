@@ -1,4 +1,5 @@
 
+import { resolveSessionIds } from '../id-helper';
 
 export async function onSelectDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("On Select generator - Available session data:", {
@@ -12,44 +13,42 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
-  
+
+  const ids = resolveSessionIds(sessionData);
+
   // Update transaction_id from session data (carry-forward mapping)
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   // Update message_id from session data
   if (sessionData.message_id && existingPayload.context) {
     existingPayload.context.message_id = sessionData.message_id;
   }
-  
-  // Update provider.id if available from session data (carry-forward from select)
-  if (sessionData.selected_provider?.id && existingPayload.message?.order?.provider) {
-    existingPayload.message.order.provider.id = sessionData.selected_provider.id;
-    console.log("Updated provider.id:", sessionData.selected_provider.id);
+
+  // Update provider.id from resolved IDs
+  if (ids.providerId && existingPayload.message?.order?.provider) {
+    existingPayload.message.order.provider.id = ids.providerId;
+    console.log("Updated provider.id:", ids.providerId);
   }
-  
-  // Update item.id if available from session data (carry-forward from select)
-  // if (sessionData.items && Array.isArray(sessionData.items) && sessionData.items.length > 0) {
-  //   const selectedItem = sessionData.items[0];
-  //   if (existingPayload.message?.order?.items?.[0]) {
-  //     existingPayload.message.order.items[0].id = selectedItem.id;
-  //     console.log("Updated item.id:", selectedItem.id);
-  //   }
-  // }
+
   // Generate dynamic child item ID and set parent_item_id from parent item in session
   const parentItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
   if (existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = crypto.randomUUID();
+    const newChildItemId = crypto.randomUUID();
+    existingPayload.message.order.items[0].id = newChildItemId;
+    sessionData.child_item_id = newChildItemId;
     if (parentItem?.id) {
       existingPayload.message.order.items[0].parent_item_id = parentItem.id;
+      sessionData.parent_item_id = parentItem.id;
     }
-
   }
 
   // Generate dynamic quote ID (replace hardcoded OFFER_ID/PROPOSAL_ID)
   if (existingPayload.message?.order?.quote) {
-    existingPayload.message.order.quote.id = crypto.randomUUID();
+    const newQuoteId = crypto.randomUUID();
+    existingPayload.message.order.quote.id = newQuoteId;
+    sessionData.quote_id = newQuoteId;
   }
 
   // Generate dynamic form ID and URL

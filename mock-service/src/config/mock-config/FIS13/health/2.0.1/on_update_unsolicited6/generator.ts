@@ -1,19 +1,22 @@
 
+import { resolveSessionIds, applyResolvedIdsToPayload, updateProposalIdTag, applyFlowTypeOverrides } from '../id-helper';
+
 export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, sessionData: any) {
   // Update context timestamp
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
-  
+
   // Update transaction_id from session data
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   // Generate new message_id for unsolicited update
   if (existingPayload.context) {
-    existingPayload.context.message_id = generateUUID();
+    existingPayload.context.message_id = crypto.randomUUID();
   }
+
     // Setupdated_at to current date
    if (existingPayload.message?.order) {
     const now = new Date().toISOString();
@@ -22,7 +25,6 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
       existingPayload.message.order.created_at = sessionData.created_at;
     }
   }
-
   // Helper function to generate UUID v4
   function generateUUID() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
@@ -31,9 +33,8 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
       return v.toString(16);
     });
   }
-  
-  // Resolve fulfillment ID (handle both string and array from session)
-  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
+
+  const ids = resolveSessionIds(sessionData);
 
   // Load order from session data
   if (existingPayload.message) {
@@ -44,48 +45,29 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
       order.id = sessionData.order_id;
     }
 
-    // Map provider.id from session data (carry-forward from confirm)
-    if (sessionData.selected_provider?.id && order.provider) {
-      order.provider.id = sessionData.selected_provider.id;
-    }
+  }
 
-    // Map item.id and parent_item_id from session data
-    const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-    if (childItem?.id && order.items?.[0]) {
-      order.items[0].id = childItem.id;
-      if (childItem.parent_item_id) {
-        order.items[0].parent_item_id = childItem.parent_item_id;
-      }
-    }
+  // Apply all resolved IDs to payload (provider, items, fulfillment, quote, category_ids)
+  applyResolvedIdsToPayload(existingPayload, ids);
 
-    // Map quote.id from session data (carry-forward from confirm)
-    if (sessionData.quote_id && order.quote) {
-      order.quote.id = sessionData.quote_id;
-    }
   // Update PROPOSAL_ID tag value with dynamic quote ID from session
-  if (sessionData.quote_id) {
-    const items = existingPayload.message?.order?.items;
-    if (items) {
-      items.forEach((item: any) => {
-        item.tags?.forEach((tag: any) => {
-          tag.list?.forEach((listItem: any) => {
-            if (listItem.descriptor?.code === 'PROPOSAL_ID') {
-              listItem.value = sessionData.quote_id;
-            }
-          });
+  updateProposalIdTag(existingPayload, ids.quoteId);
+
+  // Update SETTLEMENT_AMOUNT from session data
+  if (sessionData.settlement_amount && existingPayload.message?.order?.payments?.[0]?.tags) {
+    existingPayload.message.order.payments[0].tags.forEach((tag: any) => {
+      if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
+        tag.list.forEach((listItem: any) => {
+          if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
+            listItem.value = sessionData.settlement_amount;
+          }
         });
-      });
-    }
+      }
+    });
   }
 
-    // Map fulfillment.id from session data
-    if (fulfillmentId && order.fulfillments?.[0]) {
-      order.fulfillments[0].id = fulfillmentId;
-    }
-  }
-
-
-
+  // Apply flow-type overrides (Individual vs Family)
+  applyFlowTypeOverrides(existingPayload, sessionData);
 
   // Carry forward or remove add_ons based on user selection from select step
   if (existingPayload.message?.order?.items?.[0]) {
@@ -127,20 +109,6 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
     if (existingPayload.message?.order?.payments?.[0]?.params) {
       existingPayload.message.order.payments[0].params.amount = String(totalPrice);
     }
-  }
-
-  
-  // Update document URLs from session data
-  if (existingPayload.message?.order?.documents) {
-    existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {
-      if (doc.descriptor?.code === 'CLAIM_DOC' && doc.mime_type === 'application/html' && sessionData.claim_doc_url) {
-        doc.url = sessionData.claim_doc_url;
-      }
-      if (doc.descriptor?.code === 'RENEW_DOC' && doc.mime_type === 'application/html' && sessionData.renew_doc_url) {
-        doc.url = sessionData.renew_doc_url;
-      }
-      return doc;
-    });
   }
 
   return existingPayload;

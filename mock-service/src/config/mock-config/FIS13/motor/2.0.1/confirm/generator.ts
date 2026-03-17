@@ -1,12 +1,15 @@
+import { resolveSessionIds, applyResolvedIdsToPayload, updateQuoteBreakupItemIds } from '../id-helper';
 
 export async function confirmDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("sessionData for confirm", sessionData);
-  
+
   // Update context timestamp and action
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
     existingPayload.context.action = "confirm";
   }
+
+  const ids = resolveSessionIds(sessionData);
 
    const submission_id = sessionData?.form_data?.consumer_information_form?.form_submission_id || sessionData?.consumer_information_form
   const form_status = sessionData?.form_data?.consumer_information_form?.idType;
@@ -15,46 +18,17 @@ export async function confirmDefaultGenerator(existingPayload: any, sessionData:
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   // Generate new UUID message_id for confirm (new API call)
   if (existingPayload.context) {
     existingPayload.context.message_id = crypto.randomUUID();
   }
-  
-  // Update provider.id if available from session data (carry-forward from previous flows)
-  if (sessionData.selected_provider?.id && existingPayload.message?.order?.provider) {
-    existingPayload.message.order.provider.id = sessionData.selected_provider.id;
-  }
 
-  // Carry forward item.id from session data
-  const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  if (childItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = childItem.id;
-    if (childItem.parent_item_id) {
-      existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
-    }
+  // Apply all resolved IDs (provider, items, fulfillments, quote) to payload
+  applyResolvedIdsToPayload(existingPayload, ids);
 
-  }
-
-  // Resolve fulfillment ID (handle both string and array from session)
-  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
-
-  // Carry forward fulfillment.id from session data
-  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
-  }
-
-  // Carry forward quote.id from session data
-  if (sessionData.quote_id && existingPayload.message?.order?.quote) {
-    existingPayload.message.order.quote.id = sessionData.quote_id;
-  }
-
-  // Update quote breakup item references with dynamic child item ID
-  if (existingPayload.message?.order?.quote?.breakup && childItem?.id) {
-    existingPayload.message.order.quote.breakup.forEach((b: any) => {
-      if (b.item?.id && b.title !== 'ADD_ONS') b.item.id = childItem.id;
-    });
-  }
+  // Update quote breakup item references with resolved child item ID
+  updateQuoteBreakupItemIds(existingPayload, ids.childItemId);
 
    if (existingPayload.message?.order?.items?.[0]) {
     const item = existingPayload.message.order.items[0];
@@ -117,8 +91,47 @@ export async function confirmDefaultGenerator(existingPayload: any, sessionData:
       existingPayload.message.order.quote.price.value = String(totalPrice);
     }
     // Sync payment amount with calculated quote price
-    if (existingPayload.message?.order?.payments?.[0]?.params) {
+    if (existingPayload.message?.order?.payments) {
       existingPayload.message.order.payments[0].params.amount = String(totalPrice);
+    }
+
+    // Calculate and update SETTLEMENT_AMOUNT dynamically
+    if (existingPayload.message?.order?.payments?.[0]?.tags) {
+      let buyerFeeType = 'percent-annualized';
+      let buyerFeePercentage = 0;
+      let buyerFeeAmount = 0;
+      // Unwrap payment_tags from JSONPath array wrapper: [[tag1,tag2]] → [tag1,tag2]
+      const paymentTags = Array.isArray(sessionData.payment_tags?.[0]) ? sessionData.payment_tags[0] : sessionData.payment_tags;
+      if (Array.isArray(paymentTags)) {
+        const buyerFeesTag = paymentTags.find((t: any) => t.descriptor?.code === 'BUYER_FINDER_FEES');
+        if (buyerFeesTag?.list) {
+          buyerFeesTag.list.forEach((item: any) => {
+            if (item.descriptor?.code === 'BUYER_FINDER_FEES_TYPE') buyerFeeType = item.value;
+            if (item.descriptor?.code === 'BUYER_FINDER_FEES_PERCENTAGE') buyerFeePercentage = parseFloat(item.value) || 0;
+            if (item.descriptor?.code === 'BUYER_FINDER_FEES_AMOUNT') buyerFeeAmount = parseFloat(item.value) || 0;
+          });
+        }
+      }
+      // Use total_price from session (saved in on_select); unwrap JSONPath array if needed
+      const rawTotalPrice = Array.isArray(sessionData.total_price) ? sessionData.total_price[0] : sessionData.total_price;
+      const settlementBasePrice = parseFloat(rawTotalPrice) || totalPrice;
+      const buyerFee = buyerFeeType === 'amount' ? buyerFeeAmount : (buyerFeePercentage / 100) * settlementBasePrice;
+      // Unwrap collected_by from JSONPath array wrapper: ["BAP"] → "BAP"
+      const collectedBy = (Array.isArray(sessionData.collected_by) ? sessionData.collected_by[0] : sessionData.collected_by) || existingPayload.message.order.payments[0].collected_by;
+      const settlementAmount = sessionData.settlement_amount
+        ? parseFloat(sessionData.settlement_amount)
+        : (collectedBy === 'BAP' ? (settlementBasePrice - buyerFee) : buyerFee);
+      // Save settlement_amount to session for downstream generators
+      sessionData.settlement_amount = String(Math.round(settlementAmount * 100) / 100);
+      existingPayload.message.order.payments[0].tags.forEach((tag: any) => {
+        if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
+          tag.list.forEach((listItem: any) => {
+            if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
+              listItem.value = String(Math.round(settlementAmount * 100) / 100);
+            }
+          });
+        }
+      });
     }
   }
 

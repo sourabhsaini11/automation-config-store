@@ -1,5 +1,7 @@
 
 
+import { resolveSessionIds } from '../id-helper';
+
 export async function updateDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("Gold Loan Update generator - Available session data:", {
     transaction_id: sessionData.transaction_id,
@@ -24,43 +26,47 @@ export async function updateDefaultGenerator(existingPayload: any, sessionData: 
    existingPayload.context.message_id = crypto.randomUUID();
   }
 
+  const ids = resolveSessionIds(sessionData);
+
   // Load order_id into order.id (structure uses order.id)
-  if (sessionData.order_id && existingPayload.message) {
+  if (ids.orderId && existingPayload.message) {
     existingPayload.message.order = existingPayload.message.order || {};
-    existingPayload.message.order.id = sessionData.order_id;
+    existingPayload.message.order.id = ids.orderId;
   }
 
   // Update provider.id from session data
-  if ((sessionData.selected_provider?.id || sessionData.provider_id) && existingPayload.message?.order?.provider) {
-    existingPayload.message.order.provider.id = sessionData.selected_provider?.id || sessionData.provider_id;
+  if (ids.providerId && existingPayload.message?.order?.provider) {
+    existingPayload.message.order.provider.id = ids.providerId;
   }
 
   // Carry forward item.id and parent_item_id from session data
-  const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  if (childItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = childItem.id;
-    if (childItem.parent_item_id) {
-      existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
+  if (ids.childItemId && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].id = ids.childItemId;
+    if (ids.parentItemId) {
+      existingPayload.message.order.items[0].parent_item_id = ids.parentItemId;
+    }
+    if (ids.categoryIds?.length) {
+      existingPayload.message.order.items[0].category_ids = ids.categoryIds;
+    }
+    if (ids.fulfillmentId && existingPayload.message.order.items[0].fulfillment_ids) {
+      existingPayload.message.order.items[0].fulfillment_ids = [ids.fulfillmentId];
     }
   }
 
-  // Resolve fulfillment ID (handle both string and array from session)
-  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
-
   // Carry forward fulfillment.id from session data
-  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
+  if (ids.fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = ids.fulfillmentId;
   }
 
   // Carry forward quote.id from session data
-  if (sessionData.quote_id && existingPayload.message?.order?.quote) {
-    existingPayload.message.order.quote.id = sessionData.quote_id;
+  if (ids.quoteId && existingPayload.message?.order?.quote) {
+    existingPayload.message.order.quote.id = ids.quoteId;
   }
-  
+
   // Load update_target from session data
   if (sessionData.update_target && existingPayload.message) {
     existingPayload.message.update_target = sessionData.update_target;
   }
 
   return existingPayload;
-} 
+}

@@ -5,4 +5,8 @@ save-data:
     fullfillment_ids: "$.message.order.fulfillments[*].id"
     quote_id: "$.message.order.quote.id"
     form_id: "$.message.order.items[0].xinput.form.id"
+    child_item_id: "$.message.order.items[0].id"
+    parent_item_id: "$.message.order.items[0].parent_item_id"
+    fulfillment_id: "$.message.order.fulfillments[0].id"
+    provider_id: "$.message.order.provider.id"
     vehicle_nominee_details_form: "$..form.url"

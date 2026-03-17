@@ -1,6 +1,9 @@
+import { resolveSessionIds } from '../id-helper';
+
 export async function onSearchDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("existingPayload on search", existingPayload);
-  
+  const ids = resolveSessionIds(sessionData);
+
   // Set payment_collected_by if present in session data
   if (sessionData.collected_by && existingPayload.message?.catalog?.providers?.[0]?.payments?.[0]) {
     existingPayload.message.catalog.providers[0].payments[0].collected_by = sessionData.collected_by;
@@ -30,8 +33,8 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
 
   // Carry forward provider ID from session (from on_search)
   if (existingPayload.message?.catalog?.providers?.[0]) {
-    if (sessionData.provider_id || sessionData.selected_provider?.id) {
-      existingPayload.message.catalog.providers[0].id = sessionData.provider_id || sessionData.selected_provider.id;
+    if (ids.providerId) {
+      existingPayload.message.catalog.providers[0].id = ids.providerId;
     } else {
       existingPayload.message.catalog.providers[0].id = crypto.randomUUID();
     }

@@ -1,6 +1,8 @@
+import { applyFlowTypeOverrides } from '../id-helper';
+
 export async function onSearchDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("existingPayload on search", existingPayload);
-  
+
   // Set payment_collected_by if present in session data
   if (sessionData.collected_by && existingPayload.message?.catalog?.providers?.[0]?.payments?.[0]) {
     existingPayload.message.catalog.providers[0].payments[0].collected_by = sessionData.collected_by;
@@ -10,7 +12,6 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
   if (sessionData.message_id && existingPayload.context) {
     existingPayload.context.message_id = sessionData.message_id;
   }
- 
 
   // Update form URLs for items with session data (preserve existing structure)
   if (existingPayload.message?.catalog?.providers?.[0]?.items) {
@@ -26,7 +27,6 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
     });
   }
 
-
   // Generate dynamic provider ID (replace hardcoded placeholder)
   if (existingPayload.message?.catalog?.providers?.[0]) {
     existingPayload.message.catalog.providers[0].id = crypto.randomUUID();
@@ -41,6 +41,9 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
       }
     });
   }
+
+  // Apply flow-type overrides (Individual vs Family) — updates category_ids and descriptor on all items
+  applyFlowTypeOverrides(existingPayload, sessionData);
 
   // Generate dynamic fulfillment IDs (replace hardcoded placeholders)
   if (existingPayload.message?.catalog?.providers?.[0]?.fulfillments) {

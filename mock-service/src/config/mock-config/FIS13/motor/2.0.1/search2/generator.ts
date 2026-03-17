@@ -1,4 +1,5 @@
 import { SessionData } from "../../../session-types";
+import { resolveSessionIds } from '../id-helper';
 
 export async function searchDefaultGenerator(
 	existingPayload: any,
@@ -19,16 +20,16 @@ export async function searchDefaultGenerator(
 
 
   const form_status = sessionData?.form_data?.verification_status?.idType;
+	const ids = resolveSessionIds(sessionData);
 
 	// Carry forward provider.id from session data
-	if (sessionData.selected_provider?.id && existingPayload.message?.intent?.provider) {
-		existingPayload.message.intent.provider.id = sessionData.selected_provider.id;
+	if (ids.providerId && existingPayload.message?.intent?.provider) {
+		existingPayload.message.intent.provider.id = ids.providerId;
 	}
 
 	// Carry forward item.id from session data
-	const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-	if (selectedItem?.id && existingPayload.message?.intent?.provider?.items?.[0]) {
-		existingPayload.message.intent.provider.items[0].id = selectedItem.id;
+	if (ids.childItemId && existingPayload.message?.intent?.provider?.items?.[0]) {
+		existingPayload.message.intent.provider.items[0].id = ids.childItemId;
 	}
 
 	// Update the form_response submission_id in the payload

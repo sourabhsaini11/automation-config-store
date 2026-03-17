@@ -1,4 +1,5 @@
 
+import { resolveSessionIds, applyResolvedIdsToPayload } from '../id-helper';
 
 export async function onSelectDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("On Select generator - Available session data:", {
@@ -8,53 +9,25 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
     items: !!sessionData.items
   });
 
+  const ids = resolveSessionIds(sessionData);
+
   // Update context timestamp
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
-  
+
   // Update transaction_id from session data (carry-forward mapping)
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   // Update message_id from session data
   if (sessionData.message_id && existingPayload.context) {
     existingPayload.context.message_id = sessionData.message_id;
   }
-  
-  // Update provider.id if available from session data (carry-forward from select)
-  if (sessionData.selected_provider?.id && existingPayload.message?.order?.provider) {
-    existingPayload.message.order.provider.id = sessionData.selected_provider.id;
-    console.log("Updated provider.id:", sessionData.selected_provider.id);
-  }
-  
-  // Update item.id if available from session data (carry-forward from select)
-  // if (sessionData.items && Array.isArray(sessionData.items) && sessionData.items.length > 0) {
-  //   const selectedItem = sessionData.items[0];
-  //   if (existingPayload.message?.order?.items?.[0]) {
-  //     existingPayload.message.order.items[0].id = selectedItem.id;
-  //     console.log("Updated item.id:", selectedItem.id);
-  //   }
-  // }
-  // redirection to be done
-  // Carry forward item.id from session data
-  const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-  if (childItem?.id && existingPayload.message?.order?.items?.[0]) {
-    existingPayload.message.order.items[0].id = childItem.id;
-    if (childItem.parent_item_id) {
-      existingPayload.message.order.items[0].parent_item_id = childItem.parent_item_id;
-    }
 
-  }
-
-  // Resolve fulfillment ID (handle both string and array from session)
-  const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
-
-  // Carry forward fulfillment.id from session data
-  if (fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
-    existingPayload.message.order.fulfillments[0].id = fulfillmentId;
-  }
+  // Apply resolved IDs (provider, items, fulfillment, quote) to payload
+  applyResolvedIdsToPayload(existingPayload, ids);
 
   // Generate dynamic quote ID (replace hardcoded OFFER_ID/PROPOSAL_ID)
   if (existingPayload.message?.order?.quote) {

@@ -1,18 +1,22 @@
 
+import { resolveSessionIds, applyResolvedIdsToPayload } from '../id-helper';
+
 export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, sessionData: any) {
+  const ids = resolveSessionIds(sessionData);
+
   // Update context timestamp
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
-  
+
   // Update transaction_id from session data
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-  
+
   // Generate new message_id for unsolicited update
   if (existingPayload.context) {
-    existingPayload.context.message_id = generateUUID();
+    existingPayload.context.message_id = crypto.randomUUID();
   }
 
     if (existingPayload.message?.order) {
@@ -31,44 +35,19 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
       return v.toString(16);
     });
   }
-  
+
   // Load order from session data
   if (existingPayload.message) {
     const order = existingPayload.message.order || (existingPayload.message.order = {});
 
     // Map order.id from session data (carry-forward from confirm)
-    if (sessionData.order_id) {
-      order.id = sessionData.order_id;
-    }
-
-    // Map provider.id from session data (carry-forward from confirm)
-    if (sessionData.selected_provider?.id && order.provider) {
-      order.provider.id = sessionData.selected_provider.id;
-    }
-
-
-    // Map item.id and parent_item_id from session data
-    const childItem = sessionData.order?.items?.[0] || sessionData.selected_items?.[0] || sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
-    if (childItem?.id && order.items?.[0]) {
-      order.items[0].id = childItem.id;
-      if (childItem.parent_item_id) {
-        order.items[0].parent_item_id = childItem.parent_item_id;
-      }
-    }
-
-    // Map quote.id from session data (carry-forward from confirm)
-    if (sessionData.quote_id && order.quote) {
-      order.quote.id = sessionData.quote_id;
-    }
-
-    // Resolve fulfillment ID (handle both string and array from session)
-    const fulfillmentId = Array.isArray(sessionData.fullfillment_ids) ? sessionData.fullfillment_ids[0] : sessionData.fullfillment_ids;
-
-    // Map fulfillment.id from session data
-    if (fulfillmentId && order.fulfillments?.[0]) {
-      order.fulfillments[0].id = fulfillmentId;
+    if (ids.orderId) {
+      order.id = ids.orderId;
     }
   }
+
+  // Apply resolved IDs (provider, items, fulfillment, quote) to payload
+  applyResolvedIdsToPayload(existingPayload, ids);
 
 
 

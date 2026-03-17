@@ -45,3 +45,8 @@ session_data:
   cancellation_reason_id: null
   cancellation_quote: []
   selected_fulfillment_id: null
+  child_item_id: null
+  quote_id: null
+  fulfillment_id: null
+  selected_category_ids: []
+  settlement_amount: null

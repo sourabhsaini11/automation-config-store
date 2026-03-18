@@ -24,7 +24,13 @@ export async function searchDefaultGenerator(
 		existingPayload.context.location.city.code = sessionData.user_inputs.city_code;
 	}
 
+	// Save vehicle_type from user inputs to session for downstream generators
+	if (sessionData.user_inputs?.vehicle_type) {
+		sessionData.vehicle_type = sessionData.user_inputs.vehicle_type;
+	}
+
 	console.log("sessionData.message_id in search generator", sessionData.message_id);
+	console.log("vehicle_type selected:", sessionData.vehicle_type);
 
 	return existingPayload;
 } 

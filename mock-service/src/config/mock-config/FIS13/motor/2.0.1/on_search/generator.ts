@@ -1,6 +1,9 @@
+import { applyFlowTypeOverrides } from '../id-helper';
+
 export async function onSearchDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("existingPayload on search", existingPayload);
   console.log('sessionData', sessionData)
+
   // Set payment_collected_by if present in session data
   if (sessionData.collected_by && existingPayload.message?.catalog?.providers?.[0]?.payments?.[0]) {
     existingPayload.message.catalog.providers[0].payments[0].collected_by = sessionData.collected_by;
@@ -10,7 +13,6 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
   if (sessionData.message_id && existingPayload.context) {
     existingPayload.context.message_id = sessionData.message_id;
   }
- 
 
   // Update form URLs for items with session data (preserve existing structure)
   if (existingPayload.message?.catalog?.providers?.[0]?.items) {
@@ -22,13 +24,11 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
         item.xinput.form.id = crypto.randomUUID();
         const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/vehicle_details_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
         console.log("Form URL generated:", url);
-
         item.xinput.form.url = url;
       }
       return item;
     });
   }
-
 
   // Generate dynamic provider ID (replace hardcoded placeholder)
   if (existingPayload.message?.catalog?.providers?.[0]) {
@@ -41,6 +41,9 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
       item.id = crypto.randomUUID();
     });
   }
+
+  // Apply vehicle-type overrides (2-wheeler vs 4-wheeler) — updates category_ids, descriptor, price
+  applyFlowTypeOverrides(existingPayload, sessionData);
 
   // Generate dynamic fulfillment IDs (replace hardcoded placeholders)
   if (existingPayload.message?.catalog?.providers?.[0]?.fulfillments) {

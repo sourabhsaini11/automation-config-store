@@ -19,7 +19,7 @@ export class MockSearchClass extends MockAction {
     get inputs(): any {
         return {
             city_code: {
-                name: "Enter city code",
+                name: "city_code",
                 label: "Enter city code",
                 type: "text",
                 payloadField: "$.context.location.city.code"

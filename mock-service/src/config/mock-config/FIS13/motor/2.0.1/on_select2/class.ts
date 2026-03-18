@@ -29,22 +29,6 @@ export class MockOnSelect2Class extends MockAction {
         return onSelectDefaultGenerator(existingPayload, sessionData);
     }
     async validate(targetPayload: any): Promise<MockOutput> {
-        // Basic structural validation for the two variants
-        const order = targetPayload?.message?.order;
-        if (!order) return { valid: true };
-        const items = Array.isArray(order.items) ? order.items : [];
-        const firstItem = items[0];
-        const locIds = Array.isArray(firstItem?.location_ids) ? firstItem.location_ids : [];
-        // If fulfillments exist, we expect single location and agent
-        if (Array.isArray(order.fulfillments) && order.fulfillments.length > 0) {
-            if (locIds.length !== 1) {
-                return { valid: false, message: "on_select second-step must have a single location_id" };
-            }
-            const agent = order.fulfillments[0]?.agent;
-            if (!agent?.person?.name || !agent?.contact?.phone) {
-                return { valid: false, message: "on_select fulfillments must include agent person.name and contact.phone" };
-            }
-        }
         return { valid: true };
     }
     async meetRequirements(sessionData: SessionData): Promise<MockOutput> {

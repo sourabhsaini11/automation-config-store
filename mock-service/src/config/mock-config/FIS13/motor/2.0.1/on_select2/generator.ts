@@ -29,9 +29,10 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
   // Apply resolved IDs (provider, items, fulfillment, quote) to payload
   applyResolvedIdsToPayload(existingPayload, ids);
 
-  // Generate dynamic quote ID (replace hardcoded OFFER_ID/PROPOSAL_ID)
-  if (existingPayload.message?.order?.quote) {
-    existingPayload.message.order.quote.id = crypto.randomUUID();
+  // Reuse quote_id from session data (generated in first on_select call)
+  if (existingPayload.message?.order?.quote && ids.quoteId) {
+    existingPayload.message.order.quote.id = ids.quoteId;
+    console.log("Reused quote_id from session:", ids.quoteId);
   }
 
   // Generate dynamic form ID and URL
@@ -77,9 +78,10 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
     }
-    // Sync payment amount with calculated quote price
+    // Sync payment amount with total_price from session data (saved in on_select)
     if (existingPayload.message?.order?.payments?.[0]?.params) {
-      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
+      const sessionTotalPrice = Array.isArray(sessionData.total_price) ? sessionData.total_price[0] : sessionData.total_price;
+      existingPayload.message.order.payments[0].params.amount = String(sessionTotalPrice || totalPrice);
     }
   }
 

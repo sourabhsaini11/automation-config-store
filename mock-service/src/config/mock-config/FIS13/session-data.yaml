@@ -23,6 +23,7 @@ session_data:
   selected_item_id: null
   billing: {}
   payments: []
+  payment_tags: null
   updated_payments: []
   order_id: null
   status: null

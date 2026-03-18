@@ -95,10 +95,27 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
     }
-    // Sync payment amount with calculated quote price
-    if (existingPayload.message?.order?.payments?.[0]?.params) {
-      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
+  }
+
+  // Sync payment amount with total_price from session data (saved in on_select)
+  if (existingPayload.message?.order?.payments?.[0]?.params) {
+    const sessionTotalPrice = Array.isArray(sessionData.total_price) ? sessionData.total_price[0] : sessionData.total_price;
+    if (sessionTotalPrice) {
+      existingPayload.message.order.payments[0].params.amount = String(sessionTotalPrice);
     }
+  }
+
+  // Reuse settlement_amount from session data (calculated in init/on_init)
+  if (sessionData.settlement_amount && existingPayload.message?.order?.payments?.[0]?.tags) {
+    existingPayload.message.order.payments[0].tags.forEach((tag: any) => {
+      if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
+        tag.list.forEach((listItem: any) => {
+          if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
+            listItem.value = String(sessionData.settlement_amount);
+          }
+        });
+      }
+    });
   }
 
   return existingPayload;

@@ -147,30 +147,54 @@ function normalizeCategoryIds(categoryIds: any): string[] | undefined {
 }
 
 /**
- * Checks if the current flow is a Family insurance flow based on flow_id.
- * Family flows contain "Family" in the flow_id string.
+ * Checks if the selected vehicle type is 4-wheeler.
+ * Reads from sessionData.vehicle_type (set by user in search modal) or user_inputs.
  */
-export function isFamilyFlow(sessionData: any): boolean {
-  return sessionData.flow_id?.includes('Family') === true;
+export function isFourWheeler(sessionData: any): boolean {
+  const vehicleType = sessionData.vehicle_type || sessionData.user_inputs?.vehicle_type;
+  return vehicleType === '4-wheeler';
 }
 
 /**
- * Returns the correct category_ids based on flow type.
- * Individual flows: ["C1", "C3"], Family flows: ["C2", "C3"]
+ * Returns the correct category_ids based on vehicle type.
+ * 2-wheeler: ["C1", "C2", "C3"], 4-wheeler: ["C4", "C5", "C6"]
  */
-export function getCategoryIdsForFlow(sessionData: any): string[] {
-  return isFamilyFlow(sessionData) ? ['C2', 'C3'] : ['C1', 'C3'];
+export function getCategoryIdsForVehicleType(sessionData: any): string[] {
+  return isFourWheeler(sessionData) ? ['C4', 'C5', 'C6'] : ['C1', 'C2', 'C3'];
 }
 
 /**
- * Applies flow-type overrides (Individual vs Family) to all items in the payload.
- * Updates category_ids and descriptor (name, short_desc) based on flow_id.
+ * Returns the item descriptor based on vehicle type.
+ */
+export function getItemDescriptorForVehicleType(sessionData: any): { name: string; short_desc: string } {
+  return isFourWheeler(sessionData)
+    ? {
+        name: '4-Wheeler 3rd Party Motor Insurance',
+        short_desc: '4-Wheeler 3rd Party Motor Insurance by ABC Insurance Provider',
+      }
+    : {
+        name: '2-Wheeler 3rd Party Motor Insurance',
+        short_desc: '2-Wheeler 3rd Party Motor Insurance by ABC Insurance Provider',
+      };
+}
+
+/**
+ * Returns the base price for the vehicle type.
+ * 4-wheeler has higher premium than 2-wheeler.
+ */
+export function getBasePriceForVehicleType(sessionData: any): string {
+  return isFourWheeler(sessionData) ? '18750' : '12531';
+}
+
+/**
+ * Applies vehicle-type overrides (2-wheeler vs 4-wheeler) to all items in the payload.
+ * Updates category_ids, descriptor (name, short_desc), and price based on vehicle_type.
  * Works for both catalog items (on_search) and order items (on_select, init, etc.)
- * Call this after payload is built to override hardcoded Individual defaults for Family flows.
  */
 export function applyFlowTypeOverrides(existingPayload: any, sessionData: any): void {
-  const isFamily = isFamilyFlow(sessionData);
-  const flowCategoryIds = getCategoryIdsForFlow(sessionData);
+  const flowCategoryIds = getCategoryIdsForVehicleType(sessionData);
+  const descriptor = getItemDescriptorForVehicleType(sessionData);
+  const basePrice = getBasePriceForVehicleType(sessionData);
 
   // Handle order items (on_select, init, on_init, confirm, etc.)
   const orderItems = existingPayload.message?.order?.items;
@@ -178,29 +202,24 @@ export function applyFlowTypeOverrides(existingPayload: any, sessionData: any): 
     orderItems.forEach((item: any) => {
       item.category_ids = flowCategoryIds;
       if (item.descriptor) {
-        item.descriptor.name = isFamily
-          ? 'Health Gain Plus Family'
-          : 'Health Gain Plus Individual';
-        item.descriptor.short_desc = isFamily
-          ? 'ABC Family Health Insurance Class A with custom addon'
-          : 'ABC Individual Health Insurance Class A with custom addon';
+        item.descriptor.name = descriptor.name;
+        item.descriptor.short_desc = descriptor.short_desc;
+      }
+      if (item.price) {
+        item.price.value = basePrice;
       }
     });
   }
 
-  // Handle catalog items (on_search)
+  // Handle catalog items (on_search) — only update the selected vehicle type item
   const providers = existingPayload.message?.catalog?.providers;
   if (providers) {
     providers.forEach((provider: any) => {
       provider.items?.forEach((item: any) => {
         item.category_ids = flowCategoryIds;
         if (item.descriptor) {
-          item.descriptor.name = isFamily
-            ? 'Health Gain Plus Family'
-            : 'Health Gain Plus Individual';
-          item.descriptor.short_desc = isFamily
-            ? 'ABC Family Health Insurance Class A with custom addon'
-            : 'ABC Individual Health Insurance Class A with custom addon';
+          item.descriptor.name = descriptor.name;
+          item.descriptor.short_desc = descriptor.short_desc;
         }
       });
     });

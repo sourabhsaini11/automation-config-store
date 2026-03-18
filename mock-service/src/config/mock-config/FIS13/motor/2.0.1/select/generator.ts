@@ -1,7 +1,6 @@
 
 
-import { randomUUID } from "crypto";
-import { resolveSessionIds, applyResolvedIdsToPayload } from '../id-helper';
+import { resolveSessionIds } from '../id-helper';
 
 export async function selectDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("Select generator - Available session data:", {
@@ -17,20 +16,40 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
     existingPayload.context.timestamp = new Date().toISOString();
   }
 
-  const ids = resolveSessionIds(sessionData);
-
   // Update transaction_id from session data (carry-forward mapping)
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
 
   // Update message_id from session data
-    if (sessionData.message_id && existingPayload.context) {
-      existingPayload.context.message_id = randomUUID();
-    }
+  if (sessionData.message_id && existingPayload.context) {
+    existingPayload.context.message_id = crypto.randomUUID();
+  }
 
-  // Apply all resolved IDs (provider, items, fulfillments, quote) to payload
-  applyResolvedIdsToPayload(existingPayload, ids);
+  const ids = resolveSessionIds(sessionData);
+
+  // Update provider.id if available from session data (carry-forward from on_search)
+  if (ids.providerId && existingPayload.message?.order?.provider) {
+    existingPayload.message.order.provider.id = ids.providerId;
+    console.log("Updated provider.id:", ids.providerId);
+  }
+
+  // Use item ID and parent_item_id from session items data (from on_search)
+  const parentItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  if (parentItem?.id && existingPayload.message?.order?.items?.[0]) {
+    existingPayload.message.order.items[0].parent_item_id = parentItem.id;
+    existingPayload.message.order.items[0].id = sessionData.items[1].id;
+    console.log("Using child item ID from session:", existingPayload.message.order.items[0].id, "parent_item_id:", parentItem.id);
+
+    // Save resolved IDs back to sessionData for downstream generators
+    sessionData.child_item_id = existingPayload.message.order.items[0].id;
+    sessionData.parent_item_id = parentItem.id;
+  }
+
+  // Carry forward fulfillment.id from session data
+  if (ids.fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
+    existingPayload.message.order.fulfillments[0].id = ids.fulfillmentId;
+  }
 
   // Build add_ons from user-selected addon IDs and session data
   if (sessionData.user_inputs?.addon_ids && sessionData.selected_add_ons?.length > 0) {

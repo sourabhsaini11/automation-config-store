@@ -1,4 +1,4 @@
-import { resolveSessionIds } from '../id-helper';
+import { resolveSessionIds, applyFlowTypeOverrides } from '../id-helper';
 
 export async function onSearchDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("existingPayload on search", existingPayload);
@@ -41,22 +41,38 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
   const parentItemId = sessionData.item?.id;
   if (existingPayload.message?.catalog?.providers?.[0]?.items) {
     existingPayload.message.catalog.providers[0].items.forEach((item: any) => {
-      if (item.parent_item_id) {
-        // This is a child item: generate new UUID and set parent_item_id to dynamic parent ID
-        item.id = crypto.randomUUID();
-        if (parentItemId) {
-          item.parent_item_id = parentItemId;
-        }
-      } else {
-        // This is the parent item: reuse ID from on_search session
+      // if (item.parent_item_id) {
+      //   // This is a child item: generate new UUID and set parent_item_id to dynamic parent ID
+      //   item.id = crypto.randomUUID();
+      //   if (parentItemId) {
+      //     item.parent_item_id = parentItemId;
+      //   }
+      // } else {
+      //   // This is the parent item: reuse ID from on_search session
+      //   if (parentItemId) {
+      //     item.id = parentItemId;
+      //   } else {
+      //     item.id = crypto.randomUUID();
+      //   }
+      // }
+
+      if (!item.parent_item_id) {
+        // Parent item — use carried-forward ID from session
         if (parentItemId) {
           item.id = parentItemId;
         } else {
           item.id = crypto.randomUUID();
         }
+      } else {
+        // Child item — generate new UUID, update parent_item_id to match
+        item.id = crypto.randomUUID();
+        if (parentItemId) {
+          item.parent_item_id = parentItemId;
+        }
       }
     });
   }
+
 
   // Carry forward fulfillment IDs from session (from on_search)
   if (existingPayload.message?.catalog?.providers?.[0]?.fulfillments) {
@@ -69,6 +85,9 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
       }
     });
   }
+
+  // Apply vehicle-type overrides (2-wheeler vs 4-wheeler) — updates category_ids, descriptor, price
+  applyFlowTypeOverrides(existingPayload, sessionData);
 
   return existingPayload;
 }

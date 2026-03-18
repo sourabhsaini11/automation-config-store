@@ -114,8 +114,10 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
       let buyerFeeType = 'percent-annualized';
       let buyerFeePercentage = 0;
       let buyerFeeAmount = 0;
-      // Unwrap payment_tags from JSONPath array wrapper: [[tag1,tag2]] → [tag1,tag2]
-      const paymentTags = Array.isArray(sessionData.payment_tags?.[0]) ? sessionData.payment_tags[0] : sessionData.payment_tags;
+      // Get payment_tags: prefer session (from search), fallback to payload's own payment tags
+      const rawPaymentTags = sessionData.payment_tags || existingPayload.message.order.payments[0].tags;
+      // Unwrap from JSONPath array wrapper if needed: [[tag1,tag2]] → [tag1,tag2]
+      const paymentTags = Array.isArray(rawPaymentTags?.[0]) && Array.isArray(rawPaymentTags[0]) ? rawPaymentTags[0] : rawPaymentTags;
       if (Array.isArray(paymentTags)) {
         const buyerFeesTag = paymentTags.find((t: any) => t.descriptor?.code === 'BUYER_FINDER_FEES');
         if (buyerFeesTag?.list) {

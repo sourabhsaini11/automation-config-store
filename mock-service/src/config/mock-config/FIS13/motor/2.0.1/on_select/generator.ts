@@ -32,15 +32,15 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
     console.log("Updated provider.id:", ids.providerId);
   }
 
-  // Generate dynamic child item ID and set parent_item_id from parent item in session
-  const parentItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
+  // Reuse child_item_id and parent_item_id from session data (saved during select step)
   if (existingPayload.message?.order?.items?.[0]) {
-    const newChildItemId = crypto.randomUUID();
-    existingPayload.message.order.items[0].id = newChildItemId;
-    sessionData.child_item_id = newChildItemId;
-    if (parentItem?.id) {
-      existingPayload.message.order.items[0].parent_item_id = parentItem.id;
-      sessionData.parent_item_id = parentItem.id;
+    if (ids.childItemId) {
+      existingPayload.message.order.items[0].id = ids.childItemId;
+      console.log("Reused child_item_id from session:", ids.childItemId);
+    }
+    if (ids.parentItemId) {
+      existingPayload.message.order.items[0].parent_item_id = ids.parentItemId;
+      console.log("Reused parent_item_id from session:", ids.parentItemId);
     }
   }
 

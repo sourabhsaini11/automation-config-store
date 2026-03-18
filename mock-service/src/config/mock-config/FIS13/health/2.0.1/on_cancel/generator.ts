@@ -99,32 +99,46 @@ export async function onCancelDefaultGenerator(existingPayload: any, sessionData
           });
         });
       }
-      // Recalculate total quote price from all breakup items
-      const totalPrice = order.quote.breakup.reduce(
+      // Use total_price from session (saved in on_select) for quote price and payment amount
+      const rawTotalPrice = Array.isArray(sessionData.total_price) ? sessionData.total_price[0] : sessionData.total_price;
+      const totalPrice = parseFloat(rawTotalPrice) || order.quote.breakup.reduce(
         (sum: number, b: any) => sum + (parseFloat(b.price?.value) || 0), 0
       );
       if (order.quote.price) {
         order.quote.price.value = String(totalPrice);
       }
-      // Sync payment amount with calculated quote price
+      // Sync payment amount with total price from session
       if (order.payments?.[0]?.params) {
         order.payments[0].params.amount = String(totalPrice);
       }
     }
+
+    // Update SETTLEMENT_AMOUNT from session data
+    if (sessionData.settlement_amount && order.payments?.[0]?.tags) {
+      order.payments[0].tags.forEach((tag: any) => {
+        if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
+          tag.list.forEach((listItem: any) => {
+            if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
+              listItem.value = sessionData.settlement_amount;
+            }
+          });
+        }
+      });
+    }
   }
 
   // Update document URLs from session data
-  if (existingPayload.message?.order?.documents) {
-    existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {
-      if (doc.descriptor?.code === 'CLAIM_DOC' && doc.mime_type === 'application/html' && sessionData.claim_doc_url) {
-        doc.url = sessionData.claim_doc_url;
-      }
-      if (doc.descriptor?.code === 'RENEW_DOC' && doc.mime_type === 'application/html' && sessionData.renew_doc_url) {
-        doc.url = sessionData.renew_doc_url;
-      }
-      return doc;
-    });
-  }
+  // if (existingPayload.message?.order?.documents) {
+  //   existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {
+  //     if (doc.descriptor?.code === 'CLAIM_DOC' && doc.mime_type === 'application/html' && sessionData.claim_doc_url) {
+  //       doc.url = sessionData.claim_doc_url;
+  //     }
+  //     if (doc.descriptor?.code === 'RENEW_DOC' && doc.mime_type === 'application/html' && sessionData.renew_doc_url) {
+  //       doc.url = sessionData.renew_doc_url;
+  //     }
+  //     return doc;
+  //   });
+  // }
 
   return existingPayload;
 }

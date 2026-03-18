@@ -113,18 +113,18 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
 
 
   
-  // Update document URLs from session data
-  if (existingPayload.message?.order?.documents) {
-    existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {
-      if (doc.descriptor?.code === 'CLAIM_DOC' && doc.mime_type === 'application/html' && sessionData.claim_doc_url) {
-        doc.url = sessionData.claim_doc_url;
-      }
-      if (doc.descriptor?.code === 'RENEW_DOC' && doc.mime_type === 'application/html' && sessionData.renew_doc_url) {
-        doc.url = sessionData.renew_doc_url;
-      }
-      return doc;
-    });
-  }
+  // // Update document URLs from session data
+  // if (existingPayload.message?.order?.documents) {
+  //   existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {
+  //     if (doc.descriptor?.code === 'CLAIM_DOC' && doc.mime_type === 'application/html' && sessionData.claim_doc_url) {
+  //       doc.url = sessionData.claim_doc_url;
+  //     }
+  //     if (doc.descriptor?.code === 'RENEW_DOC' && doc.mime_type === 'application/html' && sessionData.renew_doc_url) {
+  //       doc.url = sessionData.renew_doc_url;
+  //     }
+  //     return doc;
+  //   });
+  // }
 
   
 

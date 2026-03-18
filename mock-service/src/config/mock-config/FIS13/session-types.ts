@@ -146,4 +146,5 @@ export interface Input {
 	missed_emi_date?: string;
 	part_payment_amount?: number;
 	payment_date?: string;
+	vehicle_type?: string;
 }

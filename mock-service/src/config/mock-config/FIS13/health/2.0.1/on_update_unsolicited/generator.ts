@@ -115,7 +115,7 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
 if (existingPayload.message?.order?.documents) {
     existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {
         const renewFlows = ['Renew_Health_Insurance(Individual)', 'Renew_Health_Insurance(Family)'];
-         const claimFlows = ['Claim_Health_Insurance(Individual)', ' Claim_Health_Insurance(Family)'];
+         const claimFlows = ['Claim_Health_Insurance(Individual)', 'Claim_Health_Insurance(Family)'];
 
       if (doc.descriptor?.code === 'RENEW_DOC' && doc.mime_type === 'application/html'&& renewFlows.includes(sessionData.flow_id)) {
         doc.url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/renew_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;

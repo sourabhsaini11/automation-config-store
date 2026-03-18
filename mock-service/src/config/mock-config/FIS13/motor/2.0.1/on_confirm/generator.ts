@@ -137,49 +137,27 @@ export async function onConfirmDefaultGenerator(existingPayload: any, sessionDat
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
     }
-    // Sync payment amount with calculated quote price
-    if (existingPayload.message?.order?.payments) {
-      existingPayload.message.order.payments[0].params.amount = String(totalPrice);
-    }
+  }
 
-    // Calculate and update SETTLEMENT_AMOUNT dynamically
-    if (existingPayload.message?.order?.payments?.[0]?.tags) {
-      let buyerFeeType = 'percent-annualized';
-      let buyerFeePercentage = 0;
-      let buyerFeeAmount = 0;
-      // Unwrap payment_tags from JSONPath array wrapper: [[tag1,tag2]] → [tag1,tag2]
-      const paymentTags = Array.isArray(sessionData.payment_tags?.[0]) ? sessionData.payment_tags[0] : sessionData.payment_tags;
-      if (Array.isArray(paymentTags)) {
-        const buyerFeesTag = paymentTags.find((t: any) => t.descriptor?.code === 'BUYER_FINDER_FEES');
-        if (buyerFeesTag?.list) {
-          buyerFeesTag.list.forEach((item: any) => {
-            if (item.descriptor?.code === 'BUYER_FINDER_FEES_TYPE') buyerFeeType = item.value;
-            if (item.descriptor?.code === 'BUYER_FINDER_FEES_PERCENTAGE') buyerFeePercentage = parseFloat(item.value) || 0;
-            if (item.descriptor?.code === 'BUYER_FINDER_FEES_AMOUNT') buyerFeeAmount = parseFloat(item.value) || 0;
-          });
-        }
-      }
-      // Use total_price from session (saved in on_select); unwrap JSONPath array if needed
-      const rawTotalPrice = Array.isArray(sessionData.total_price) ? sessionData.total_price[0] : sessionData.total_price;
-      const settlementBasePrice = parseFloat(rawTotalPrice) || totalPrice;
-      const buyerFee = buyerFeeType === 'amount' ? buyerFeeAmount : (buyerFeePercentage / 100) * settlementBasePrice;
-      // Unwrap collected_by from JSONPath array wrapper: ["BAP"] → "BAP"
-      const collectedBy = (Array.isArray(sessionData.collected_by) ? sessionData.collected_by[0] : sessionData.collected_by) || existingPayload.message.order.payments[0].collected_by;
-      const settlementAmount = sessionData.settlement_amount
-        ? parseFloat(sessionData.settlement_amount)
-        : (collectedBy === 'BAP' ? (settlementBasePrice - buyerFee) : buyerFee);
-      // Save settlement_amount to session for downstream generators
-      sessionData.settlement_amount = String(Math.round(settlementAmount * 100) / 100);
-      existingPayload.message.order.payments[0].tags.forEach((tag: any) => {
-        if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
-          tag.list.forEach((listItem: any) => {
-            if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
-              listItem.value = String(Math.round(settlementAmount * 100) / 100);
-            }
-          });
-        }
-      });
+  // Sync payment amount with total_price from session data (saved in on_select)
+  if (existingPayload.message?.order?.payments?.[0]?.params) {
+    const sessionTotalPrice = Array.isArray(sessionData.total_price) ? sessionData.total_price[0] : sessionData.total_price;
+    if (sessionTotalPrice) {
+      existingPayload.message.order.payments[0].params.amount = String(sessionTotalPrice);
     }
+  }
+
+  // Reuse settlement_amount from session data (calculated in init/on_init)
+  if (sessionData.settlement_amount && existingPayload.message?.order?.payments?.[0]?.tags) {
+    existingPayload.message.order.payments[0].tags.forEach((tag: any) => {
+      if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
+        tag.list.forEach((listItem: any) => {
+          if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
+            listItem.value = String(sessionData.settlement_amount);
+          }
+        });
+      }
+    });
   }
 
   return existingPayload;

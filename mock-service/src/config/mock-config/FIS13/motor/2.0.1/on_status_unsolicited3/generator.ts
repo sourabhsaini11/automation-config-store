@@ -1,4 +1,4 @@
-import { resolveSessionIds, applyResolvedIdsToPayload } from '../id-helper';
+import { resolveSessionIds, applyResolvedIdsToPayload, applyFlowTypeOverrides } from '../id-helper';
 
 export async function onStatusUnsolicitedGenerator(existingPayload: any, sessionData: any) {
   const ids = resolveSessionIds(sessionData);
@@ -68,6 +68,9 @@ if (existingPayload.message?.order?.items?.[0]) {
       }
     }
   }
+  // Apply vehicle-type overrides (2-wheeler vs 4-wheeler) — updates category_ids, descriptor, price
+  applyFlowTypeOverrides(existingPayload, sessionData);
+
   // Carry forward or remove add_ons based on user selection from select step
   if (existingPayload.message?.order?.items?.[0]) {
     const userAddOns = sessionData.user_selected_add_ons;
@@ -97,14 +100,15 @@ if (existingPayload.message?.order?.items?.[0]) {
         });
       });
     }
-    // Recalculate total quote price from all breakup items
-    const totalPrice = existingPayload.message.order.quote.breakup.reduce(
+    // Use total_price from session (saved in on_select) for quote price and payment amount
+    const rawTotalPrice = Array.isArray(sessionData.total_price) ? sessionData.total_price[0] : sessionData.total_price;
+    const totalPrice = parseFloat(rawTotalPrice) || existingPayload.message.order.quote.breakup.reduce(
       (sum: number, b: any) => sum + (parseFloat(b.price?.value) || 0), 0
     );
     if (existingPayload.message.order.quote.price) {
       existingPayload.message.order.quote.price.value = String(totalPrice);
     }
-    // Sync payment amount with calculated quote price
+    // Sync payment amount with total price from session
     if (existingPayload.message?.order?.payments?.[0]?.params) {
       existingPayload.message.order.payments[0].params.amount = String(totalPrice);
     }

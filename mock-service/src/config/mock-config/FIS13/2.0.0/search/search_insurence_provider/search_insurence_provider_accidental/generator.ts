@@ -1,5 +1,4 @@
 import { SessionData } from "../../../../session-types";
-
 export async function search_insurence_accidental_generator(
 	existingPayload: any,
 	sessionData: SessionData

@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import { SessionData } from "../../../session-types";
 
 export async function search_seller_pagination_generator(
@@ -18,7 +19,7 @@ export async function search_seller_pagination_generator(
 		existingPayload.message.intent.fulfillment.stops[0].time.range.end = end.toISOString();
 	}
 
-
+	existingPayload.message.intent.provider.id = uuidv4();
 
 	return existingPayload;
 } 

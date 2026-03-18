@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 export async function onSelectCDBalanceErrorGenerator(existingPayload: any, sessionData: any) {
     let breakup: any[] = [];
     let totalAmt: number = 0;
@@ -67,6 +68,7 @@ export async function onSelectCDBalanceErrorGenerator(existingPayload: any, sess
 
         existingPayload.message.order.quote = {
             ...(existingPayload.message.order.quote || {}),
+            id: uuidv4(),
             breakup,
             price: {
                 currency: "INR",

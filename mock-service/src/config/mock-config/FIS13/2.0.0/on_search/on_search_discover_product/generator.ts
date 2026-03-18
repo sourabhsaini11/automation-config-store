@@ -1,9 +1,9 @@
-
+import { v4 as uuidv4 } from "uuid";
 
 export async function onSearchSellerPagination1Generator(existingPayload: any, sessionData: any) {
 
   existingPayload.context.location.city.code = sessionData?.city_code
-  existingPayload.message.catalog.providers.forEach((provider: { tags: any[], id: string }) => {
+  existingPayload.message.catalog.providers.forEach((provider: any) => {
     provider.id = sessionData.provider_id,
       provider.tags.forEach((tag: { descriptor: { code: string; }; list: any[]; }) => {
         if (tag.descriptor.code === "MASTER_POLICY") {
@@ -14,6 +14,10 @@ export async function onSearchSellerPagination1Generator(existingPayload: any, s
           });
         }
       });
+    provider.items = provider.items?.map((item: any) => ({
+      ...item,
+      id: uuidv4(),
+    })) || [];
   });
   return existingPayload;
 } 

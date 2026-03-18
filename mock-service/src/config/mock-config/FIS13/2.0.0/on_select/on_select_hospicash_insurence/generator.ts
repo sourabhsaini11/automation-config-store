@@ -1,4 +1,4 @@
-
+import { v4 as uuidv4 } from "uuid";
 
 
 export async function onSelectDefaultGenerator(existingPayload: any, sessionData: any) {
@@ -59,6 +59,7 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
   existingPayload.message.order.items = orderItems;
   existingPayload.message.order.quote = {
     ...(existingPayload.message.order.quote || {}),
+    id: uuidv4(),
     breakup,
     price: {
       currency: "INR",

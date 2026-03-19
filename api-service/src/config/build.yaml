@@ -105165,7 +105165,7 @@ x-validations:
           _RETURN_:
           - _NAME_: PAYMENTS_ID
             attr: "$.message.order.payments[*].id"
-            reg: ['^[0-9a-zA-Z/_-]{1,36}$']
+            reg: ['^[A-Za-z0-9_-]{1,50}$']
             _RETURN_: attr follow regex reg
 
           - _NAME_: PAYMENTS_ID_UNIQUE

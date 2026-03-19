@@ -5,7 +5,8 @@ save-data:
   # Order details
   order_id: "$.message.order.id"
   order_status: "$.message.order.status"
-  
+  order: "$.message.order"
+
   # Core order data
   items: "$.message.order.items[*]"
   fulfillments: "$.message.order.fulfillments[*]"
@@ -13,7 +14,7 @@ save-data:
   billing: "$.message.order.billing"
   payments: "$.message.order.payments[*]"
   quote: "$.message.order.quote"
-  
+   
   # Terms and policies
   cancellation_terms: "$.message.order.cancellation_terms[*]"
   replacement_terms: "$.message.order.replacement_terms[*]"

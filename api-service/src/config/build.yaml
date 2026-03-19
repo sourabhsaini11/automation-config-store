@@ -36821,7 +36821,7 @@ x-validations:
               - *select_REQUIRED_message_order_provider_id
               - *init_REQUIRED_message_order_fulfillments_id
               # - *init_REQUIRED_message_order_fulfillments_stops_location_gps
-              - *on_cancel_REQUIRED_message_order_fulfillments_vehicle_registration
+              # - *on_cancel_REQUIRED_message_order_fulfillments_vehicle_registration
               - *init_REQUIRED_message_order_fulfillments_customer_person_name
               - *init_REQUIRED_message_order_fulfillments_customer_contact_phone
               - *on_cancel_REQUIRED_message_order_fulfillments_agent_person_name

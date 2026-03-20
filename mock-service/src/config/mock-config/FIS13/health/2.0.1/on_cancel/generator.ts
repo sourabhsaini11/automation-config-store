@@ -51,7 +51,7 @@ export async function onCancelDefaultGenerator(existingPayload: any, sessionData
       if (ids.categoryIds?.length) {
         order.items[0].category_ids = ids.categoryIds;
       }
-      if (ids.fulfillmentId && order.items[0].fulfillment_ids) {
+      if (ids.fulfillmentId) {
         order.items[0].fulfillment_ids = [ids.fulfillmentId];
       }
     }

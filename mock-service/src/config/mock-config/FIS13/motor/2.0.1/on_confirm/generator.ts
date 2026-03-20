@@ -1,4 +1,4 @@
-import { resolveSessionIds } from '../id-helper';
+import { resolveSessionIds, getBasePriceForVehicleType } from '../id-helper';
 
 export async function onConfirmDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("sessionData for on_confirm", sessionData);
@@ -53,7 +53,7 @@ export async function onConfirmDefaultGenerator(existingPayload: any, sessionDat
     if (ids.categoryIds?.length) {
       existingPayload.message.order.items[0].category_ids = ids.categoryIds;
     }
-    if (ids.fulfillmentId && existingPayload.message.order.items[0].fulfillment_ids) {
+    if (ids.fulfillmentId) {
       existingPayload.message.order.items[0].fulfillment_ids = [ids.fulfillmentId];
     }
     console.log("Updated item.id:", ids.childItemId, "parent_item_id:", ids.parentItemId);
@@ -100,6 +100,16 @@ export async function onConfirmDefaultGenerator(existingPayload: any, sessionDat
     console.log("Updated customer email:", sessionData.customer_email);
   }
 
+
+  // Update item price with base price for vehicle type
+  if (existingPayload.message?.order?.items) {
+    const basePrice = getBasePriceForVehicleType(sessionData);
+    existingPayload.message.order.items.forEach((item: any) => {
+      if (item.price) {
+        item.price.value = basePrice;
+      }
+    });
+  }
 
   // Carry forward or remove add_ons based on user selection from select step
   if (existingPayload.message?.order?.items?.[0]) {

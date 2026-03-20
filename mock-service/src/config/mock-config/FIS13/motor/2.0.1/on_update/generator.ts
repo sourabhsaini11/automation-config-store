@@ -1,4 +1,4 @@
-import { resolveSessionIds, applyResolvedIdsToPayload } from '../id-helper';
+import { resolveSessionIds, applyResolvedIdsToPayload, getBasePriceForVehicleType } from '../id-helper';
 
 export async function onUpdateDefaultGenerator(existingPayload: any, sessionData: any) {
   // Update context timestamp
@@ -43,6 +43,16 @@ export async function onUpdateDefaultGenerator(existingPayload: any, sessionData
   }
 
   
+  // Update item price with base price for vehicle type
+  if (existingPayload.message?.order?.items) {
+    const basePrice = getBasePriceForVehicleType(sessionData);
+    existingPayload.message.order.items.forEach((item: any) => {
+      if (item.price) {
+        item.price.value = basePrice;
+      }
+    });
+  }
+
   // Carry forward or remove add_ons based on user selection from select step
   if (existingPayload.message?.order?.items?.[0]) {
     const userAddOns = sessionData.user_selected_add_ons;

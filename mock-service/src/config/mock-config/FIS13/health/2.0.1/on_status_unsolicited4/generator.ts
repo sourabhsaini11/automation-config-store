@@ -101,7 +101,7 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
     if (ids.categoryIds?.length) {
       existingPayload.message.order.items[0].category_ids = ids.categoryIds;
     }
-    if (ids.fulfillmentId && existingPayload.message.order.items[0].fulfillment_ids) {
+    if (ids.fulfillmentId) {
       existingPayload.message.order.items[0].fulfillment_ids = [ids.fulfillmentId];
     }
   }

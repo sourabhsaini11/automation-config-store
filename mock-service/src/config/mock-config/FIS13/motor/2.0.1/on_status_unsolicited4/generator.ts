@@ -114,5 +114,18 @@ if (existingPayload.message?.order?.items?.[0]) {
     }
   }
 
+  // Update SETTLEMENT_AMOUNT from session data
+  if (sessionData.settlement_amount && existingPayload.message?.order?.payments?.[0]?.tags) {
+    existingPayload.message.order.payments[0].tags.forEach((tag: any) => {
+      if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
+        tag.list.forEach((listItem: any) => {
+          if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
+            listItem.value = String(sessionData.settlement_amount);
+          }
+        });
+      }
+    });
+  }
+
   return existingPayload;
 }

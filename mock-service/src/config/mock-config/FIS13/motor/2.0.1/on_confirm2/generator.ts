@@ -1,5 +1,5 @@
 
-import { resolveSessionIds, applyResolvedIdsToPayload } from '../id-helper';
+import { resolveSessionIds, applyResolvedIdsToPayload, getBasePriceForVehicleType } from '../id-helper';
 
 export async function onConfirmDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("sessionData for on_confirm", sessionData);
@@ -77,6 +77,16 @@ export async function onConfirmDefaultGenerator(existingPayload: any, sessionDat
         doc.url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/renew_insurance_form_motor?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
       }
       return doc;
+    });
+  }
+
+  // Update item price with base price for vehicle type
+  if (existingPayload.message?.order?.items) {
+    const basePrice = getBasePriceForVehicleType(sessionData);
+    existingPayload.message.order.items.forEach((item: any) => {
+      if (item.price) {
+        item.price.value = basePrice;
+      }
     });
   }
 

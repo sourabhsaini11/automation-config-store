@@ -97,6 +97,19 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
   }
 
 
+  // Update SETTLEMENT_AMOUNT from session data
+  if (sessionData.settlement_amount && existingPayload.message?.order?.payments?.[0]?.tags) {
+    existingPayload.message.order.payments[0].tags.forEach((tag: any) => {
+      if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
+        tag.list.forEach((listItem: any) => {
+          if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
+            listItem.value = String(sessionData.settlement_amount);
+          }
+        });
+      }
+    });
+  }
+
   // Update document URLs to use dynamic form service URLs
   if (existingPayload.message?.order?.documents) {
     existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {

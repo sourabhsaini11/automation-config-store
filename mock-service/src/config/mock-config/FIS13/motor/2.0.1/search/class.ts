@@ -18,6 +18,14 @@ export class MockSearchClass extends MockAction {
     }
     get inputs(): any {
         return {
+            vehicle_type: {
+                name: "vehicle_type",
+                label: "Select Vehicle Type",
+                type: "select",
+                values: ["2-wheeler", "4-wheeler"],
+                payloadField: "vehicle_type",
+                defaultValue: "2-wheeler"
+            },
             city_code: {
                 name: "city_code",
                 label: "Enter city code",

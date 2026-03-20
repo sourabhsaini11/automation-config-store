@@ -1,5 +1,3 @@
-import { applyFlowTypeOverrides } from '../id-helper';
-
 export async function onSearchDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("existingPayload on search", existingPayload);
   console.log('sessionData', sessionData)
@@ -41,9 +39,6 @@ export async function onSearchDefaultGenerator(existingPayload: any, sessionData
       item.id = crypto.randomUUID();
     });
   }
-
-  // Apply vehicle-type overrides (2-wheeler vs 4-wheeler) — updates category_ids, descriptor, price
-  applyFlowTypeOverrides(existingPayload, sessionData);
 
   // Generate dynamic fulfillment IDs (replace hardcoded placeholders)
   if (existingPayload.message?.catalog?.providers?.[0]?.fulfillments) {

@@ -14,6 +14,20 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
     existingPayload.context.timestamp = new Date().toISOString();
   }
 
+  const PRE_ORDER_FLOWS = [
+  "Health_Insurance_Application(PRE-ORDER-Individual)",
+  "Health_Insurance_Application(PRE-ORDER-Family)",
+];
+
+if (PRE_ORDER_FLOWS.includes(sessionData.flow_id)) {
+  existingPayload?.order?.items?.forEach((item: any) => {
+    if (!item?.xinput?.head) return;
+
+    item.xinput.head.index = { min: 0, cur: 0, max: 0 };
+    item.xinput.head.headings = ["EKYC"];
+  });
+}
+
   // Update transaction_id from session data (carry-forward mapping)
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;

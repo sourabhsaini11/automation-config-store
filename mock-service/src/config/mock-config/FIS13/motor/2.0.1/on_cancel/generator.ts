@@ -50,7 +50,7 @@ export async function onCancelDefaultGenerator(existingPayload: any, sessionData
       if (ids.categoryIds?.length) {
         order.items[0].category_ids = ids.categoryIds;
       }
-      if (ids.fulfillmentId && order.items[0].fulfillment_ids) {
+      if (ids.fulfillmentId) {
         order.items[0].fulfillment_ids = [ids.fulfillmentId];
       }
     }
@@ -124,17 +124,17 @@ export async function onCancelDefaultGenerator(existingPayload: any, sessionData
   }
 
   // Update document URLs to use dynamic form service URLs
-  if (existingPayload.message?.order?.documents) {
-    existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {
-      if (doc.descriptor?.code === 'CLAIM_DOC' && doc.mime_type === 'application/html' && sessionData.claim_doc_url_motor) {
-        doc.url = sessionData.claim_doc_url_motor;
-      }
-      if (doc.descriptor?.code === 'RENEW_DOC' && doc.mime_type === 'application/html') {
-        doc.url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/renew_insurance_form_motor?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
-      }
-      return doc;
-    });
-  }
+  // if (existingPayload.message?.order?.documents) {
+  //   existingPayload.message.order.documents = existingPayload.message.order.documents.map((doc: any) => {
+  //     if (doc.descriptor?.code === 'CLAIM_DOC' && doc.mime_type === 'application/html' && sessionData.claim_doc_url_motor) {
+  //       doc.url = sessionData.claim_doc_url_motor;
+  //     }
+  //     if (doc.descriptor?.code === 'RENEW_DOC' && doc.mime_type === 'application/html') {
+  //       doc.url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/renew_insurance_form_motor?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
+  //     }
+  //     return doc;
+  //   });
+  // }
 
   return existingPayload;
 }

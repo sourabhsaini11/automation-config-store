@@ -7,6 +7,7 @@ save-data:
   items: "$.message.order.items[*]"
   provider: "$.message.order.provider"
   fulfillments: "$.message.order.fulfillments[*]"
+  fulfillment_id_on_confirm: "$.message.order.fulfillments[?(@.type == 'TICKET')].id"
   cancellation_terms: "$.message.order.cancellation_terms[*]"
   quote: "$.message.order.quote"
   payments: "$.message.order.payments[*]"

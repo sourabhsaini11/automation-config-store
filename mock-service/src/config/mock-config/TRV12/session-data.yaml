@@ -41,6 +41,7 @@ session_data:
   updated_price: null
   selected_add_ons: []
   created_at: null
+  fulfillment_id_on_confirm: null
   cancellation_reason_id: null
   cancellation_quote: []
   selected_fulfillment_id: null

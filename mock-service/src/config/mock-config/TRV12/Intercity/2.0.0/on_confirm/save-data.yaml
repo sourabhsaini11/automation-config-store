@@ -3,6 +3,7 @@ save-data:
   transaction_id: "$.context.transaction_id"
   order_status: "$.message.order.status"
   fulfillments: "$.message.order.fulfillments[*]"
+  fulfillment_id_on_confirm: "$.message.order.fulfillments[?(@.type == 'TICKET')].id"
   payments: "$.message.order.payments[*]"
   created_at: "$.message.order.created_at"
   updated_at: "$.message.order.updated_at"

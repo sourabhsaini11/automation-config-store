@@ -25,6 +25,7 @@ export interface SessionData {
 	billing: any | undefined;
 	payments: any[] | undefined;
 	updated_payments: any[] | undefined;
+	fulfillment_id_on_confirm: string | undefined;
 	order_id: string | undefined;
 	quote: any | undefined;
 	status: string;
@@ -32,7 +33,7 @@ export interface SessionData {
 	error_message: string | undefined;
 	ref_id: string | undefined;
 	ttl: string | undefined;
-	usecaseId : string | undefined;
+	usecaseId: string | undefined;
 	stops: any[] | undefined;
 	update_stop: any[] | undefined;
 	update_quote: any[] | undefined;

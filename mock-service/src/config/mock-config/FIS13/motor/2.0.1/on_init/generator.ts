@@ -37,7 +37,7 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
     if (ids.categoryIds?.length) {
       existingPayload.message.order.items[0].category_ids = ids.categoryIds;
     }
-    if (ids.fulfillmentId && existingPayload.message.order.items[0].fulfillment_ids) {
+    if (ids.fulfillmentId) {
       existingPayload.message.order.items[0].fulfillment_ids = [ids.fulfillmentId];
     }
   }
@@ -47,6 +47,10 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
     const newFulfillmentId = crypto.randomUUID();
     existingPayload.message.order.fulfillments[0].id = newFulfillmentId;
     sessionData.fulfillment_id = newFulfillmentId;
+    // Sync items fulfillment_ids with the new fulfillment ID
+    if (existingPayload.message?.order?.items?.[0]) {
+      existingPayload.message.order.items[0].fulfillment_ids = [newFulfillmentId];
+    }
   }
 
   // Apply quote.id from resolved IDs

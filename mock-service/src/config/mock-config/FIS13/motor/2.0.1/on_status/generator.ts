@@ -58,7 +58,7 @@ export async function onStatusGenerator(existingPayload: any, sessionData: any) 
       if (ids.categoryIds?.length) {
         item.category_ids = ids.categoryIds;
       }
-      if (ids.fulfillmentId && item.fulfillment_ids) {
+      if (ids.fulfillmentId) {
         item.fulfillment_ids = [ids.fulfillmentId];
       }
     }

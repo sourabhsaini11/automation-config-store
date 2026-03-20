@@ -37,7 +37,7 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
     if (ids.categoryIds?.length) {
       existingPayload.message.order.items[0].category_ids = ids.categoryIds;
     }
-    if (ids.fulfillmentId && existingPayload.message.order.items[0].fulfillment_ids) {
+    if (ids.fulfillmentId) {
       existingPayload.message.order.items[0].fulfillment_ids = [ids.fulfillmentId];
     }
   }
@@ -48,6 +48,10 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
     existingPayload.message.order.fulfillments[0].id = dynamicFulfillmentId;
     // Save generated fulfillment_id back to sessionData for downstream generators
     sessionData.fulfillment_id = dynamicFulfillmentId;
+    // Sync items fulfillment_ids with the new fulfillment ID
+    if (existingPayload.message?.order?.items?.[0]) {
+      existingPayload.message.order.items[0].fulfillment_ids = [dynamicFulfillmentId];
+    }
   }
 
   // Apply quote ID

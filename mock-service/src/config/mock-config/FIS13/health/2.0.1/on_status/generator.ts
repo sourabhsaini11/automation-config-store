@@ -36,6 +36,7 @@ export async function onStatusGenerator(existingPayload: any, sessionData: any) 
     existingPayload.message.order.provider = existingPayload.message.order.provider || {};
     existingPayload.message.order.provider.id = ids.providerId;
   }
+  
 
   // Carry forward fulfillment.id from session data
   if (ids.fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
@@ -63,7 +64,7 @@ export async function onStatusGenerator(existingPayload: any, sessionData: any) 
       if (ids.categoryIds?.length) {
         item.category_ids = ids.categoryIds;
       }
-      if (ids.fulfillmentId && item.fulfillment_ids) {
+      if (ids.fulfillmentId) {
         item.fulfillment_ids = [ids.fulfillmentId];
       }
     } else if (sessionData.item_id) {

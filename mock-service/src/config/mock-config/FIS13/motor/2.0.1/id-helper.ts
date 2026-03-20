@@ -101,7 +101,7 @@ export function applyResolvedIdsToPayload(
     if (ids.categoryIds?.length) {
       existingPayload.message.order.items[0].category_ids = ids.categoryIds;
     }
-    if (ids.fulfillmentId && existingPayload.message.order.items[0].fulfillment_ids) {
+    if (ids.fulfillmentId) {
       existingPayload.message.order.items[0].fulfillment_ids = [ids.fulfillmentId];
     }
   }
@@ -211,19 +211,8 @@ export function applyFlowTypeOverrides(existingPayload: any, sessionData: any): 
     });
   }
 
-  // Handle catalog items (on_search) — only update the selected vehicle type item
-  const providers = existingPayload.message?.catalog?.providers;
-  if (providers) {
-    providers.forEach((provider: any) => {
-      provider.items?.forEach((item: any) => {
-        item.category_ids = flowCategoryIds;
-        if (item.descriptor) {
-          item.descriptor.name = descriptor.name;
-          item.descriptor.short_desc = descriptor.short_desc;
-        }
-      });
-    });
-  }
+  // Note: catalog items (on_search) are NOT overridden here — the catalog should
+  // return both 2-wheeler and 4-wheeler items as-is from the default YAML.
 
   // Save to session for downstream
   sessionData.selected_category_ids = flowCategoryIds;

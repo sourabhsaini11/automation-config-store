@@ -209,7 +209,7 @@ jobs:
             NODE_ENV=${{ vars.NODE_ENV }}
             LOKI_HOST=${{ vars.LOKI_HOST }}
             SERVICE_NAME=automation-mock-service-${{ vars.CONTAINER_NAME }}
-            FINVU_AA_SERVICE_URL=automation-mock-service-${{ vars.FINVU_AA_SERVICE_URL }}
+            FINVU_AA_SERVICE_URL=${{ vars.FINVU_AA_SERVICE_URL_STAGING }}
 
             EOF
   
@@ -228,7 +228,7 @@ jobs:
             NODE_ENV=${{ vars.NODE_ENV }}
             LOKI_HOST=${{ vars.LOKI_HOST }}
             SERVICE_NAME=automation-mock-service-${{ vars.CONTAINER_NAME }}
-            FINVU_AA_SERVICE_URL=automation-mock-service-${{ vars.FINVU_AA_SERVICE_URL }}
+            FINVU_AA_SERVICE_URL=automation-mock-service-${{ vars.FINVU_AA_SERVICE_URL_STAGING }}
 
             EOF
             else

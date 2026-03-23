@@ -105071,10 +105071,10 @@ x-validations:
         #     _RETURN_: attr are present        
         - _NAME_: ORDER_FULFILLMENTS
           _RETURN_: &INIT_FULFILLMENTS
-          - _NAME_: FULFILLMENTS_ID
-            attr: "$.message.order.fulfillments[*].id"
-            reg: ['^[A-Za-z0-9_-]{1,50}$']
-            _RETURN_: attr follow regex reg
+          # - _NAME_: FULFILLMENTS_ID
+          #   attr: "$.message.order.fulfillments[*].id"
+          #   reg: ['^[A-Za-z0-9_-]{1,50}$']
+          #   _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_TYPE
             attr: "$.message.order.fulfillments[*].type"
             var_enum: ["Delivery", "Self-Pickup", "Buyer-Delivery"]
@@ -105119,6 +105119,10 @@ x-validations:
         #   _RETURN_: *INIT_BILLING
         - _NAME_: ORDER_FULFILLMENTS
           _RETURN_: *INIT_FULFILLMENTS
+        - _NAME_: FULFILLMENTS_ID
+          attr: "$.message.order.fulfillments[*].id"
+          reg: ['^[A-Za-z0-9_-]{1,50}$']
+          _RETURN_: attr follow regex reg
         - _NAME_: ORDER_QUOTE
           _RETURN_: &ON_INIT_QUOTE
           - _NAME_: QUOTE_PRICE_CURRENCY

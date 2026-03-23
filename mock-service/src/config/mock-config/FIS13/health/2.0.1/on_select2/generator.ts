@@ -20,7 +20,7 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
 ];
 
 if (PRE_ORDER_FLOWS.includes(sessionData.flow_id)) {
-  existingPayload?.order?.items?.forEach((item: any) => {
+  existingPayload?.message?.order?.items?.forEach((item: any) => {
     if (!item?.xinput?.head) return;
 
     item.xinput.head.index = { min: 0, cur: 0, max: 0 };

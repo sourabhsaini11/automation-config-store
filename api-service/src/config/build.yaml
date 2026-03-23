@@ -44993,31 +44993,31 @@ x-validations:
       #       attr: $.message.order.items[*].tags[?(@.descriptor.code=='VAHAN_DETAILS')].list[?(@.descriptor.code=='PREVIOUS_POLICY_END_DATE')].value
       #       _RETURN_: attr are present
       # ---------------- DOCUMENTS ----------------
-      - _NAME_: ON_CANCEL_DOCUMENTS_MANDATORY_FIELDS
-        _RETURN_:
-          - _NAME_: DOCUMENT_CODE
-            attr: $.message.order.documents[*].descriptor.code
-            _RETURN_: attr are present
+      # - _NAME_: ON_CANCEL_DOCUMENTS_MANDATORY_FIELDS
+      #   _RETURN_:
+      #     - _NAME_: DOCUMENT_CODE
+      #       attr: $.message.order.documents[*].descriptor.code
+      #       _RETURN_: attr are present
 
-          - _NAME_: DOCUMENT_NAME
-            attr: $.message.order.documents[*].descriptor.name
-            _RETURN_: attr are present
+      #     - _NAME_: DOCUMENT_NAME
+      #       attr: $.message.order.documents[*].descriptor.name
+      #       _RETURN_: attr are present
 
-          - _NAME_: DOCUMENT_SHORT_DESC
-            attr: $.message.order.documents[*].descriptor.short_desc
-            _RETURN_: attr are present
+      #     - _NAME_: DOCUMENT_SHORT_DESC
+      #       attr: $.message.order.documents[*].descriptor.short_desc
+      #       _RETURN_: attr are present
 
-          - _NAME_: DOCUMENT_LONG_DESC
-            attr: $.message.order.documents[*].descriptor.long_desc
-            _RETURN_: attr are present
+      #     - _NAME_: DOCUMENT_LONG_DESC
+      #       attr: $.message.order.documents[*].descriptor.long_desc
+      #       _RETURN_: attr are present
 
-          - _NAME_: DOCUMENT_MIME_TYPE
-            attr: $.message.order.documents[*].mime_type
-            _RETURN_: attr are present
+      #     - _NAME_: DOCUMENT_MIME_TYPE
+      #       attr: $.message.order.documents[*].mime_type
+      #       _RETURN_: attr are present
 
-          - _NAME_: DOCUMENT_URL
-            attr: $.message.order.documents[*].url
-            _RETURN_: attr are present
+      #     - _NAME_: DOCUMENT_URL
+      #       attr: $.message.order.documents[*].url
+      #       _RETURN_: attr are present
 
   _SESSION_DATA_:
     search: {}

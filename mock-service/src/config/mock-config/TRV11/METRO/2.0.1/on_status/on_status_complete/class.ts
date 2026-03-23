@@ -1,23 +1,19 @@
 import { readFileSync } from "fs";
 import yaml from "js-yaml";
 import path from "path";
-import {
-  MockAction,
-  MockOutput,
-  saveType,
-} from "../../../../classes/mock-action";
+import { MockAction, MockOutput, saveType } from "../../../../classes/mock-action";
 import { SessionData } from "../../../../session-types";
 import { onStatusCompleteGenerator } from "./generator";
 
 export class MockOnStatusCompleteMetro201Class extends MockAction {
   get saveData(): saveType {
     return yaml.load(
-      readFileSync(path.resolve(__dirname, "../save-data.yaml"), "utf8"),
+      readFileSync(path.resolve(__dirname, "../save-data.yaml"), "utf8")
     ) as saveType;
   }
   get defaultData(): any {
     return yaml.load(
-      readFileSync(path.resolve(__dirname, "./default.yaml"), "utf8"),
+      readFileSync(path.resolve(__dirname, "./default.yaml"), "utf8")
     );
   }
   get inputs(): any {
@@ -34,7 +30,7 @@ export class MockOnStatusCompleteMetro201Class extends MockAction {
   }
   async validate(
     targetPayload: any,
-    sessionData: SessionData,
+    sessionData: SessionData
   ): Promise<MockOutput> {
     const order = targetPayload?.message?.order;
 
@@ -71,7 +67,7 @@ export class MockOnStatusCompleteMetro201Class extends MockAction {
       const itemFulfillmentIds = item.fulfillment_ids || [];
       if (
         !itemFulfillmentIds.every((fid: string) =>
-          payloadFulfillmentIds.includes(fid),
+          payloadFulfillmentIds.includes(fid)
         )
       ) {
         return {
@@ -128,10 +124,7 @@ export class MockOnStatusCompleteMetro201Class extends MockAction {
 
   async meetRequirements(sessionData: SessionData): Promise<MockOutput> {
     // Check for updated_payments
-    if (
-      !sessionData.updated_payments ||
-      sessionData.updated_payments.length === 0
-    ) {
+    if (!sessionData.updated_payments || sessionData.updated_payments.length === 0) {
       return {
         valid: false,
         message: "No updated_payments available in session data",
@@ -201,12 +194,12 @@ export class MockOnStatusCompleteMetro201Class extends MockAction {
 export class MockUnsoliciatedOnStatusCompleteMetro201Class extends MockAction {
   get saveData(): saveType {
     return yaml.load(
-      readFileSync(path.resolve(__dirname, "../save-data.yaml"), "utf8"),
+      readFileSync(path.resolve(__dirname, "../save-data.yaml"), "utf8")
     ) as saveType;
   }
   get defaultData(): any {
     return yaml.load(
-      readFileSync(path.resolve(__dirname, "./default.yaml"), "utf8"),
+      readFileSync(path.resolve(__dirname, "./default.yaml"), "utf8")
     );
   }
   get inputs(): any {
@@ -223,7 +216,7 @@ export class MockUnsoliciatedOnStatusCompleteMetro201Class extends MockAction {
   }
   async validate(
     targetPayload: any,
-    sessionData: SessionData,
+    sessionData: SessionData
   ): Promise<MockOutput> {
     const order = targetPayload?.message?.order;
 
@@ -260,7 +253,7 @@ export class MockUnsoliciatedOnStatusCompleteMetro201Class extends MockAction {
       const itemFulfillmentIds = item.fulfillment_ids || [];
       if (
         !itemFulfillmentIds.every((fid: string) =>
-          payloadFulfillmentIds.includes(fid),
+          payloadFulfillmentIds.includes(fid)
         )
       ) {
         return {
@@ -340,10 +333,7 @@ export class MockUnsoliciatedOnStatusCompleteMetro201Class extends MockAction {
 
   async meetRequirements(sessionData: SessionData): Promise<MockOutput> {
     // Check for updated_payments
-    if (
-      !sessionData.updated_payments ||
-      sessionData.updated_payments.length === 0
-    ) {
+    if (!sessionData.updated_payments || sessionData.updated_payments.length === 0) {
       return {
         valid: false,
         message: "No updated_payments available in session data",

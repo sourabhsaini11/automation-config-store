@@ -318,6 +318,11 @@ codes:
     action: on_status
     default: METRO/2.0.1/on_status/on_status_complete/default.yaml
     message_id: false
+  - code: 161
+    action_id: unsolicited_on_status_complete_METRO_201
+    action: on_status
+    default: METRO/2.0.1/on_status/on_status_complete/default.yaml
+    message_id: true  
   - code: 162
     action_id: on_status_cancel_METRO_201
     action: on_status
@@ -633,6 +638,11 @@ codes:
     action: on_status
     default: BUS/2.0.1/on_status/on_status_complete/default.yaml
     message_id: false
+  - code: 220
+    action_id: unsolicited_on_status_complete_BUS_201
+    action: on_status
+    default: BUS/2.0.1/on_status/on_status_complete/default.yaml
+    message_id: true  
   - code: 221
     action_id: on_cancel_merchant_BUS_201
     action: on_cancel

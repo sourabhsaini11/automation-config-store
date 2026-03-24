@@ -57,7 +57,7 @@ import { MockOnSearch2Metro201Class } from "./METRO/2.0.1/on_search/on_search2/c
 import { MockOnSelectMetro201Class } from "./METRO/2.0.1/on_select/class";
 import { MockOnStatusActiveMetro201Class } from "./METRO/2.0.1/on_status/on_status_active/class";
 import { MockOnStatusCancelMetro201Class } from "./METRO/2.0.1/on_status/on_status_cancelled/class";
-import { MockOnStatusCompleteMetro201Class } from "./METRO/2.0.1/on_status/on_status_complete/class";
+import { MockOnStatusCompleteMetro201Class, MockUnsoliciatedOnStatusCompleteMetro201Class } from "./METRO/2.0.1/on_status/on_status_complete/class";
 import { MockOnUpdateAcceptedMetro201Class } from "./METRO/2.0.1/on_update/on_update_accepted/class";
 import { MockOnUpdateEndStop1MetroClass } from "./METRO/2.0.1/on_update/on_update_end_stop_1/class";
 import { MockOnUpdateEndStop2MetroClass } from "./METRO/2.0.1/on_update/on_update_end_stop_2/class";
@@ -73,7 +73,7 @@ import { MockUpdateEndStop3MetroClass } from "./METRO/2.0.1/update/update_end_st
 
 import { MockAction } from "./classes/mock-action";
 import { MockStatusPurchaseFlowBus201Class } from "./BUS/2.0.1/status/class";
-import { MockOnStatusCompleteBus201Class } from "./BUS/2.0.1/on_status/on_status_complete/class";
+import { MockOnStatusCompleteBus201Class, MockUnsoliciatedOnStatusCompleteBus201Class } from "./BUS/2.0.1/on_status/on_status_complete/class";
 import { MockOnCancelMerchantBus201Class } from "./BUS/2.0.1/on_cancel/on_cancel_merchant/class";
 import { MockOnSearchMonthlyPassBus201Class } from "./BUS/2.0.1/on_search/on_search_monthly_pass/class";
 import { MockSearchMonthlyPassBus201Class } from "./BUS/2.0.1/search/search_monthly_pass/class";
@@ -183,6 +183,7 @@ const registry = {
   on_status_active_METRO_201: MockOnStatusActiveMetro201Class,
   on_status_cancel_METRO_201: MockOnStatusCancelMetro201Class,
   on_status_complete_METRO_201: MockOnStatusCompleteMetro201Class,
+  unsolicited_on_status_complete_METRO_201: MockUnsoliciatedOnStatusCompleteMetro201Class,
   on_update_accepted_METRO_201: MockOnUpdateAcceptedMetro201Class,
   search1_METRO_201: MockSearch1Metro201Class,
   search2_METRO_201: MockSearch2Metro201Class,
@@ -197,6 +198,7 @@ const registry = {
   on_update_end_stop_3: MockOnUpdateEndStop3MetroClass,
   status_purchase_flow_BUS_201: MockStatusPurchaseFlowBus201Class,
   on_status_complete_BUS_201: MockOnStatusCompleteBus201Class,
+  unsolicited_on_status_complete_BUS_201: MockUnsoliciatedOnStatusCompleteBus201Class,
   on_cancel_merchant_BUS_201: MockOnCancelMerchantBus201Class,
 
   // _____________________IGM BUS (2.0.1)____________________________

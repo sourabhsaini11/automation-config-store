@@ -8,5 +8,5 @@ order:
         form:
           id: F01
         form_response:
-          status: SUCCESS
+          status: APPROVED
           submission_id: F01_SUBMISSION_ID

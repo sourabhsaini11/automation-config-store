@@ -8,43 +8,41 @@
  * 4. Update form_response with status and submission_id (preserve existing structure)
  */
 
-import { injectSettlementAmount } from "../utils/settlement-utils";
-
 export async function initDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("sessionData for init", sessionData);
-
+  
   // Update context timestamp and action
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
     existingPayload.context.action = "init";
   }
 
-  const submission_id = sessionData?.form_data?.verification_status?.form_submission_id;
-
+  const submission_id = sessionData?.form_data?.kyc_verification_status?.form_submission_id;
+  
   // Update transaction_id from session data (carry-forward mapping)
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-
+  
   // Generate new UUID message_id for init (new API call)
   if (existingPayload.context) {
     existingPayload.context.message_id = crypto.randomUUID();
     console.log("Generated new UUID message_id for init:", existingPayload.context.message_id);
   }
-
+  
   // Update provider.id if available from session data (carry-forward from previous flows)
   if (sessionData.selected_provider?.id && existingPayload.message?.order?.provider) {
     existingPayload.message.order.provider.id = sessionData.selected_provider.id;
     console.log("Updated provider.id:", sessionData.selected_provider.id);
   }
-
+  
   // Update item.id if available from session data (carry-forward from previous flows)
   const selectedItem = sessionData.item || (Array.isArray(sessionData.items) ? sessionData.items[0] : undefined);
   if (selectedItem?.id && existingPayload.message?.order?.items?.[0]) {
     existingPayload.message.order.items[0].id = selectedItem.id;
     console.log("Updated item.id:", selectedItem.id);
   }
-
+  
   // Update form ID from session data (carry-forward from previous flows)
   if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
     // Use form ID from session data or default to FO3 (from on_select_2/on_status_unsolicited)
@@ -52,7 +50,7 @@ export async function initDefaultGenerator(existingPayload: any, sessionData: an
     existingPayload.message.order.items[0].xinput.form.id = formId;
     console.log("Updated form ID:", formId);
   }
-
+  
   // Update form_response with status and submission_id (preserve existing structure)
   if (existingPayload.message?.order?.items?.[0]?.xinput?.form_response) {
     existingPayload.message.order.items[0].xinput.form_response.status = "SUCCESS";
@@ -63,11 +61,6 @@ export async function initDefaultGenerator(existingPayload: any, sessionData: an
     }
     console.log("Updated form_response with status and submission_id");
   }
-
-  //update payment for all init 
-  const sessionPayments: any[] = sessionData.payments || sessionData.order?.payments || [];
-  existingPayload.message.order.payments[0].id = sessionPayments[0].id
-  injectSettlementAmount(existingPayload, sessionData);
 
   return existingPayload;
 }

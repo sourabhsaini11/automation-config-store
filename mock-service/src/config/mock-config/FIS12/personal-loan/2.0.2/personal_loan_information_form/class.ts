@@ -57,7 +57,6 @@ export class MockPersonalLoanInformationFormClass extends MockAction {
 	}
 	get saveData(): saveType {
 		return { "save-data": { personal_loan_information_form: "personal_loan_information_form" } };
-
 	}
 	get defaultData(): any {
 		return {};

@@ -132,7 +132,7 @@ order:
                 code: NUMBER_OF_INSTALLMENTS_OF_REPAYMENT
                 name: Number of installments of repayment
                 short_desc: Number of installments borrower has to make to payback the loan
-              value: "5"
+              value: "45"
             - descriptor:
                 code: TNC_LINK
                 name: Terms & Conditions
@@ -142,7 +142,7 @@ order:
                 code: COOL_OFF_PERIOD
                 name: cool off period
                 short_desc: Cooling off/look-up period during which borrower shall not be charged any penalty
-              value: P30D
+              value: PT30D
             - descriptor:
                 code: INSTALLMENT_AMOUNT
                 name: Installment amount
@@ -173,7 +173,7 @@ order:
         required: true
 
   quote:
-    id: bcaa0931-47d7-42c9-aa83-3fb2b5048551
+    id: LOAN_LEAD_ID_OR_SIMILAR
     price:
       currency: INR
       value: "442300"
@@ -206,4 +206,4 @@ order:
         price:
           value: "0"
           currency: INR
-    ttl: P15D
+    ttl: PT15D

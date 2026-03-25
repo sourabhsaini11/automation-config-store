@@ -1,7 +1,7 @@
-update_target: fulfillment
+update_target: "fulfillment"
 order:
-    id: "66B7AEDF45"
-    fulfillments:
-      - state:
-          descriptor:
-            code: APPROVED
+  id: "66B7AEDF45"
+  fulfillments:
+    - state:
+        descriptor:
+          code: "APPROVED"

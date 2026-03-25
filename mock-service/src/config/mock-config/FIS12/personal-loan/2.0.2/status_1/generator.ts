@@ -4,14 +4,13 @@ export async function statusGenerator(existingPayload: any, sessionData: any) {
   }
 
   console.log("sessionData for status", sessionData);
-
-  // Set ref_id from transaction_id
+  
   if (existingPayload.context?.transaction_id) {
     existingPayload.message = existingPayload.message || {};
-    existingPayload.message.ref_id = sessionData.order_id;
+    existingPayload.message.ref_id = existingPayload.context.transaction_id;
     delete existingPayload.message.transaction_id;
-  }
+  } 
+  
 
   return existingPayload;
 }
-

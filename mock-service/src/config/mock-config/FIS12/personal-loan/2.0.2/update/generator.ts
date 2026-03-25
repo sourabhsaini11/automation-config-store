@@ -1,3 +1,13 @@
+/**
+ * Update Generator for FIS12 Gold Loans
+ * 
+ * Logic:
+ * 1. Update context with current timestamp
+ * 2. Update transaction_id and message_id from session data
+ * 3. Load order_id and update_target from session data
+ * 4. Handle Gold Loan specific update scenarios (foreclosure, missed EMI, part payment)
+ */
+
 export async function updateDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("Gold Loan Update generator - Available session data:", {
     transaction_id: sessionData.transaction_id,
@@ -12,13 +22,18 @@ export async function updateDefaultGenerator(existingPayload: any, sessionData: 
   if (existingPayload.context) {
     existingPayload.context.timestamp = new Date().toISOString();
   }
-
+  
   // Update transaction_id from session data
   if (sessionData.transaction_id && existingPayload.context) {
     existingPayload.context.transaction_id = sessionData.transaction_id;
   }
-
-
+  
+  // Load order_id into order.id (structure uses order.id)
+  if (sessionData.order_id && existingPayload.message) {
+    existingPayload.message.order = existingPayload.message.order || {};
+    existingPayload.message.order.id = sessionData.order_id;
+  }
+  
   // Load update_target from session data
   if (sessionData.update_target && existingPayload.message) {
     existingPayload.message.update_target = sessionData.update_target;
@@ -30,14 +45,14 @@ export async function updateDefaultGenerator(existingPayload: any, sessionData: 
     if (!existingPayload.message.update_target) existingPayload.message.update_target = 'payments';
 
     existingPayload.message.order = existingPayload.message.order || {};
-    existingPayload.message.order.id = sessionData.order_id;
     existingPayload.message.order.payments = existingPayload.message.order.payments || [{}];
+
+    const payment = existingPayload.message.order.payments[0];
+    payment.time = payment.time || {};
 
     // Choose label based on flow_id, user_inputs, or saved update_label
     let labelFromSession = sessionData.update_label;
-    console.log("labelFromSession", labelFromSession);
-    console.log("sessionData.flow_id", sessionData.flow_id);
-
+    
     // Map flow IDs to specific payment labels
     if (sessionData.flow_id) {
       if (sessionData.flow_id.includes('Missed_EMI')) {
@@ -48,43 +63,28 @@ export async function updateDefaultGenerator(existingPayload: any, sessionData: 
         labelFromSession = 'PRE_PART_PAYMENT';
       }
     }
-
-    // Fallback to existing label if no flow-based mapping found
-    const existingPayment = existingPayload.message.order.payments[0];
-    if (!labelFromSession && existingPayment?.time?.label) {
-      labelFromSession = existingPayment.time.label;
+    
+    // Fallback to user_inputs if no flow-based mapping found
+    if (!labelFromSession) {
+      labelFromSession = sessionData.user_inputs?.foreclosure_amount ? 'FORECLOSURE'
+        : sessionData.user_inputs?.missed_emi_amount ? 'MISSED_EMI_PAYMENT'
+        : sessionData.user_inputs?.part_payment_amount ? 'PRE_PART_PAYMENT'
+        : payment.time.label;
+    }
+    
+    if (labelFromSession) {
+      payment.time.label = labelFromSession;
+      console.log(`Payment label set to: ${labelFromSession} based on flow_id: ${sessionData.flow_id}`);
     }
 
-    // Create minimal payment object based on label type
-    if (labelFromSession === 'PRE_PART_PAYMENT') {
-      // For PRE_PART_PAYMENT: include params with amount
-      existingPayload.message.order.payments[0] = {
-        time: {
-          label: labelFromSession
-        },
-        params: {
-          amount: String(sessionData?.user_inputs?.pre_part_payment) || "92232",
-          currency: sessionData.update_currency || 'INR'
-        }
-      };
-    } else if (labelFromSession === 'FORECLOSURE' || labelFromSession === 'MISSED_EMI_PAYMENT') {
-      // For FORECLOSURE and MISSED_EMI_PAYMENT: only time.label (minimal payload)
-      existingPayload.message.order.payments[0] = {
-        time: {
-          label: labelFromSession
-        }
-      };
-      console.log(`${labelFromSession} - minimal payload with only time.label`);
-    } else if (labelFromSession) {
-      // Fallback for any other label
-      existingPayload.message.order.payments[0] = {
-        time: {
-          label: labelFromSession
-        }
-      };
+    // Amount mapping for part payment (optional for other labels)
+    if (sessionData.user_inputs?.part_payment_amount) {
+      payment.params = payment.params || {};
+      payment.params.amount = String(sessionData.user_inputs.part_payment_amount);
+      payment.params.currency = payment.params.currency || sessionData.update_currency || 'INR';
     }
   }
-
-  console.log(" update payload generated successfully");
+  
+  console.log("Gold Loan update payload generated successfully");
   return existingPayload;
 } 

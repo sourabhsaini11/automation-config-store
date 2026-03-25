@@ -44,3 +44,19 @@ session_data:
   cancellation_reason_id: null
   cancellation_quote: []
   selected_fulfillment_id: null
+  start_code: null
+  end_code: null
+  selected_item_ids: []
+  price: null
+  payment_id: null
+  update_fulfillment: []
+  buyer_side_fulfillment_ids: []
+  user_inputs: null
+  first_form_testing: []
+  latest_issue_payload: null
+  igm_action: null
+  issue_action: []
+  issue_resolution: []
+  issue_id: null
+  on_issue_actions: null
+  issue_actions: null

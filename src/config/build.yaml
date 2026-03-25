@@ -105071,7 +105071,7 @@ x-validations:
           _RETURN_:
           - _NAME_: TRACKING_VALID_TAGS
             attr: "$.message.tracking.tags[*].code"
-            valid: ["id","config","path"]
+            valid: ["id","config","path","order"]
             _CONTINUE_: "!(attr are present)"
             _RETURN_: attr all in valid
           - _NAME_: TRACKING_ORDER_TAG

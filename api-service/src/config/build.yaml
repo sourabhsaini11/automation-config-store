@@ -105140,6 +105140,7 @@ x-validations:
             _RETURN_: attr are present
           - _NAME_: CANCELLATION_REASON_ID
             attr: "$.message.order.cancellation.reason.id"
+            _CONTINUE_: "!(attr are present)"
             _RETURN_: attr are present
         - _NAME_: ORDER_PROVIDER
           _RETURN_: *SELECT_PROVIDER

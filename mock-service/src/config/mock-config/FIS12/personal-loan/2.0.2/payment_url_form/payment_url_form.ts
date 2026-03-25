@@ -4,15 +4,16 @@ import { SessionData } from "../../../session-types";
 import { validateFormHtml } from "./validate-form";
 import { resolveFormActions } from "./resolve-action";
 
-export class MockPaymentUrlFormStatusClass extends MockAction {
+export class MockPaymentUrlFormStatusClassPL extends MockAction {
 	name(): string {
 		return "payment_url_form";
 	}
 	get description(): string {
-		return "payment_url_form";
+		return "Mock for payment_url_form";
 	}
 	generator(existingPayload: any, sessionData: SessionData): Promise<any> {
-		throw new Error("Method not implemented.");
+		console.log("payment_url_form generator", existingPayload, sessionData);
+		return Promise.resolve(existingPayload);
 	}
 	async validate(
 		targetPayload: any,

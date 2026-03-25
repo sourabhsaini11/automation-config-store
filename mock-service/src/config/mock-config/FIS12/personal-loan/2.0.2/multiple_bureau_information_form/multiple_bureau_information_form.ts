@@ -4,16 +4,15 @@ import { SessionData } from "../../../session-types";
 import { validateFormHtml } from "./validate-form";
 import { resolveFormActions } from "./resolve-action";
 
-export class MockVerificationPlStatusClass extends MockAction {
+export class MockMultiBureauInfoFormClass extends MockAction {
 	name(): string {
-		return "verification_status";
+		return "multiple_bureau_information_form";
 	}
 	get description(): string {
-		return "Mock for verification_status";
+		return "Mock for multiple_bureau_information_form";
 	}
 	generator(existingPayload: any, sessionData: SessionData): Promise<any> {
-		console.log("verification_status generator", existingPayload, sessionData);
-		return Promise.resolve(existingPayload);
+		throw new Error("Method not implemented.");
 	}
 	async validate(
 		targetPayload: any,
@@ -25,7 +24,7 @@ export class MockVerificationPlStatusClass extends MockAction {
 				message: "Session data is required for validation",
 			};
 		}
-		const formLink = sessionData["verification_status"];
+		const formLink = sessionData["multiple_bureau_information_form"];
 		if (!formLink) {
 			return { valid: false, message: "Form link not found in session data" };
 		}
@@ -41,7 +40,8 @@ export class MockVerificationPlStatusClass extends MockAction {
 	override async __forceSaveData(
 		sessionData: SessionData
 	): Promise<Record<string, any>> {
-		const formLink = sessionData["verification_status"];
+		
+		const formLink = sessionData["multiple_bureau_information_form"];
 		if (!formLink) {
 			throw new Error("Form link not found in session data");
 		}
@@ -49,15 +49,16 @@ export class MockVerificationPlStatusClass extends MockAction {
 		const formData = formRaw.data;
 		return {
 			...sessionData,
-			verification_status: resolveFormActions(formLink, formData),
+			multiple_bureau_information_form: resolveFormActions(formLink, formData),
 		};
+
 	}
 
 	meetRequirements(sessionData: SessionData): Promise<MockOutput> {
 		return Promise.resolve({ valid: true });
 	}
 	get saveData(): saveType {
-		return { "save-data": { verification_status: "verification_status" } };
+		return { "save-data": { multiple_bureau_information_form: "multiple_bureau_information_form" } };
 	}
 	get defaultData(): any {
 		return {};

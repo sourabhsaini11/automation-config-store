@@ -5,7 +5,7 @@ import { MockAction, MockOutput, saveType } from "../../../classes/mock-action";
 import { SessionData } from "../../../session-types";
 import { onUpdateUnsolicitedDefaultGenerator } from "./generator";
 
-export class MockOnUpdateUnsolicitedPersonalLoanClass extends MockAction {
+export class MockOnUpdateUnsolicitedPersonalLoan3Class extends MockAction {
     get saveData(): saveType {
         return yaml.load(
             readFileSync(path.resolve(__dirname, "./save-data.yaml"), "utf8")

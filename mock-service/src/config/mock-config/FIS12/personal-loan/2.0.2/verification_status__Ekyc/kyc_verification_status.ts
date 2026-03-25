@@ -4,7 +4,7 @@ import { SessionData } from "../../../session-types";
 import { validateFormHtml } from "./validate-form";
 import { resolveFormActions } from "./resolve-action";
 
-export class MockEKycVerificationStatusPl202Class extends MockAction {
+export class MockKycVerificationStatus3Class extends MockAction {
 	name(): string {
 		return "Ekyc_details_form";
 	}

@@ -51,13 +51,9 @@ export function calculateSettlementAmount(sessionData: any): string {
 
     const principalAmount = parseFloat(sessionData.principal_amount || "0");
     const totalLoanAmount = parseFloat(sessionData.quote_price || "0");
+
     const loanTermISO = sessionData.loan_term || "P12M";
     const loanTermMonths = parseISODurationToMonths(loanTermISO);
-
-    console.log("[settlement-utils] Calculating SETTLEMENT_AMOUNT with:", {
-        feeType, feePercentage, feeAmount,
-        principalAmount, totalLoanAmount, loanTermISO, loanTermMonths,
-    });
 
     let settlementAmount = 0;
 
@@ -68,19 +64,26 @@ export function calculateSettlementAmount(sessionData: any): string {
             break;
 
         case "percent":
-            settlementAmount = (feePercentage / 100) * totalLoanAmount;
-            console.log(`[settlement-utils] percent type → ${feePercentage}% × ${totalLoanAmount} = ${settlementAmount}`);
+            // ⚠️ confirm with spec: using principal here
+            settlementAmount = (feePercentage / 100) * principalAmount;
+            console.log(`[settlement-utils] percent type → ${feePercentage}% × ${principalAmount} = ${settlementAmount}`);
             break;
 
         case "percent-annualized":
         default:
-            settlementAmount = (feePercentage / 100) * (loanTermMonths / 12) * principalAmount;
+            // ✅ Correct ONDC logic
+            settlementAmount =
+                (feePercentage / 100) *
+                (loanTermMonths / 12) *
+                principalAmount;
+
             console.log(
                 `[settlement-utils] percent-annualized type → ${feePercentage}% × (${loanTermMonths}/12) × ${principalAmount} = ${settlementAmount}`
             );
             break;
     }
 
+    // ✅ safer rounding (2 decimal then round)
     const result = String(Math.round(settlementAmount));
     console.log(`[settlement-utils] Final SETTLEMENT_AMOUNT = ${result}`);
     return result;

@@ -5,7 +5,7 @@ import { MockAction, MockOutput, saveType } from "../../../classes/mock-action";
 import { SessionData } from "../../../session-types";
 import { onUpdateMissedEmiDefaultGenerator } from "./generator";
 
-export class MockOnUpdateMissedEmiClass extends MockAction {
+export class MockOnUpdateMissedEmiClassGD extends MockAction {
   get saveData(): saveType {
     // Action-specific save-data
     return yaml.load(

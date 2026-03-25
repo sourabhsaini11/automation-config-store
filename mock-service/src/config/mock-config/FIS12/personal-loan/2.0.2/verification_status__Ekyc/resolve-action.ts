@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import logger from "@ondc/automation-logger";
+
 /**
  * Resolves <form action> URLs in an HTML string against a base URL.
  * - If a form's action is an absolute http(s) URL (or protocol-relative //...), it is left as-is.
@@ -9,7 +9,6 @@ import logger from "@ondc/automation-logger";
  * Works in Node.js environments using Cheerio for HTML parsing.
  */
 export function resolveFormActions(baseUrl: string, html: string): string {
-	logger.info("Resolving form actions", { baseUrl, html });
 	// Validate baseUrl
 	let base: URL;
 	try {
@@ -48,8 +47,6 @@ export function resolveFormActions(baseUrl: string, html: string): string {
 		}
 		$form.attr("action", resolved);
 	});
-
-	logger.info("Resolved form actions", { html: $.html() });
 
 	// Return the modified HTML
 	return $.html();

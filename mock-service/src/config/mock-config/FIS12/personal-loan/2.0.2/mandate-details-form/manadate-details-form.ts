@@ -4,7 +4,7 @@ import { SessionData } from "../../../session-types";
 import { validateFormHtml } from "./validate-form";
 import { resolveFormActions } from "./resolve-action";
 
-export class MockMandateDetailsForm extends MockAction {
+export class MockMandateDetails3Form extends MockAction {
 	name(): string {
 		return "manadate_details_form";
 	}

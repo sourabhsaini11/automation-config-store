@@ -53,13 +53,13 @@ function yamlToJson(filePath: string): object {
 	}
 }
 
-export async function createMockResponseFIS12_200(
+export async function createMockResponseFIS12PL_203(
 	actionID: string,
 	sessionData: SessionData
 ) {
-	console.log("createMockResponseFIS12_202", actionID, sessionData);
+	console.log("createMockResponseFIS12PL_203", actionID, sessionData);
 	const factoryData = loadFactoryYaml(
-		path.resolve(__dirname, "../factory.yaml")
+		path.resolve(__dirname, "../../factory.yaml")
 	);
 	let api_details: any = {};
 	if (actionID.startsWith("dyn_on_status")) {
@@ -87,7 +87,7 @@ export async function createMockResponseFIS12_200(
 		context.message_id = sessionData.message_id as string;
 	}
 	const default_message = yamlToJson(
-		path.resolve(__dirname, `../../${api_details.default}`)
+		path.resolve(__dirname, `../../../${api_details.default}`)
 	);
 	const payload: any = {
 		context: context,

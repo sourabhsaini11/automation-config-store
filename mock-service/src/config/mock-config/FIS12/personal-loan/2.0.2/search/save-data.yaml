@@ -1,6 +1,5 @@
 save-data:
   message_id: "$.context.message_id"
-  bap_id: "$.context.bap_id"
   transaction_id: "$.context.transaction_id"
   collected_by: "$.message.intent.payment.collected_by" 
   tags: "$.message.intent.tags"
@@ -8,7 +7,8 @@ save-data:
   end_time: "$.message.intent.fulfillment.stops[?(@.type=='START')].time.range.end"
   city_code: "$.context.location.city.code"
   vehicle_category: "$.message.intent.fulfillment.vehicle.category"
+  bap_id: "$.context.bap_id"
   # BAP_TERMS fee parameters for dynamic SETTLEMENT_AMOUNT calculation
-  buyer_finder_fees_type: "$.message.intent.payment.tags[?(@.descriptor.code=='BAP_TERMS')].list[?(@.descriptor.code=='BUYER_FINDER_FEES_TYPE')].value"
-  buyer_finder_fees_percentage: "$.message.intent.payment.tags[?(@.descriptor.code=='BAP_TERMS')].list[?(@.descriptor.code=='BUYER_FINDER_FEES_PERCENTAGE')].value"
-  buyer_finder_fees_amount: "$.message.intent.payment.tags[?(@.descriptor.code=='BAP_TERMS')].list[?(@.descriptor.code=='BUYER_FINDER_FEES_AMOUNT')].value"
+  buyer_finder_fees_type: "$.message.intent.payment.tags[?(@.descriptor.code=='BUYER_FINDER_FEES')].list[?(@.descriptor.code=='BUYER_FINDER_FEES_TYPE')].value"
+  buyer_finder_fees_percentage: "$.message.intent.payment.tags[?(@.descriptor.code=='BUYER_FINDER_FEES')].list[?(@.descriptor.code=='BUYER_FINDER_FEES_PERCENTAGE')].value"
+  buyer_finder_fees_amount: "$.message.intent.payment.tags[?(@.descriptor.code=='BUYER_FINDER_FEES')].list[?(@.descriptor.code=='BUYER_FINDER_FEES_AMOUNT')].value"

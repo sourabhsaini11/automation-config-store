@@ -77,11 +77,11 @@ order:
             - descriptor: { code: REPAYMENT_FREQUENCY, name: Repayment Frequency }
               value: MONTHLY
             - descriptor: { code: NUMBER_OF_INSTALLMENTS_OF_REPAYMENT, name: Number of installments of repayment }
-              value: "45"
+              value: "5"
             - descriptor: { code: TNC_LINK, name: Terms & Conditions }
               value: https://icicibank.com/loan/tnc.html
             - descriptor: { code: COOL_OFF_PERIOD, name: cool off period }
-              value: PT30D
+              value: P30D
             - descriptor: { code: INSTALLMENT_AMOUNT, name: Installment amount }
               value: "46360"
             - descriptor: { code: KFS_LINK, name: Key Facts Statement Link }
@@ -89,7 +89,7 @@ order:
           display: true
 
   quote:
-    id: LOAN_LEAD_ID_OR_SIMILAR
+    id: bcaa0931-47d7-42c9-aa83-3fb2b5048551
     price:
       currency: INR
       value: "223836"
@@ -112,7 +112,7 @@ order:
         price: { value: "9536", currency: INR }
       - title: OUTSTANDING_INTEREST
         price: { value: "0", currency: INR }
-    ttl: PT15D
+    ttl: P15D
 
   fulfillments:
     - customer:

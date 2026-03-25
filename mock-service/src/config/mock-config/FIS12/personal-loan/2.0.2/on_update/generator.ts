@@ -12,13 +12,10 @@
 import {
   upsertBreakup,
   generateTimeRangeFromContext,
-  updateForeclosurePaymentStatus,
-  updateMissedEMIStatus,
-  updatePrePartPaymentStatus,
   addDelayedInstallment,
   markPreviousInstallmentsAsPaid
 } from '../generator-utils';
-import { injectSettlementAmount } from '../settlement-utils';
+import { injectSettlementAmount } from '../utils/settlement-utils';
 
 export async function onUpdateDefaultGenerator(existingPayload: any, sessionData: any) {
   try {
@@ -148,9 +145,6 @@ export async function onUpdateDefaultGenerator(existingPayload: any, sessionData
       // Add delayed installment
       addDelayedInstallment(orderRef, contextTimestamp);
 
-      // Set payment URL
-      const refId = sessionData.message_id || orderRef.id || 'b5487595-42c3-4e20-bd43-ae21400f60f0';
-      firstPayment.url = `https://pg.icici.com/?amount=46360&ref_id=${encodeURIComponent(refId)}`;
     }
 
     if (label === 'FORECLOSURE') {
@@ -173,9 +167,6 @@ export async function onUpdateDefaultGenerator(existingPayload: any, sessionData
       // Remove time range for foreclosure
       if (firstPayment.time.range) delete firstPayment.time.range;
 
-      // Set payment URL
-      const refId = sessionData.message_id || orderRef.id || 'b5487595-42c3-4e20-bd43-ae21400f60f0';
-      firstPayment.url = `https://pg.icici.com/?amount=${foreclosureAmount}&ref_id=${encodeURIComponent(refId)}`;
     }
 
     if (label === 'PRE_PART_PAYMENT') {
@@ -189,10 +180,6 @@ export async function onUpdateDefaultGenerator(existingPayload: any, sessionData
 
       // Remove time range for pre part payment
       if (firstPayment.time.range) delete firstPayment.time.range;
-
-      // Set payment URL
-      const refId = sessionData.message_id || orderRef.id || 'b5487595-42c3-4e20-bd43-ae21400f60f0';
-      firstPayment.url = `https://pg.icici.com/?amount=50860&ref_id=${encodeURIComponent(refId)}`;
     }
 
     console.log("=== On Update Generator Complete ===");

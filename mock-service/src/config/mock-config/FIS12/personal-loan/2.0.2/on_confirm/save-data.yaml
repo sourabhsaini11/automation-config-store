@@ -4,4 +4,6 @@ save-data:
    order: "$.message.order"
    order_id: "$.message.order.id"
    quote_id: "$.message.order.quote.id"
+   quote: "$.message.order.quote"
+   payments: "$.message.order.payments[*]"
    payment_id: "$.message.order.payments[0].id"

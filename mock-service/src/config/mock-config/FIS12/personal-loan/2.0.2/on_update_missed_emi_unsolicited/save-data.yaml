@@ -1,0 +1,6 @@
+save-data:
+  transaction_id: "$.context.transaction_id"
+  message_id: "$.context.message_id"
+  order: "$.message.order"
+
+

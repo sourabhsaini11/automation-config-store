@@ -37,8 +37,8 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
   }
   
   if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
-    const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/consumer_information_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
-    console.log("✅ URL for consumer_information_form in on_select_bureau_consent:", url);
+    const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/multiple_bureau_information_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
+    console.log("✅ URL for multiple_bureau_information_form in on_select_bureau_consent:", url);
     existingPayload.message.order.items[0].xinput.form.url = url;
     console.log("✅ Form URL successfully set in payload");
   } else {

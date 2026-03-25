@@ -4,12 +4,12 @@ import { SessionData } from "../../../session-types";
 import { validateFormHtml } from "./validate-form";
 import { resolveFormActions } from "./resolve-action";
 
-export class MockPersonalLoanInformationFormClass extends MockAction {
+export class MockLoanAgreementEsignForm extends MockAction {
 	name(): string {
-		return "personal_loan_information_form";
+		return "loan_agreement_esign_form";
 	}
 	get description(): string {
-		return "Mock for personal_loan_information_form";
+		return "loan_agreement_esign_form";
 	}
 	generator(existingPayload: any, sessionData: SessionData): Promise<any> {
 		throw new Error("Method not implemented.");
@@ -24,7 +24,7 @@ export class MockPersonalLoanInformationFormClass extends MockAction {
 				message: "Session data is required for validation",
 			};
 		}
-		const formLink = sessionData["personal_loan_information_form"];
+		const formLink = sessionData["loan_agreement_esign_form"];
 		if (!formLink) {
 			return { valid: false, message: "Form link not found in session data" };
 		}
@@ -40,8 +40,7 @@ export class MockPersonalLoanInformationFormClass extends MockAction {
 	override async __forceSaveData(
 		sessionData: SessionData
 	): Promise<Record<string, any>> {
-		
-		const formLink = sessionData["personal_loan_information_form"];
+		const formLink = sessionData["loan_agreement_esign_form"];
 		if (!formLink) {
 			throw new Error("Form link not found in session data");
 		}
@@ -49,16 +48,15 @@ export class MockPersonalLoanInformationFormClass extends MockAction {
 		const formData = formRaw.data;
 		return {
 			...sessionData,
-			personal_loan_information_form: resolveFormActions(formLink, formData),
+			loan_agreement_esign_form: resolveFormActions(formLink, formData),
 		};
-
 	}
 
 	meetRequirements(sessionData: SessionData): Promise<MockOutput> {
 		return Promise.resolve({ valid: true });
 	}
 	get saveData(): saveType {
-		return { "save-data": { personal_loan_information_form: "personal_loan_information_form" } };
+		return { "save-data": { loan_agreement_esign_form: "loan_agreement_esign_form" } };
 	}
 	get defaultData(): any {
 		return {};

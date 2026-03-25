@@ -26,7 +26,7 @@ export const defaultSessionData = (domain: string = defaultDomain) => {
 			sessionDataPath = path.join(__dirname, `./${domain}/session-data.yaml`);
 			break;
 	}
-	
+
 	return yaml.load(readFileSync(sessionDataPath, "utf8")) as { session_data: MockSessionData };
 };
 
@@ -42,7 +42,7 @@ export async function generateMockResponse(
 		console.log("generateMockResponse - domain:", domain);
 		console.log("generateMockResponse - defaultDomain:", defaultDomain);
 		console.log("generateMockResponse - sessionData", sessionData);
-		
+
 		let response = await createFIS12MockResponse(
 			session_id,
 			sessionData,
@@ -58,14 +58,14 @@ export async function generateMockResponse(
 }
 
 export function getMockActionObject(actionId: string, domain: string = defaultDomain) {
-		return getFIS12MockAction(actionId);
-		}
+	return getFIS12MockAction(actionId);
+}
 
 export function getActionData(code: number, domain: string = defaultDomain) {
 	if (!actionConfig) {
 		throw new Error(`Domain ${domain} not supported`);
 	}
-	
+
 	const actionData = actionConfig.codes.find(
 		(action: any) => action.code === code
 	);
@@ -77,7 +77,7 @@ export function getActionData(code: number, domain: string = defaultDomain) {
 
 export function getSaveDataContent(version: string, action: string, domain: string = defaultDomain) {
 	let actionFolderPath: string;
-	
+
 	switch (domain) {
 		case "ONDC:FIS14":
 		case "ONDC:TRV14":
@@ -95,7 +95,7 @@ export function getSaveDataContent(version: string, action: string, domain: stri
 			);
 			break;
 	}
-	
+
 	const saveDataFilePath = path.join(actionFolderPath, "save-data.yaml");
 	const fileContent = readFileSync(saveDataFilePath, "utf8");
 	const cont = yaml.load(fileContent) as any;
@@ -104,5 +104,5 @@ export function getSaveDataContent(version: string, action: string, domain: stri
 }
 
 export function getUiMetaKeys(): (keyof MockSessionData)[] {
-	return ["verification_status", "Ekyc_details_form","payment_url_form","consumer_information_form", "personal_loan_information_form","loan_amount_adjustment_form", "manadate_details_form"];
+	return ["verification_status", "Ekyc_details_form", "payment_url_form", "consumer_information_form", "personal_loan_information_form", "loan_amount_adjustment_form", "manadate_details_form", "loan_agreement_esign_form","credit_card_information_form","multiple_bureau_information_form", "Ekyc_details_form_cc"];
 }

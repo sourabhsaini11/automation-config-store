@@ -1,10 +1,13 @@
 save-data:
   transaction_id: "$.context.transaction_id"
   message_id: "$.context.message_id"
+  verification_status: "$..form.url"
+  form_id: "$.message.order.items[0].xinput.form.id"
+  quote_id: "$.message.order.quote.id"
+
   order: "$.message.order"
   selected_items: "$.message.order.items[*]"
   selected_fulfillments: "$.message.order.fulfillments[*]"
   selected_provider: "$.message.order.provider"
   billing: "$.message.order.billing"
   tags: "$.message.order.tags[*]"
-  verification_status: "$..form.url" 

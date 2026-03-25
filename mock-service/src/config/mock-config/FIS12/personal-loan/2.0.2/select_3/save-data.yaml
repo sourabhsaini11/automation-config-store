@@ -3,8 +3,6 @@ save-data:
   message_id: "$.context.message_id"
   selected_location_id: "$.message.order.items[0].location_ids[0]"
   selected_items: "$.message.order.items[*]"
-  item: "$.message.order.items[0]"
-  selected_provider: "$.message.order.provider"
   last_select_status: "$.message.order.items[0].xinput.form_response.status"
   selected_items_xinput: "$.message.order.items[*].xinput"
-  form_id: "$.message.order.items[0].xinput.form.id"
+

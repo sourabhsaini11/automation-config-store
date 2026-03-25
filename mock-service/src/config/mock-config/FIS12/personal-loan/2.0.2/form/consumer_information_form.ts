@@ -4,12 +4,12 @@ import { SessionData } from "../../../session-types";
 import { validateFormHtml } from "./validate-form";
 import { resolveFormActions } from "./resolve-action";
 
-export class MockVerificationStatusEmandate extends MockAction {
+export class MockConsumerInformationFormPl202Class extends MockAction {
 	name(): string {
-		return "verification_status";
+		return "consumer_information_form";
 	}
 	get description(): string {
-		return "verification_status";
+		return "Mock for consumer_information_form";
 	}
 	generator(existingPayload: any, sessionData: SessionData): Promise<any> {
 		throw new Error("Method not implemented.");
@@ -24,7 +24,7 @@ export class MockVerificationStatusEmandate extends MockAction {
 				message: "Session data is required for validation",
 			};
 		}
-		const formLink = sessionData["verification_status"];
+		const formLink = sessionData["consumer_information_form"];
 		if (!formLink) {
 			return { valid: false, message: "Form link not found in session data" };
 		}
@@ -40,7 +40,8 @@ export class MockVerificationStatusEmandate extends MockAction {
 	override async __forceSaveData(
 		sessionData: SessionData
 	): Promise<Record<string, any>> {
-		const formLink = sessionData["verification_status"];
+		
+		const formLink = sessionData["consumer_information_form"];
 		if (!formLink) {
 			throw new Error("Form link not found in session data");
 		}
@@ -48,7 +49,7 @@ export class MockVerificationStatusEmandate extends MockAction {
 		const formData = formRaw.data;
 		return {
 			...sessionData,
-			verification_status: resolveFormActions(formLink, formData),
+			consumer_information_form: resolveFormActions(formLink, formData),
 		};
 	}
 
@@ -56,7 +57,7 @@ export class MockVerificationStatusEmandate extends MockAction {
 		return Promise.resolve({ valid: true });
 	}
 	get saveData(): saveType {
-		return { "save-data": { verification_status: "verification_status" } };
+		return { "save-data": { consumer_information_form: "consumer_information_form" } };
 	}
 	get defaultData(): any {
 		return {};

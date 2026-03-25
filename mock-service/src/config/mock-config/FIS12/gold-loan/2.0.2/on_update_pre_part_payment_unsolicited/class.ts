@@ -5,7 +5,7 @@ import { MockAction, MockOutput, saveType } from "../../../classes/mock-action";
 import { SessionData } from "../../../session-types";
 import { onUpdatePrePartPaymentUnsolicitedDefaultGenerator } from "./generator";
 
-export class MockOnUpdatePrePartPaymentUnsolicitedClassGD extends MockAction {
+export class MockOnUpdatePrePartPaymentUnsolicitedClass extends MockAction {
     get saveData(): saveType {
         // Action-specific save-data
         return yaml.load(

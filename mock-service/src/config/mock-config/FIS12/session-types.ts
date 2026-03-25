@@ -29,7 +29,7 @@ export interface SessionData {
 	error_message: string | undefined;
 	ref_id: string | undefined;
 	ttl: string | undefined;
-	usecaseId: string | undefined;
+	usecaseId : string | undefined;
 	stops: any[] | undefined;
 	update_stop: any[] | undefined;
 	update_quote: any[] | undefined;
@@ -58,7 +58,20 @@ export interface SessionData {
 	updated_at: string | undefined;
 	order_status: string | undefined;
 	domain: string | undefined;
-	igm_action: string,
+	// Gold Loan select/on_select state
+	last_select_status?: string;
+	selected_location_id?: string;
+	flow_variant?: string; // WITH_AA | WITHOUT_AA | other
+	stage?: string; // optional transient stage marker
+	consumer_information_form?: string;
+	payment_url_form?: string;
+	verification_status?: string;
+	Ekyc_details_form?: string;
+	manadate_details_form?: string;
+	loan_amount_adjustment_form?: string;
+	personal_loan_information_form?: string;
+	latest_issue_payload: any
+	igm_action: any
 	issue_action: any
 	issue_level: any
 	issue_resolution: any
@@ -66,24 +79,6 @@ export interface SessionData {
 	issue_actions: any
 	issue_created_at: any
 	on_issue_actions: any
-	rating: any
-	// Gold Loan select/on_select state
-	last_select_status?: string;
-	selected_location_id?: string;
-	flow_variant?: string; // WITH_AA | WITHOUT_AA | other
-	stage?: string; // optional transient stage marker
-	consumer_information_form?: string;
-	consumer_information_form_cc?: string;
-	payment_url_form?: string;
-	verification_status?: string;
-	Ekyc_details_form?: string;
-	loan_agreement_esign_form?: string;
-	manadate_details_form?: string;
-	loan_amount_adjustment_form?: string;
-	personal_loan_information_form?: string;
-	credit_card_information_form?: string;
-	multiple_bureau_information_form?: string;
-	Ekyc_details_form_cc?: string;
 }
 
 export type BecknContext = {
@@ -109,7 +104,6 @@ export type BecknContext = {
 };
 
 export interface Input {
-	rating?: string;
 	category?: string;
 	paymentType?: string;
 	city_code?: string;
@@ -130,4 +124,6 @@ export interface Input {
 	missed_emi_date?: string;
 	part_payment_amount?: number;
 	payment_date?: string;
+	resolution_accept: any
+    rating: string
 }

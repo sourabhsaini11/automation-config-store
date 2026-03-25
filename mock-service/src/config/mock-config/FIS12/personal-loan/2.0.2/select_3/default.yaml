@@ -1,12 +1,11 @@
 order:
   provider:
-    id: PROVIDER_ID
-
+    id: "PROVIDER_ID"
   items:
-    - id: ITEM_ID_PERSONAL_LOAN_2
+    - id: "ITEM_ID_PERSONAL_LOAN_2"
       xinput:
         form:
-          id: FO2
+          id: "FO2"
         form_response:
-          status: SUCCESS
-          submission_id: F02_SUBMISSION_ID
+          status: "SUCCESS"
+          submission_id: "F02_SUBMISSION_ID"

@@ -4,7 +4,3 @@ save-data:
   order_id: "$.message.order.id"
   provider_id: "$.message.order.provider.id"
   loan_status: "$.message.order.fulfillments[0].state.descriptor.code"
-  quote_id: "$.message.order.quote.id"
-  quote: "$.message.order.quote"
-  form_id: "$.message.order.items[0].xinput.form.id"
-  payments: "$.message.order.payments[*]"

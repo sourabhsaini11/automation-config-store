@@ -17,9 +17,10 @@ order:
       type: ON_ORDER
       status: NOT-PAID
       params:
-        bank_code: "XXXXXXXX"
-        bank_account_number: "xxxxxxxxxxxxxx"
-        virtual_payment_address: "9988199772@okicic"
+        bank_code: XXXXXXXXX
+        bank_account_number: xxxxxxxxxxxxxx
+        virtual_payment_address: 9988199772@okicic
+
       tags:
         - descriptor:
             code: BUYER_FINDER_FEES
@@ -27,7 +28,7 @@ order:
           list:
             - descriptor:
                 code: BUYER_FINDER_FEES_TYPE
-              value: "percent-annualized"
+              value: percent-annualized
             - descriptor:
                 code: BUYER_FINDER_FEES_PERCENTAGE
               value: "1"
@@ -41,13 +42,13 @@ order:
               value: "1159"
             - descriptor:
                 code: SETTLEMENT_TYPE
-              value: "neft"
+              value: neft
             - descriptor:
                 code: DELAY_INTEREST
               value: "5"
             - descriptor:
                 code: STATIC_TERMS
-              value: "https://bap.credit.becknprotocol.io/personal-banking/loans/personal-loan"
+              value: https://bap.credit.becknprotocol.io/personal-banking/loans/personal-loan
             - descriptor:
                 code: OFFLINE_CONTRACT
               value: "true"

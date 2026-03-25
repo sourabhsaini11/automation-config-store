@@ -162,26 +162,67 @@ export function validateFormHtml(html: string): ValidationResult {
 		warnings.push("No visible submit control found.");
 	}
 
-	// --- Required business fields ---
-	// Passport: any field whose name or id contains "passport"
-	// const hasPassport = fields.some((f) =>
-	// 	(f.name + " " + (f.id ?? "")).toLowerCase().includes("passport")
-	// );
+	// --- Required business fields for consumer information form ---
+	// PAN: any field whose name or id contains "pan"
+	const hasPan = fields.some((f) =>
+		(f.name + " " + (f.id ?? "")).toLowerCase().includes("pan")
+	);
+
+	// Full Name: any field whose name or id contains "fullname" or "full_name"
+	const hasFullName = fields.some((f) => {
+		const key = (f.name + " " + (f.id ?? "")).toLowerCase();
+		return key.includes("fullname") || key.includes("full_name");
+	});
+
+	// Gender: any field whose name or id contains "gender"
+	const hasGender = fields.some((f) =>
+		(f.name + " " + (f.id ?? "")).toLowerCase().includes("gender")
+	);
 
 	// Date of birth: a date input OR name/id contains "dob" or "dateofbirth"
-	// const hasDob =
-	// 	fields.some((f) => f.type === "date") ||
-	// 	fields.some((f) => {
-	// 		const key = (f.name + " " + (f.id ?? "")).toLowerCase();
-	// 		return (
-	// 			key.includes("dob") ||
-	// 			key.includes("dateofbirth") ||
-	// 			key.includes("date_of_birth")
-	// 		);
-	// 	});
+	const hasDob =
+		fields.some((f) => f.type === "date") ||
+		fields.some((f) => {
+			const key = (f.name + " " + (f.id ?? "")).toLowerCase();
+			return (
+				key.includes("dob") ||
+				key.includes("dateofbirth") ||
+				key.includes("date_of_birth")
+			);
+		});
 
-	// if (!hasPassport) errors.push('Required "passport" field not found.');
-	// if (!hasDob) errors.push('Required "date of birth" field not found.');
+	// Contact Number: any field whose name or id contains "contact" or "phone"
+	const hasContactNumber = fields.some((f) => {
+		const key = (f.name + " " + (f.id ?? "")).toLowerCase();
+		return key.includes("contact") || key.includes("phone") || key.includes("mobile");
+	});
+
+	// Pin Code: any field whose name or id contains "pincode" or "pin_code"
+	const hasPincode = fields.some((f) => {
+		const key = (f.name + " " + (f.id ?? "")).toLowerCase();
+		return key.includes("pincode") || key.includes("pin_code") || key.includes("postal");
+	});
+
+	// Jewellery: any field whose name or id contains "jewellery" or "jewelry"
+	const hasJewellery = fields.some((f) => {
+		const key = (f.name + " " + (f.id ?? "")).toLowerCase();
+		return key.includes("jewellery") || key.includes("jewelry") || key.includes("gold");
+	});
+
+	// Purity: any field whose name or id contains "purity"
+	const hasPurity = fields.some((f) =>
+		(f.name + " " + (f.id ?? "")).toLowerCase().includes("purity")
+	);
+
+	// Validate all required fields
+	if (!hasPan) errors.push('Required "PAN" field not found.');
+	if (!hasFullName) errors.push('Required "Full Name" field not found.');
+	if (!hasGender) errors.push('Required "Gender" field not found.');
+	if (!hasDob) errors.push('Required "Date of Birth" field not found.');
+	if (!hasContactNumber) errors.push('Required "Contact Number" field not found.');
+	if (!hasPincode) errors.push('Required "Pin Code" field not found.');
+	if (!hasJewellery) errors.push('Required "Jewellery" field not found.');
+	if (!hasPurity) errors.push('Required "Purity" field not found.');
 
 	// Extra sanity: flag suspicious hidden fields (heuristic)
 	const suspiciousHiddenNames = ["redirect", "callback", "token", "url"];

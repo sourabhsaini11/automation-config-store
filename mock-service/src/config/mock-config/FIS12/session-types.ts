@@ -67,6 +67,8 @@ export interface SessionData {
 	issue_created_at: any
 	on_issue_actions: any
 	rating: any
+	latest_issue_payload: any
+	resolution_accept?: any
 	// Gold Loan select/on_select state
 	last_select_status?: string;
 	selected_location_id?: string;
@@ -117,6 +119,7 @@ export interface Input {
 	end_gps?: string;
 	start_code?: string;
 	end_code?: string;
+	resolution_accept?: any;
 	feature_discovery?: string[];
 	fulfillRequest?: string;
 	retailCategory?: string;

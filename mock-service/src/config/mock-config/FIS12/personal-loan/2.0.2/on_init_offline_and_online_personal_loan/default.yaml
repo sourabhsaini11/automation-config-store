@@ -127,7 +127,7 @@ order:
             - descriptor:
                 code: "NUMBER_OF_INSTALLMENTS_OF_REPAYMENT"
                 name: "Number of installments"
-              value: "45"
+              value: "5"
             - descriptor:
                 code: "TNC_LINK"
                 name: "Terms & Conditions"
@@ -135,7 +135,7 @@ order:
             - descriptor:
                 code: "COOL_OFF_PERIOD"
                 name: "Cooling off period"
-              value: "PT30D"
+              value: "P30D"
             - descriptor:
                 code: "INSTALLMENT_AMOUNT"
                 name: "Installment amount"
@@ -167,7 +167,7 @@ order:
         required: true
 
   quote:
-    id: "LOAN_LEAD_ID_OR_SIMILAR"
+    id: "bcaa0931-47d7-42c9-aa83-3fb2b5048551"
     price:
       currency: "INR"
       value: "232800"

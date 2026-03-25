@@ -5,7 +5,7 @@ import { MockAction, MockOutput, saveType } from "../../../classes/mock-action";
 import { SessionData } from "../../../session-types";
 import { onUpdateForeclosureDefaultGenerator } from "./generator";
 
-export class MockOnUpdateForeclosureClass extends MockAction {
+export class MockOnUpdateForeclosureClassGD extends MockAction {
   get saveData(): saveType {
     // Action-specific save-data
     return yaml.load(

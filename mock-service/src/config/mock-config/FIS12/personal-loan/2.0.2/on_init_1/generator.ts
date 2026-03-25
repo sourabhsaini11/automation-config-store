@@ -1,15 +1,9 @@
 /**
- * On Init Generator for FIS12 Personal Loan
- *
- * Logic:
- * 1. Update context with current timestamp
- * 2. Update transaction_id and message_id from session data (carry-forward mapping)
- * 3. Update provider.id and item.id from session data (carry-forward mapping)
- * 4. Update customer name in fulfillments from session data
- * 5. Update form URL for manadate_details_form
+ * On Init_1 Generator for FIS12 Personal Loan
  */
+import { randomUUID } from 'crypto';
+import { injectSettlementAmount } from '../utils/settlement-utils';
 
-import { injectSettlementAmount } from '../settlement-utils';
 
 export async function onInitDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("sessionData for on_init", sessionData);
@@ -74,16 +68,48 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
   console.log("  - Has xinput.form?", !!existingPayload.message?.order?.items?.[0]?.xinput?.form);
 
   if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
+    const uniqueFormId = `manadate_details_${randomUUID()}`;
+    existingPayload.message.order.items[0].xinput.form.id = uniqueFormId;
     const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/manadate_details_form?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
-    console.log("✅ URL for manadate_details_form in on_init_1:", url);
+    console.log("✅ [on_init_1] form_id:", uniqueFormId, "URL:", url);
     existingPayload.message.order.items[0].xinput.form.url = url;
-    console.log("✅ Form URL successfully set in payload");
   } else {
-    console.error("❌ FAILED: Payload structure doesn't match expected path for form URL!");
-    console.log("Actual payload structure:", JSON.stringify(existingPayload.message?.order, null, 2));
+    console.error("❌ [on_init_1] FAILED: no xinput.form in payload");
   }
 
-  // Dynamically inject SETTLEMENT_AMOUNT derived from BAP_TERMS fee data
+  // Update quote.id from session data
+  if (existingPayload.message?.order?.quote) {
+    if (sessionData.quote_id) {
+      existingPayload.message.order.quote.id = sessionData.quote_id;
+    } else if (sessionData.order?.quote?.id) {
+      existingPayload.message.order.quote.id = sessionData.order.quote.id;
+    }
+  }
+  // ========== GENERATE UNIQUE PAYMENT IDs (first time in flow) ==========
+  // on_init_1 is where the payment plan is first established.
+  // Generate unique IDs now so they propagate consistently through on_init_2, on_init_3,
+  // confirm, on_confirm, on_status, and all on_update flows.
+  if (Array.isArray(existingPayload.message?.order?.payments)) {
+    let installCounter = 1;
+    existingPayload.message.order.payments.forEach((payment: any) => {
+      // Only generate if it has a static placeholder ID
+      if (!payment.id || payment.id === 'PAYMENT_ID_PERSONAL_LOAN' || payment.id === 'PAYMENT_ID_GOLD_LOAN' || !payment.id.includes('-')) {
+        if (payment.type === 'POST_FULFILLMENT' && payment.time?.label === 'INSTALLMENT') {
+          payment.id = `installment_${installCounter}_${randomUUID()}`;
+          console.log(`[on_init_1] Generated installment payment ID: ${payment.id}`);
+          installCounter++;
+        } else if (payment.type === 'ON_ORDER') {
+          payment.id = `on_order_${randomUUID()}`;
+          console.log(`[on_init_1] Generated ON_ORDER payment ID: ${payment.id}`);
+        } else if (payment.type === 'POST_FULFILLMENT') {
+          payment.id = `payment_${randomUUID()}`;
+          console.log(`[on_init_1] Generated payment ID: ${payment.id}`);
+        }
+      }
+    });
+    console.log(`[on_init_1] ✅ Payment IDs generated for ${existingPayload.message.order.payments.length} payments`);
+  }
+
   injectSettlementAmount(existingPayload, sessionData);
 
   return existingPayload;

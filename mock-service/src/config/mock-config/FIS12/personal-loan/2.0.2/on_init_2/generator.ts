@@ -1,15 +1,9 @@
 /**
- * On Init Generator for FIS12 Personal Loan
- *
- * Logic:
- * 1. Update context with current timestamp
- * 2. Update transaction_id and message_id from session data (carry-forward mapping)
- * 3. Update provider.id and item.id from session data (carry-forward mapping)
- * 4. Update customer name in fulfillments from session data
- * 5. Update form URL for kyc_verification_status
+ * On Init_2 Generator for FIS12 Personal Loan
  */
+import { randomUUID } from 'crypto';
+import { injectSettlementAmount } from '../utils/settlement-utils';
 
-import { injectSettlementAmount } from '../settlement-utils';
 
 export async function onInitDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("sessionData for on_init", sessionData);
@@ -68,22 +62,48 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
   }
 
   // Update form URL for kyc_verification_status (preserve existing structure)
-  console.log("🔍 Checking payload structure for kyc_verification_status:");
+  console.log("🔍 Checking payload structure for verification_status_e_mandate:");
   console.log("  - Has items?", !!existingPayload.message?.order?.items);
   console.log("  - Has items[0]?", !!existingPayload.message?.order?.items?.[0]);
   console.log("  - Has xinput.form?", !!existingPayload.message?.order?.items?.[0]?.xinput?.form);
 
   if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
+    const uniqueFormId = `verification_status_${randomUUID()}`;
+    existingPayload.message.order.items[0].xinput.form.id = uniqueFormId;
     const url = `${process.env.FORM_SERVICE}/forms/${sessionData.domain}/verification_status?session_id=${sessionData.session_id}&flow_id=${sessionData.flow_id}&transaction_id=${existingPayload.context.transaction_id}`;
-    console.log("✅ URL for kyc_verification_status in on_init_2:", url);
+    console.log("✅ [on_init_2] form_id:", uniqueFormId, "URL:", url);
     existingPayload.message.order.items[0].xinput.form.url = url;
-    console.log("✅ Form URL successfully set in payload");
-  } else {
-    console.error("❌ FAILED: Payload structure doesn't match expected path for form URL!");
-    console.log("Actual payload structure:", JSON.stringify(existingPayload.message?.order, null, 2));
   }
 
-  // Dynamically inject SETTLEMENT_AMOUNT derived from BAP_TERMS fee data
+
+  // Update quote.id from session data
+  if (existingPayload.message?.order?.quote) {
+    if (sessionData.quote_id) {
+      existingPayload.message.order.quote.id = sessionData.quote_id;
+    } else if (sessionData.order?.quote?.id) {
+      existingPayload.message.order.quote.id = sessionData.order.quote.id;
+    }
+  }
+  // ========== CARRY FORWARD PAYMENT IDs FROM on_init_1 ==========
+  // on_init_1 generated unique IDs for installments + ON_ORDER payment.
+  // Stamp those session IDs onto this response's payments to keep them consistent.
+  const sessionPayments: any[] = sessionData.payments || sessionData.order?.payments || [];
+  if (Array.isArray(existingPayload.message?.order?.payments) && sessionPayments.length > 0) {
+    const sessionIdMap = new Map<string, string>();
+    sessionPayments.forEach((p: any) => {
+      if (p?.id && p.id.includes('-')) {
+        const key = `${p.type}::${p.time?.label || ''}`;
+        sessionIdMap.set(key, p.id);
+      }
+    });
+    existingPayload.message.order.payments.forEach((payment: any) => {
+      const key = `${payment.type}::${payment.time?.label || ''}`;
+      if (sessionIdMap.has(key) && (!payment.id || !payment.id.includes('-'))) {
+        payment.id = sessionIdMap.get(key)!;
+        console.log(`[on_init_2] Stamped session payment ID: ${payment.id}`);
+      }
+    });
+  }
   injectSettlementAmount(existingPayload, sessionData);
 
   return existingPayload;

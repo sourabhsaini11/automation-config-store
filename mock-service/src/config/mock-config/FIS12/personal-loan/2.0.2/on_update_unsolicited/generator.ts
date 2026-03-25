@@ -21,12 +21,17 @@ import {
   updateMissedEMIStatus,
   updatePrePartPaymentStatus
 } from '../generator-utils';
-import { injectSettlementAmount } from '../settlement-utils';
+import { injectSettlementAmount } from '../utils/settlement-utils';
 
 export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, sessionData: any) {
   try {
     console.log("=== On Update Unsolicited Generator Start ===");
     console.log("Session data keys:", Object.keys(sessionData || {}));
+
+    // Read payment status from payment_url_form submission (same pattern as Gold Loan)
+    const paymentStatus = sessionData?.form_data?.payment_url_form?.idType || 'PAID';
+    const paymentSubmissionId = sessionData?.form_data?.payment_url_form?.form_submission_id;
+    console.log('[on_update unsolicited PL] paymentStatus from form_data:', paymentStatus, 'submissionId:', paymentSubmissionId);
 
     // Validate required data
     if (!existingPayload) {
@@ -108,11 +113,18 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
         console.warn("⚠️ quote_id not found in session data (tried quote_id and order.quote.id)");
       }
 
-      // Map payment.id from session data if available
-      const paymentId = sessionData.payment_id || sessionData.order?.payments?.[0]?.id;
-      if (paymentId && order.payments?.[0]) {
-        order.payments[0].id = paymentId;
-        console.log("✓ Updated payment.id:", paymentId);
+      // Carry forward all payments from session (preserves installment IDs from on_init_1)
+      const savedPayments = sessionData.payments || sessionData.order?.payments;
+      if (Array.isArray(savedPayments) && savedPayments.length > 0) {
+        order.payments = savedPayments.map((p: any) => ({ ...p })); // clone to avoid mutation
+        console.log(`[on_update_unsolicited] ✅ Carried forward ${order.payments.length} payments from session`);
+      } else {
+        // Fallback: at minimum stamp payments[0].id from session if available
+        const paymentId = sessionData.payment_id || sessionData.order?.payments?.[0]?.id;
+        if (paymentId && order.payments?.[0]) {
+          order.payments[0].id = paymentId;
+          console.log('✓ Updated payment.id (fallback):', paymentId);
+        }
       }
     } else {
       console.warn("⚠️ existingPayload.message is missing");
@@ -138,6 +150,7 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
       firstPayment.params = firstPayment.params || {};
       firstPayment.params.amount = "46360"; // Matches INSTALLMENT_AMOUNT from on_confirm
       firstPayment.params.currency = "INR";
+      firstPayment.status = paymentStatus; // Dynamic: from payment_url_form submission
 
       // Set time range based on context timestamp
       const contextTimestamp = existingPayload.context?.timestamp || new Date().toISOString();
@@ -165,6 +178,7 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
       firstPayment.params = firstPayment.params || {};
       firstPayment.params.amount = foreclosureAmount; // Outstanding principal + interest + charges
       firstPayment.params.currency = "INR";
+      firstPayment.status = paymentStatus; // Dynamic: from payment_url_form submission
       const contextTimestamp = existingPayload.context?.timestamp || new Date().toISOString();
 
       // Mark unpaid installments as DEFERRED (already paid ones stay PAID)
@@ -191,13 +205,12 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
       firstPayment.params = firstPayment.params || {};
       firstPayment.params.amount = "50860"; // 46360 (installment) + 4500 (pre payment charge)
       firstPayment.params.currency = "INR";
+      firstPayment.status = paymentStatus; // Dynamic: from payment_url_form submission
 
       // Update payment statuses: some PAID, some DEFERRED
       const contextTimestamp = existingPayload.context?.timestamp || new Date().toISOString();
       updatePrePartPaymentStatus(orderRef.payments, contextTimestamp);
 
-      // Remove time range for pre part payment
-      if (firstPayment.time.range) delete firstPayment.time.range;
 
       // Set payment URL
       const refId = sessionData.message_id || orderRef.id || 'b5487595-42c3-4e20-bd43-ae21400f60f0';
@@ -205,6 +218,14 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
     }
 
     console.log("=== On Update Unsolicited Generator Complete ===");
+
+    // Set created_at and updated_at to current timestamp
+    if (existingPayload.message?.order) {
+      const now = new Date().toISOString();
+      existingPayload.message.order.created_at = sessionData.order.created_at;
+      existingPayload.message.order.updated_at = now;
+      console.log("Set order.created_at and order.updated_at to:", now);
+    }
 
     // Dynamically inject SETTLEMENT_AMOUNT derived from BAP_TERMS fee data
     injectSettlementAmount(existingPayload, sessionData);

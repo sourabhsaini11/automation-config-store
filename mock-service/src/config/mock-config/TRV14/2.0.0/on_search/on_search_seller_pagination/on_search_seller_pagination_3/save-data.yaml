@@ -2,7 +2,9 @@ save-data:
   transaction_id: "$.context.transaction_id"
   message_id: "$.context.message_id"
   bpp_id: "$.context.bpp_id"
-
+  bap_id: "$.context.bap_id"
+  bpp_uri: "$.context.bpp_uri"
+  bap_url: "$.context.bap_url"
   items: "$.message.catalog.providers[*].items[*]"
   item: "$.message.catalog.providers[0].items[0]"
   fulfillments: "$.message.catalog.providers[0].fulfillments[*]"

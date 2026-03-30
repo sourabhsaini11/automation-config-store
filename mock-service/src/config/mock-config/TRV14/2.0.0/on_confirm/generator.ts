@@ -37,6 +37,7 @@ export async function onConfirmGenerator(existingPayload: any, sessionData: any)
             if (stop.type === "START") {
               // Calculate +5 days from current timestamp
               const currentTime = new Date(stop.time?.timestamp || new Date());
+              stop.time.timestamp = currentTime.toISOString();
               const validTo = new Date(currentTime.getTime() + (5 * 24 * 60 * 60 * 1000)); // +5 days
 
               stop.authorization = {

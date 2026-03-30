@@ -102612,7 +102612,7 @@ x-validations:
           - _NAME_: ITEMS_FULFILLMENT_ID
             attr: "$.message.order.items[*].fulfillment_id"
             reg: ['^[0-9a-zA-Z/-_]{1,36}$']
-            _RETURN_: attr follow regex reg
+            _RETURN_: attr are present
           - _NAME_: ITEMS_FULFILLMENT_ID_MAP_SPF
             attr: "$.message.order.items[*].fulfillment_id"
             enum_var_id: "$.message.order.fulfillments[*].id"

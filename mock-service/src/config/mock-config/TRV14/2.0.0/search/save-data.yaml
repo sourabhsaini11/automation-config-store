@@ -7,8 +7,6 @@ save-data:
   end_time: "$.message.intent.fulfillment.stops[?(@.type=='START')].time.range.end"
   city_code: "$.context.location.city.code"
   vehicle_category: "$.message.intent.fulfillment.vehicle.category"
-  bpp_id: "$.context.bpp_id"
   bap_id: "$.context.bap_id"
-  bpp_uri: "$.context.bpp_uri"
   bap_url: "$.context.bap_url"
   

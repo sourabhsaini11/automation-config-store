@@ -8,7 +8,7 @@ import { MockOnInitClass } from "./2.0.0/on_init/class";
 import { MockConfirmClass } from "./2.0.0/confirm/class";
 import { MockOnConfirmDefaultClass } from "./2.0.0/on_confirm/class";
 import { MockStatusDefaultClass } from "./2.0.0/status/class";
-import { MockOnStatusDefaultClass } from "./2.0.0/on_status/class";
+import { MockOnStatusDefaultClass, MockUnsoliciatedOnStatusDefaultClass } from "./2.0.0/on_status/class";
 import { MockCancelClass } from "./2.0.0/cancel/class";
 import { MockOnCancelDefaultClass } from "./2.0.0/on_cancel/class";
 // on_search
@@ -113,6 +113,7 @@ const registry = {
 	// status / on_status
 	status: MockStatusDefaultClass,
 	on_status: MockOnStatusDefaultClass,
+	on_status_unsoliciated: MockUnsoliciatedOnStatusDefaultClass,
 	status_technical_cancellation: MockStatusTechnicalCancellationClass,
 	on_status_technical_cancellation: MockOnStatusTechnicalCancellationClass,
 	status_user_cancellation: MockStatusUserCancellationClass,

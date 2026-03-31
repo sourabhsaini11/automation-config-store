@@ -52,6 +52,7 @@ import { MockOnUpdateBuyerPaymentClass } from "./mutual-funds/2.1.0/on_update_bu
 import { MockSelectRedemptionClass } from "./mutual-funds/2.1.0/select_redemption/class";
 import { MockConfirmRedemptionClass } from "./mutual-funds/2.1.0/confirm_redemption/class";
 import { MockOnUpdatePaymentSuccessUnsolicitedClass } from "./mutual-funds/2.1.0/on_update_unsolicited_success/class";
+import { MockOnUpdateUnsolicitedFailedClass } from "./mutual-funds/2.1.0/on_update_unsolicited_failed/class";
 
 type Ctor<T> = new () => T;
 
@@ -104,7 +105,7 @@ const registry = {
     on_status_unsolicited: MockOnStatusUnsolicitedClass,
     on_status_esign_unsolicited: MockOnStatusUnsolicitedClass,
     on_update_unsolicited: MockOnUpdateUnsolicitedClass,
-    on_update_unsolicited_failed: MockOnUpdateUnsolicitedClass,
+    on_update_unsolicited_failed: MockOnUpdateUnsolicitedFailedClass,
     // forms
     investor_details_form: MockInvestorDetailsFormClass,
     kyc_details_form: MockKycDetailFormClass,

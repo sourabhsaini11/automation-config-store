@@ -4,7 +4,7 @@ import path from "path";
 import { MockAction, saveType } from "../../../../FIS14/classes/mock-action";
 import { on_update_unsolicitedDefaultGenerator } from "./generator";
 
-export class MockOnUpdateUnsolicitedClass extends MockAction {
+export class MockOnUpdateUnsolicitedFailedClass extends MockAction {
   get saveData(): saveType {
     return yaml.load(
       readFileSync(path.resolve(__dirname, "./save-data.yaml"), "utf8")

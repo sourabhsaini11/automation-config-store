@@ -1,6 +1,7 @@
 order:
   id: mfpp_213adf123af
-  status: ACCEPTED
+  status: COMPLETED
+
   provider:
     id: sellerapp_id
     descriptor:
@@ -82,8 +83,8 @@ order:
           phone: '9916599123'
       state:
         descriptor:
-          name: Pending
-          code: PENDING
+          name: Successful
+          code: SUCCESSFUL
       agent:
         person:
           id: 'euin:E52432'
@@ -102,7 +103,7 @@ order:
             - descriptor:
                 name: Folio Number
                 code: FOLIO_NUMBER
-              value: 123213432/32
+              value: 1562162434/45
             - descriptor:
                 name: Holding Pattern
                 code: HOLDING_PATTERN

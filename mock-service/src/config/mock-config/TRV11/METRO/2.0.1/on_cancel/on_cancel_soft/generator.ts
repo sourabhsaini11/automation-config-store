@@ -109,6 +109,8 @@ export async function onCancelSoftGenerator(
   existingPayload: any,
   sessionData: any
 ) {
+  const now = new Date().toISOString();
+
   if (sessionData.updated_payments.length > 0) {
     existingPayload.message.order.payments = modifyPayments(
       sessionData.updated_payments
@@ -145,6 +147,7 @@ export async function onCancelSoftGenerator(
   existingPayload.message.order.status = "SOFT_CANCEL";
   existingPayload.message.order.cancellation = {
     cancelled_by: "CONSUMER",
+    time: now,
     reason: {
       descriptor: {
         code: sessionData.cancellation_reason_id,
@@ -154,7 +157,6 @@ export async function onCancelSoftGenerator(
   if (sessionData.provider) {
     existingPayload.message.order.provider = sessionData.provider;
   }
-  const now = new Date().toISOString();
   existingPayload.message.order.created_at = sessionData.created_at;
   existingPayload.message.order.updated_at = now;
   return existingPayload;

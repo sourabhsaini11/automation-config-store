@@ -103713,6 +103713,7 @@ x-validations:
           - _NAME_: FULFILLMENTS_ID
             attr: "$.message.order.fulfillments[*].id"
             reg: ['^[0-9a-zA-Z\_\-]{1,36}$']
+            _CONTINUE_: "!(attr are present)"
             _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_TYPE
             attr: "$.message.order.fulfillments[*].type"
@@ -103755,6 +103756,7 @@ x-validations:
           _RETURN_:  
           - _NAME_: FULFILLMENTS_ID
             attr: "$.message.order.fulfillments[*].id"
+            _CONTINUE_: "!(attr are present)"
             reg: ['^[0-9a-zA-Z\_\-]{1,36}$']
             _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_TYPE

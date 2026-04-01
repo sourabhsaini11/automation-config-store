@@ -79722,9 +79722,9 @@ x-validations:
               - IP_ADDRESS
               - FOLIO
             _RETURN_: attr all in enumList
-          - _NAME_: REQUIRED_FULFILLMENT_CUSTOMER_CONTACT_PHONE
-            attr: $.message.order.fulfillments[*].customer.contact.phone
-            _RETURN_: attr are present
+          # - _NAME_: REQUIRED_FULFILLMENT_CUSTOMER_CONTACT_PHONE
+          #   attr: $.message.order.fulfillments[*].customer.contact.phone
+          #   _RETURN_: attr are present
           - _NAME_: REQUIRED_FULFILLMENT_AGENT
             attr: $.message.order.fulfillments[*].agent.person.id
             _RETURN_: attr are present

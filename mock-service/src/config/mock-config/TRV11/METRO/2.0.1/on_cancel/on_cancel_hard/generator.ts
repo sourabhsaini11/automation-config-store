@@ -134,51 +134,51 @@ export async function onCancelHardGenerator(
     existingPayload.message.order.quote = sessionData.quote;
   }
 
-  if (sessionData.flow_id === "TECHNICAL_CANCELLATION_FLOW") {
-  const originalBreakup =
-    existingPayload?.message?.order?.quote?.breakup ?? [];
+  if (sessionData.flow_id === "TECHNICAL_CANCELLATION_FLOW" || sessionData.flow_id === "TECHNICAL_CANCELLATION_FLOW (W/O Select)") {
+    const originalBreakup =
+      existingPayload?.message?.order?.quote?.breakup ?? [];
 
-  const breakup = [
-    ...originalBreakup.flatMap((breakupItem: any) => [
-      breakupItem,
-      {
-        ...breakupItem,
-        title: "REFUND",
-        item: {
-          ...breakupItem.item,
+    const breakup = [
+      ...originalBreakup.flatMap((breakupItem: any) => [
+        breakupItem,
+        {
+          ...breakupItem,
+          title: "REFUND",
+          item: {
+            ...breakupItem.item,
+            price: {
+              ...breakupItem.item.price,
+              value: `-${breakupItem.item.price.value}`,
+            },
+          },
           price: {
-            ...breakupItem.item.price,
-            value: `-${breakupItem.item.price.value}`,
+            ...breakupItem.price,
+            value: `-${breakupItem.price.value}`,
           },
         },
+      ]),
+      {
+        title: "CANCELLATION_CHARGES",
         price: {
-          ...breakupItem.price,
-          value: `-${breakupItem.price.value}`,
+          currency: "INR",
+          value: "0",
         },
       },
-    ]),
-    {
-      title: "CANCELLATION_CHARGES",
+    ];
+
+    const totalPrice = breakup.reduce(
+      (sum: number, item: any) => sum + Number(item.price?.value || 0),
+      0
+    );
+
+    existingPayload.message.order.quote = {
       price: {
         currency: "INR",
-        value: "0",
+        value: totalPrice.toString(),
       },
-    },
-  ];
-
-  const totalPrice = breakup.reduce(
-    (sum: number, item: any) => sum + Number(item.price?.value || 0),
-    0
-  );
-
-  existingPayload.message.order.quote = {
-    price: {
-      currency: "INR",
-      value: totalPrice.toString(),
-    },
-    breakup,
-  };
-}
+      breakup,
+    };
+  }
 
   existingPayload.message.order.cancellation = {
     cancelled_by: "CONSUMER",

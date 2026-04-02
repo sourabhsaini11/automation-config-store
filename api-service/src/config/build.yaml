@@ -31060,6 +31060,8 @@ x-validations:
                       - SEAT
                       - NON_STOP
                       - CONNECT
+                      - ADULT_TICKET
+                      - CHILD_TICKET
                     _CONTINUE_: '!(attr are present)'  
                     _RETURN_: attr any in enumList
                   - _NAME_: ENUM_FULFILLMENT_VEHICLE_CATEGORIES
@@ -33051,24 +33053,22 @@ x-validations:
           - *REQUIRED_ITEM_QUANTITY
           - *REQUIRED_ITEM_FULFILLMENT_IDS
           - *REQUIRED_ITEM_CATEGORY_ID
-      - *SELECTED_PROVIDER
-      - *ON_CONFIRM_FULFILLMENTS
-      - *ENUM_FULFILLMENTS
       - _NAME_: BUS_VALIDATION
         _SCOPE_: $.message.order.fulfillments[*].vehicle.category[?(@=='BUS')]
-        _RETURN_:
+        _RETURN_:    
+          - *SELECTED_PROVIDER
+          - *ON_CONFIRM_FULFILLMENTS
+          - *ENUM_FULFILLMENTS
           - *REGEX_FULFILLMENT_STOPS
-   
-
-      - *ON_INIT_CANCELLATION_TERMS
-      - *ON_INIT_QUOTE
-      - *ON_CONFIRM_PAYMENTS
-      - _NAME_: ON_UPDATE_TAGS
-        action:
-          - on_update
-        _RETURN_:
-          - *FULFILLMENT_TAGS
-          - *ITEM_TAGS
+          - *ON_INIT_CANCELLATION_TERMS
+          - *ON_INIT_QUOTE
+          - *ON_CONFIRM_PAYMENTS
+          - _NAME_: ON_UPDATE_TAGS
+            action:
+              - on_update
+            _RETURN_:
+              - *FULFILLMENT_TAGS
+              - *ITEM_TAGS
     
     rating:
       - _NAME_: STATUS_CONTEXT

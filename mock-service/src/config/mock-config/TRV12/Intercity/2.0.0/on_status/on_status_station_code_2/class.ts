@@ -29,6 +29,35 @@ export class MockOnStatusStationCode2Class extends MockAction {
     return onStatusGenerator(existingPayload, sessionData);
   }
   async validate(targetPayload: any): Promise<MockOutput> {
+    const order = targetPayload?.message?.order;
+    if (order?.status !== "COMPLETED") {
+      return {
+        valid: false,
+        message: `Invalid order state. Expected "COMPLETED", got ${order?.status}`,
+      };
+    }
+    const invalidIndex = order?.fulfillments?.findIndex((fulfillment: any) => {
+      if (fulfillment?.type !== "TRIP") return false;
+
+      const startStop = fulfillment?.stops?.find(
+        (stop: any) => stop?.type === "PICKUP",
+      );
+
+      return startStop?.authorization?.status !== "CLAIMED";
+    });
+
+    if (invalidIndex !== -1) {
+      const fulfillment = order.fulfillments[invalidIndex];
+
+      const startStop = fulfillment?.stops?.find(
+        (stop: any) => stop?.type === "PICKUP",
+      );
+
+      return {
+        valid: false,
+        message: `Invalid authorization status at fulfillment index ${invalidIndex}. Expected "CLAIMED", got ${startStop?.authorization?.status}`,
+      };
+    }
     return { valid: true };
   }
   async meetRequirements(sessionData: SessionData): Promise<MockOutput> {

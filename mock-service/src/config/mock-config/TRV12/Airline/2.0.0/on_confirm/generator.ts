@@ -1,10 +1,12 @@
 export async function onConfirmDefaultGenerator(
   existingPayload: any,
-  sessionData: any
+  sessionData: any,
+  isOnStatusCall?: boolean,
 ) {
-
   existingPayload.message.order.id = sessionData?.confirm_order_id ?? "O1";
-  existingPayload.message.order.status = "ACTIVE";
+  existingPayload.message.order.status = isOnStatusCall
+    ? "COMPLETED"
+    : "ACTIVE";
   existingPayload.message.order.provider = sessionData?.on_init_provider ?? {};
   existingPayload.message.order.items = sessionData?.on_init_items ?? [];
   // existingPayload.message.order.fulfillments =

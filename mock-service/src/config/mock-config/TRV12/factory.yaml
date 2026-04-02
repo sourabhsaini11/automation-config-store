@@ -64,6 +64,11 @@ codes:
     action: on_confirm
     default: Airline/2.0.0/on_confirm/default.yaml
     message_id: false
+  - code: 112
+    action_id: on_status_unsoliciated_Airline_200
+    action: on_status
+    default: Airline/2.0.0/on_confirm/default.yaml
+    message_id: true  
   - code: 113
     action_id: cancel_Airline_200
     action: cancel

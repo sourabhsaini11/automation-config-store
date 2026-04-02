@@ -1624,6 +1624,32 @@ export default async function onSearch(
           );
         }
 
+        // try {
+        //   const providers = payload.message.catalog["bpp/providers"];
+        //   const address = providers[0].locations[0].address;
+
+        //   if (address) {
+        //     const area_code = Number.parseInt(address.area_code);
+        //     const std = context.city.split(":")[1];
+
+        //     console.info(
+        //       `Comparing area_code and STD Code for /${constants.ON_SEARCH}`
+        //     );
+        //     const areaWithSTD = compareSTDwithArea(area_code, std);
+
+        //     if (!areaWithSTD) {
+        //       addError(
+        //         20006,
+        //         `STD code does not match with correct area_code on /${constants.ON_SEARCH}`
+        //       );
+        //     }
+        //   }
+        // } catch (error: any) {
+        //   console.error(
+        //     `Error while matching area_code and std code for /${constants.SEARCH} and /${constants.ON_SEARCH} api, ${error.stack}`
+        //   );
+        // }
+
         try {
           console.info(
             `Comparing valid timestamp in context.timestamp and bpp/providers/items/time/timestamp`

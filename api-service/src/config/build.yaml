@@ -6,6 +6,7 @@ info:
     packaged commodities and pre-packaged food This is an adaptation of Beckn
     Core version 0.9.3
   version: 1.2.0
+  domain: ONDC:RET10
 security:
   - SubscriberAuth: []
   - GatewaySubscriberAuth: []
@@ -104093,6 +104094,7 @@ x-validations:
             _RETURN_: attr are present
           - _NAME_: FULFILLMENTS_TRACKING
             attr: "$.message.order.fulfillments[*].tracking"
+            _CONTINUE_: "!(attr are present)"
             _RETURN_: attr are present
           - _NAME_: FULFILLMENTS_ONDC_ORG_TAT
             _CONTINUE_: "!(attr are present)"

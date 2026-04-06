@@ -16,18 +16,16 @@ import {
   onUpdateRouter,
   updateRouter,
 } from "./apiTests";
-import { catalogRejectionValidator } from "./apiTests/catalog_rejection";
 
 import { validationOutput } from "./types";
-
 export async function performL1CustomValidations(
   payload: any,
-	action: string,
-	subscriberUrl: string,
+  action: string,
+  subscriberUrl: string,
   allErrors = false,
   externalData = {}
 ): Promise<validationOutput> {
-  payload =  structuredClone(payload)
+  payload = structuredClone(payload);
   console.log("Performing custom L1 validations for action: " + action);
   let result: any = [];
   switch (action) {
@@ -81,12 +79,8 @@ export async function performL1CustomValidations(
       break;
     case "issue":
     case "on_issue":
-    case "on_issue_status":  
+    case "on_issue_status":
       return result;
-    case "catalog_rejection":
-      result = await catalogRejectionValidator(payload)
-      break
-      // return result
     default:
       result = [
         {

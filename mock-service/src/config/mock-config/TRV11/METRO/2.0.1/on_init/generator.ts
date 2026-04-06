@@ -2,47 +2,47 @@ import { SessionData } from "../../../session-types";
 
 const generateRandomId = () => {
 	return Math.random().toString(36).substring(2, 15);
-  };
-const transformPayments = (payments:any) => {
-return payments.map((payment:any) => {
-	return {
-		id: generateRandomId(),
-		collected_by: payment.collected_by,
-		status: "NOT-PAID",
-		type: "PRE-ORDER",
-		params: {
-			bank_code: "XXXXXXXX",
-			bank_account_number: "xxxxxxxxxxxxxx",
-		},
-		tags: modifyTags(payment.tags),
+};
+const transformPayments = (payments: any) => {
+	return payments.map((payment: any) => {
+		return {
+			id: generateRandomId(),
+			collected_by: payment.collected_by,
+			status: "NOT-PAID",
+			type: "PRE-ORDER",
+			params: {
+				bank_code: "XXXXXXXX",
+				bank_account_number: "xxxxxxxxxxxxxx",
+			},
+			tags: modifyTags(payment.tags),
 		};
 	});
 };
 
-const modifyTags=(tags:any)=>{
-	  return tags.map((tag:any)=>{
-		if (tag.descriptor?.code === "SETTLEMENT_TERMS"){
+const modifyTags = (tags: any) => {
+	return tags.map((tag: any) => {
+		if (tag.descriptor?.code === "SETTLEMENT_TERMS") {
 			return {
-				 ...tag,
-				list:[
+				...tag,
+				list: [
 					...tag.list,
 					{
 						descriptor: {
-						  code: "SETTLEMENT_WINDOW" 
+							code: "SETTLEMENT_WINDOW"
 						},
-						value: "P30D" 
-					  },
+						value: "P30D"
+					},
 					{
 						descriptor: {
-						  code: "SETTLEMENT_BASIS" 
+							code: "SETTLEMENT_BASIS"
 						},
-						value: "INVOICE_RECEIPT" 
-					  }
+						value: "INVOICE_RECEIPT"
+					}
 				]
 			}
 		}
 		return tag
-	  })
+	})
 }
 export async function onInitGenerator(
 	existingPayload: any,
@@ -53,14 +53,16 @@ export async function onInitGenerator(
 	if (sessionData.items.length > 0) {
 		existingPayload.message.order.items = sessionData.items;
 	}
+	console.log("sessionData.items", sessionData.items);
+
 	if (sessionData.fulfillments.length > 0) {
-	existingPayload.message.order.fulfillments = sessionData.fulfillments;
+		existingPayload.message.order.fulfillments = sessionData.fulfillments;
 	}
-	if(sessionData.provider){
-		existingPayload.message.order.provider=sessionData.provider
+	if (sessionData.provider) {
+		existingPayload.message.order.provider = sessionData.provider
 	}
-	if(sessionData.quote != null){
-	existingPayload.message.order.quote = sessionData.quote
+	if (sessionData.quote != null) {
+		existingPayload.message.order.quote = sessionData.quote
 	}
 	return existingPayload;
 }

@@ -446,10 +446,10 @@ async function validateFulfillments(
             obj2.type === "Cancel"
               ? ApiSequence.ON_UPDATE_PART_CANCEL
               : (await RedisService.getKey(
-                  `${transaction_id}_onCnfrmState`
-                )) === "Accepted"
-              ? ApiSequence.ON_CONFIRM
-              : ApiSequence.ON_STATUS_PENDING;
+                `${transaction_id}_onCnfrmState`
+              )) === "Accepted"
+                ? ApiSequence.ON_CONFIRM
+                : ApiSequence.ON_STATUS_PENDING;
           if (obj2) {
             let tempobj2 = structuredClone(obj2);
             delete tempobj2?.start?.time;
@@ -458,10 +458,9 @@ async function validateFulfillments(
             delete obj1?.end?.time;
             const errors = compareFulfillmentObject(obj1, tempobj2, keys, i, apiSeq);
             errors.forEach((item: any) => {
-            result.push(addError(item.errMsg, ERROR_CODES.INVALID_RESPONSE));
-          });
+              result.push(addError(item.errMsg, ERROR_CODES.INVALID_RESPONSE));
+            });
           }   
-          
         } else {
           result.push(
             addError(

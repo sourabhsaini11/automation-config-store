@@ -1,12 +1,12 @@
 import { SessionData } from "../../../session-types";
 
 const createQuoteFromItems = (items: any): any => {
-	let totalPrice = 0; // Initialize total price
+	let totalPrice = 0;
 
 	const breakup = items.map((item: any) => {
 		const itemTotalPrice =
-			Number(item.price.value) * item.quantity.selected.count; // Calculate item total price
-		totalPrice += itemTotalPrice; // Add to total price
+			Number(item.price.value) * item.quantity.selected.count;
+		totalPrice += itemTotalPrice;
 
 		return {
 			title: "BASE_FARE",
@@ -31,8 +31,8 @@ const createQuoteFromItems = (items: any): any => {
 
 	return {
 		price: {
-			value: totalPrice.toFixed(2), // Total price as a string with two decimal places
-			currency: items[0]?.price.currency || "INR", // Use currency from the first item or default to "INR"
+			value: totalPrice.toFixed(2),
+			currency: items[0]?.price.currency || "INR",
 		},
 		breakup,
 	};
@@ -40,21 +40,19 @@ const createQuoteFromItems = (items: any): any => {
 
 function createAndAppendFulfillments(items: any[], fulfillments: any[]): void {
 	items.forEach((item) => {
+		const originalFulfillmentIds = [...item.fulfillment_ids];
 
-		// item.fulfillment_ids =
-		item.fulfillment_ids.forEach((parentFulfillmentId: string) => {
-			// Get the parent fulfillment object from the fulfillments array
+		originalFulfillmentIds.forEach((parentFulfillmentId: string) => {
 			const parentFulfillment = fulfillments.find(
 				(f) => f.id === parentFulfillmentId
 			);
-			if (parentFulfillment) {
-				// Get the quantity based on the selected count
+
+			if (parentFulfillment && parentFulfillment.type !== "TICKET") {
 				const quantity = item.quantity.selected.count;
 
 				for (let i = 0; i < quantity; i++) {
-					// Create new fulfillment object
 					const newFulfillment = {
-						id: `F${Math.random().toString(36).substring(2, 9)}`, // Unique ID for new fulfillment
+						id: `F${Math.random().toString(36).substring(2, 9)}`,
 						type: "TICKET",
 						tags: [
 							{
@@ -66,17 +64,14 @@ function createAndAppendFulfillments(items: any[], fulfillments: any[]): void {
 										descriptor: {
 											code: "PARENT_ID",
 										},
-										value: parentFulfillment.id, // Set parent ID
+										value: parentFulfillment.id,
 									},
 								],
 							},
 						],
 					};
 
-					// Append the new fulfillment to the fulfillments array
 					fulfillments.push(newFulfillment);
-
-					// Append the new fulfillment's id to the item's fulfillment_ids
 					item.fulfillment_ids.push(newFulfillment.id);
 				}
 			}
@@ -99,20 +94,21 @@ function updateProviderTimestamp(payload: any) {
 }
 
 function getUniqueFulfillmentIdsAndFilterFulfillments(
-	items: any[],
+	selectedItems: any[],
 	fulfillments: any[]
 ): any[] {
 	if (!Array.isArray(fulfillments)) {
 		fulfillments = fulfillments ? [fulfillments] : [];
 	}
-	// Step 1: Get all unique fulfillment IDs from the items
-	const fulfillmentIds = items
-		.flatMap((item) => item.fulfillment_ids) // Flatten the fulfillment_ids arrays
-		.filter((value, index, self) => self.indexOf(value) === index); // Remove duplicates
 
-	// Step 2: Filter the fulfillments based on the unique fulfillment IDs
+	const fulfillmentIds = selectedItems
+		.flatMap((item) => item.fulfillment_ids)
+		.filter((value, index, self) => self.indexOf(value) === index);
+
 	const filteredFulfillments = fulfillments.filter(
-		(fulfillment) => fulfillmentIds.includes(fulfillment.id) // Check if fulfillment.id is in the unique fulfillmentIds list
+		(fulfillment) =>
+			fulfillmentIds.includes(fulfillment.id) &&
+			fulfillment.type !== "TICKET"
 	);
 
 	return filteredFulfillments;
@@ -122,10 +118,7 @@ const filterItemsBySelectedIds = (
 	items: any[],
 	selectedIds: string | string[]
 ): any[] => {
-	// Convert selectedIds to an array if it's a string
 	const idsToFilter = Array.isArray(selectedIds) ? selectedIds : [selectedIds];
-
-	// Filter the items array based on the presence of ids in selectedIds
 	return items.filter((item) => idsToFilter.includes(item.id));
 };
 
@@ -133,41 +126,47 @@ export async function onSelectGenerator(
 	existingPayload: any,
 	sessionData: SessionData
 ) {
-	console.log("session data before the on_select call is ", sessionData)
-	existingPayload = updateProviderTimestamp(existingPayload)
-	let items = filterItemsBySelectedIds(
-		sessionData.items,
-		sessionData.selected_item_ids
-	);
-	let fulfillments = getUniqueFulfillmentIdsAndFilterFulfillments(
-		sessionData.items,
-		sessionData.fulfillments
-	);
+	existingPayload = updateProviderTimestamp(existingPayload);
+
 	const ids_with_quantities = {
 		items: sessionData.selected_items.reduce((acc: any, item: any) => {
 			acc[item.id] = item.quantity.selected.count;
 			return acc;
 		}, {}),
 	};
-	const updatedItems = sessionData.items.map((item: any) => ({
-		...item,
-		quantity: {
-			selected: {
-				count: ids_with_quantities["items"][item.id] ?? 0, // Default to 0 if not in the mapping
+
+	const updatedItems = sessionData.items
+		.map((item: any) => ({
+			...item,
+			fulfillment_ids: (item.fulfillment_ids as string[]).filter((fid) => {
+				const f = (sessionData.fulfillments as any[]).find((fl) => fl.id === fid);
+				return !f || f.type !== "TICKET";
+			}),
+			quantity: {
+				selected: {
+					count: ids_with_quantities["items"][item.id] ?? 0,
+				},
 			},
-		},
-	})).filter((item) => item.quantity.selected.count > 0);
-	items = updatedItems;
+		}))
+		.filter((item: any) => item.quantity.selected.count > 0);
+
+	const fulfillments = getUniqueFulfillmentIdsAndFilterFulfillments(
+		updatedItems,
+		sessionData.fulfillments
+	);
+
 	createAndAppendFulfillments(updatedItems, fulfillments);
+
 	const quote = createQuoteFromItems(updatedItems);
-	existingPayload.message.order.items = items;
-	sessionData.items = items;
-	existingPayload.message.order.fulfillments = fulfillments;
-	existingPayload.message.order.fulfillments.forEach((fulfillment: any) => {
+
+	fulfillments.forEach((fulfillment: any) => {
 		if (fulfillment.type === "ROUTE") {
 			fulfillment.type = "TRIP";
 		}
-	})
+	});
+
+	existingPayload.message.order.items = updatedItems;
+	existingPayload.message.order.fulfillments = fulfillments;
 	existingPayload.message.order.quote = quote;
 	return existingPayload;
 }

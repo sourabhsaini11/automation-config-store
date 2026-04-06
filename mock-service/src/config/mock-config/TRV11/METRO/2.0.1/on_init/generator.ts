@@ -3,6 +3,7 @@ import { SessionData } from "../../../session-types";
 const generateRandomId = () => {
 	return Math.random().toString(36).substring(2, 15);
 };
+
 const transformPayments = (payments: any) => {
 	return payments.map((payment: any) => {
 		return {
@@ -39,30 +40,34 @@ const modifyTags = (tags: any) => {
 						value: "INVOICE_RECEIPT"
 					}
 				]
-			}
+			};
 		}
-		return tag
-	})
-}
+		return tag;
+	});
+};
+
 export async function onInitGenerator(
 	existingPayload: any,
 	sessionData: SessionData
 ) {
-	const payments = transformPayments(sessionData.payments)
+	const payments = transformPayments(sessionData.payments);
 	existingPayload.message.order.payments = payments;
-	if (sessionData.items.length > 0) {
+
+	if (sessionData.items && sessionData.items.length > 0) {
 		existingPayload.message.order.items = sessionData.items;
 	}
-	console.log("sessionData.items", sessionData.items);
 
-	if (sessionData.fulfillments.length > 0) {
+	if (sessionData.fulfillments && sessionData.fulfillments.length > 0) {
 		existingPayload.message.order.fulfillments = sessionData.fulfillments;
 	}
+
 	if (sessionData.provider) {
-		existingPayload.message.order.provider = sessionData.provider
+		existingPayload.message.order.provider = sessionData.provider;
 	}
+
 	if (sessionData.quote != null) {
-		existingPayload.message.order.quote = sessionData.quote
+		existingPayload.message.order.quote = sessionData.quote;
 	}
+
 	return existingPayload;
 }

@@ -54,7 +54,7 @@ export async function onInitGenerator(
 	existingPayload.message.order.payments = payments;
 
 	if (sessionData.items && sessionData.items.length > 0) {
-		existingPayload.message.order.items = sessionData.items;
+		existingPayload.message.order.items = []
 	}
 
 	if (sessionData.fulfillments && sessionData.fulfillments.length > 0) {

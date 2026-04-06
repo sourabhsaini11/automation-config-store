@@ -96,7 +96,7 @@ function updateProviderTimestamp(payload: any) {
 	provider.time.range.start = startIST.toISOString();
 	provider.time.range.end = endIST.toISOString();
 	return payload;
-  }
+}
 
 function getUniqueFulfillmentIdsAndFilterFulfillments(
 	items: any[],
@@ -133,8 +133,8 @@ export async function onSelectGenerator(
 	existingPayload: any,
 	sessionData: SessionData
 ) {
-	console.log("session data before the on_select call is ",sessionData)
-	existingPayload= updateProviderTimestamp(existingPayload)
+	console.log("session data before the on_select call is ", sessionData)
+	existingPayload = updateProviderTimestamp(existingPayload)
 	let items = filterItemsBySelectedIds(
 		sessionData.items,
 		sessionData.selected_item_ids
@@ -161,11 +161,12 @@ export async function onSelectGenerator(
 	createAndAppendFulfillments(updatedItems, fulfillments);
 	const quote = createQuoteFromItems(updatedItems);
 	existingPayload.message.order.items = items;
-	existingPayload.message.order.fulfillments = fulfillments; 
+	sessionData.items = items;
+	existingPayload.message.order.fulfillments = fulfillments;
 	existingPayload.message.order.fulfillments.forEach((fulfillment: any) => {
 		if (fulfillment.type === "ROUTE") {
 			fulfillment.type = "TRIP";
-		  }
+		}
 	})
 	existingPayload.message.order.quote = quote;
 	return existingPayload;

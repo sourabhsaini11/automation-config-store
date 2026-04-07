@@ -21311,6 +21311,12 @@ x-validations:
                 attr: $.context.version
                 _RETURN_: attr are present
                 _NAME_: REQUIRED_context_version
+              - &search_REQUIRED_context_location_city_code
+                _NAME_: VALIDATE_CITY_CODE_FORMAT
+                _SCOPE_: "$.context.location.city"
+                subTags: "$.code"
+                match1: ["^std:0\\d+$"]
+                _RETURN_: subTags follow regex match1
               - &search_REQUIRED_context_bap_uri
                 attr: $.context.bap_uri
                 _RETURN_: attr are present
@@ -21498,6 +21504,7 @@ x-validations:
               - *search_REQUIRED_context_transaction_id
               - *search_REQUIRED_context_message_id
               - *search_REQUIRED_context_version
+              - *search_REQUIRED_context_location_city_code
               - *search_REQUIRED_context_bap_uri
               - *search_REQUIRED_context_ttl
               - &select_REQUIRED_context_bpp_id
@@ -21871,6 +21878,7 @@ x-validations:
               - *search_REQUIRED_context_transaction_id
               - *search_REQUIRED_context_message_id
               - *search_REQUIRED_context_version
+              - *search_REQUIRED_context_location_city_code
               - *search_REQUIRED_context_bap_uri
               - *search_REQUIRED_context_ttl
               - *select_REQUIRED_context_bpp_id

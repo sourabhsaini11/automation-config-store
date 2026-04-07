@@ -389,6 +389,11 @@ codes:
     action: on_update
     default: BUS/2.1.0/on_update/on_update_accepted/default.yaml
     message_id: true
+  - code: 193
+    action_id: unsoliciated_on_status_complete_BUS_210
+    action: on_status
+    default: BUS/2.1.0/on_update/on_update_purchase_journey/default.yaml
+    message_id: true  
   - code: 194
     action_id: on_confirm_veh_con_BUS_210
     action: on_confirm

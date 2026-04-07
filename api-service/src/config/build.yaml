@@ -35491,6 +35491,12 @@ x-validations:
                 attr: $.context.bap_uri
                 _RETURN_: attr are present
                 _NAME_: REQUIRED_context_bap_uri
+              - &search_VALIDATE_CITY_CODE_FORMAT
+                _NAME_: VALIDATE_CITY_CODE_FORMAT
+                _SCOPE_: "$.context.location.city"
+                subTags: "$.code"
+                match1: ["^std:0\\d+$"]
+                _RETURN_: subTags follow regex match1
               - &search_REQUIRED_context_ttl
                 attr: $.context.ttl
                 reg: ['^P(?=\\d|T)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+S)?)?$']
@@ -35676,6 +35682,7 @@ x-validations:
               - *search_REQUIRED_context_version
               - *search_REQUIRED_context_bap_uri
               - *search_REQUIRED_context_ttl
+              - *search_VALIDATE_CITY_CODE_FORMAT
               - &select_REQUIRED_context_bpp_id
                 attr: $.context.bpp_id
                 _RETURN_: attr are present
@@ -36049,6 +36056,7 @@ x-validations:
               - *search_REQUIRED_context_version
               - *search_REQUIRED_context_bap_uri
               - *search_REQUIRED_context_ttl
+              - *search_VALIDATE_CITY_CODE_FORMAT
               - *select_REQUIRED_context_bpp_id
               - *select_REQUIRED_context_bpp_uri
               - attr: $.message.order_id

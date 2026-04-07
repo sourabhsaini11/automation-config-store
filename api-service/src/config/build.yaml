@@ -45916,11 +45916,12 @@ x-validations:
         enumList:
           - IND
         useCasePath: "$.message.intent.fulfillment.vehicle.category"
-      # - _NAME_: VALIDATE_CITY_CODE_FORMAT
-      #   _SCOPE_: "$.context.location.city"
-      #   subTags: "$.code"
-      #   match1: ["^std:0\\d+$"]
-      #   _RETURN_: subTags follow regex match1
+      - _NAME_: VALIDATE_CITY_CODE_FORMAT
+        _SCOPE_: "$.context.location.city"
+        subTags: "$.code"
+        match1: ["^std:0\\d+$"]
+        _CONTINUE_: "!(subTags are present)"
+        _RETURN_: subTags follow regex match1
       - _NAME_: REQUIRED_CONTEXT_DOMAIN_3
         attr: "$.context.domain"
         _RETURN_: attr are present && attr all in enumList

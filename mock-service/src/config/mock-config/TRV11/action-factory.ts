@@ -128,7 +128,7 @@ import { MockOnStatusTechnicalMetro210Class } from "./METRO/2.1.0/on_status/on_s
 import { OnCancelSoftTechnicalMetro210Class } from "./METRO/2.1.0/on_cancel/on_cancel_soft_technical/class";
 import { OnCancelHardTechnicalMetro210Class } from "./METRO/2.1.0/on_cancel/on_cancel_hard_technical/class";
 import { MockUpdatePurchaseHourneyBus210Class } from "./BUS/2.1.0/update/update_purchase_journey/class";
-import { MockOnUpdatePurchaseJourneyBus210Class } from "./BUS/2.1.0/on_update/on_update_purchase_journey/class";
+import { MockOnUpdatePurchaseJourneyBus210Class, MockUnsoliciatedOnStatusOrderCompletedBus210Class } from "./BUS/2.1.0/on_update/on_update_purchase_journey/class";
 import { MockSelectAgentActivationBus210Class } from "./BUS/2.1.0/select/select_agent_activation/class";
 import { MockOnSelectAgentActivationBus210Class } from "./BUS/2.1.0/on_select/on_select_agent_activation/class";
 import { MockInitAgentActivationBus210Class } from "./BUS/2.1.0/init/init_agent_activation/class";
@@ -178,6 +178,7 @@ const registry = {
   on_confirm_BUS_QR_210: MockOnConfirmVehConBusQr210Class,
   cancel_tech_soft_BUS_210: MockCancelTechSoftBus210Class,
   on_cancel_tech_soft_BUS_210: MockOnCancelBusTech_Soft210Class,
+  unsoliciated_on_status_complete_BUS_210: MockUnsoliciatedOnStatusOrderCompletedBus210Class,
 
   //________________INTRACITY_AGENT_ACTIVATION___________________
   select_BUS_Agent_Activation_210: MockSelectAgentActivationBus210Class,

@@ -80,6 +80,7 @@ function applyCancellation(quote: Quote, cancellationCharges: number): Quote {
 export async function onUpdatePuchaseJourneyGenerator(
   existingPayload: any,
   sessionData: any,
+  is_onstatus?: boolean
 ) {
   existingPayload.message.order = sessionData?.on_confirm_order ?? {};
   existingPayload.message.order.billing = sessionData?.updated_billing ?? {};
@@ -120,5 +121,6 @@ export async function onUpdatePuchaseJourneyGenerator(
   const now = new Date().toISOString();
   existingPayload.message.order.created_at = sessionData.created_at;
   existingPayload.message.order.updated_at = now;
+  existingPayload.message.order.status = is_onstatus ? "COMPLETED" : "ACTIVE";
   return existingPayload;
 }

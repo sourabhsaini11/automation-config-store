@@ -48,6 +48,29 @@ export class MockOnStatusCompleteMetro210Class extends MockAction {
     };
   }
 
+  const invalidIndex = order?.fulfillments?.findIndex((fulfillment: any) => {
+      if (fulfillment?.type !== "TICKET") return false;
+
+      const startStop = fulfillment?.stops?.find(
+        (stop: any) => stop?.type === "START",
+      );
+
+      return startStop?.authorization?.status !== "CLAIMED";
+    });
+
+    if (invalidIndex !== -1) {
+      const fulfillment = order.fulfillments[invalidIndex];
+
+      const startStop = fulfillment?.stops?.find(
+        (stop: any) => stop?.type === "START",
+      );
+
+      return {
+        valid: false,
+        message: `Invalid authorization status at fulfillment index ${invalidIndex}. Expected "CLAIMED", got ${startStop?.authorization?.status}`,
+      };
+    }
+
   const items = order?.items || [];
   const fulfillments = order?.fulfillments || [];
 

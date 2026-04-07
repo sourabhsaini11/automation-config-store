@@ -57,6 +57,7 @@ jobs:
             cat > ./generator/.env <<EOF
           NODE_ENV=${{ vars.NODE_ENV }}
           SIGNING_PRIVATE=${{ secrets.SIGN_PRIVATE_KEY }}
+          ENCR_PRIVATE=${{ secrets.ENCR_PRIVATE }}
           PORT=${{ vars.API_SERVICE_PORT }}
           SIGNING_PUBLIC=${{ vars.SIGN_PUBLIC_KEY }}
           SUBSCRIBER_ID=${{ vars.SUBSCRIBER_ID }}
@@ -93,6 +94,7 @@ jobs:
             cat > ./generator/.env <<EOF
           NODE_ENV=${{ vars.NODE_ENV }}
           SIGNING_PRIVATE=${{ secrets.SIGN_PRIVATE_KEY }}
+          ENCR_PRIVATE=${{ secrets.ENCR_PRIVATE }}
           PORT=${{ vars.API_SERVICE_PORT }}
           SIGNING_PUBLIC=${{ vars.SIGN_PUBLIC_KEY }}
           SUBSCRIBER_ID=${{ vars.SUBSCRIBER_ID_STAGING }}
@@ -265,6 +267,7 @@ jobs:
               cat > .env <<EOF
             NODE_ENV=${{ vars.NODE_ENV }}
             SIGNING_PRIVATE=${{ secrets.SIGN_PRIVATE_KEY }}
+            ENCR_PRIVATE=${{ secrets.ENCR_PRIVATE }}
             PORT=${{ vars.API_SERVICE_PORT }}
             SIGNING_PUBLIC=${{ vars.SIGN_PUBLIC_KEY }}
             SUBSCRIBER_ID=${{ vars.SUBSCRIBER_ID }}
@@ -300,6 +303,7 @@ jobs:
               cat > .env <<EOF
             NODE_ENV=${{ vars.NODE_ENV }}
             SIGNING_PRIVATE=${{ secrets.SIGN_PRIVATE_KEY }}
+            ENCR_PRIVATE=${{ secrets.ENCR_PRIVATE }}
             PORT=${{ vars.API_SERVICE_PORT }}
             SIGNING_PUBLIC=${{ vars.SIGN_PUBLIC_KEY }}
             SUBSCRIBER_ID=${{ vars.SUBSCRIBER_ID_STAGING }}

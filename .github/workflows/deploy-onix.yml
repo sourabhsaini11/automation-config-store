@@ -159,7 +159,9 @@ jobs:
           COMBINED_SHA="${CONFIG_SHA}${GENERATOR_SHA}${PLUGIN_SHA}${ONIX_SHA}"
           COMBINED_HASH=$(echo -n "$COMBINED_SHA" | sha256sum | awk '{print $1}')
           SHORT_HASH="${COMBINED_HASH: -5}"
-          IMAGE_NAME="${{ env.REGISTRY }}/${{ env.REGISTRY_NAMESPACE }}/ondc-onix-${{ vars.CONTAINER_NAME }}"
+          RAW_CONTAINER_NAME="${{ vars.CONTAINER_NAME }}"
+          CONTAINER_NAME_CLEAN=$(echo -n "${RAW_CONTAINER_NAME}" | tr -d '\r\n')
+          IMAGE_NAME="${{ env.REGISTRY }}/${{ env.REGISTRY_NAMESPACE }}/ondc-onix-${CONTAINER_NAME_CLEAN}"
 
           if [[ "$BUILD_TYPE" == "release" ]]; then
             DEPLOYMENT_TAG="prod-${SHORT_HASH}"

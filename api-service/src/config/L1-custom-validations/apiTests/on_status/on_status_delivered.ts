@@ -441,7 +441,6 @@ async function validateFulfillments(
             delete obj2?.end?.time?.timestamp;
             delete obj2?.state;
             delete obj1?.state;
-            
           }
           apiSeq =
             obj2.type === "Cancel"

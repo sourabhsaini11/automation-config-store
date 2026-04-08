@@ -121,7 +121,7 @@ export const checkOnUpdate = async (
       console.info(`Checking settlementWindow in /message/order/payment`);
       const settlementWindow =
         on_update.payment?.["@ondc/org/settlement_window"];
-      if (settlementWindow && !/^(PT(\d+H|\d+M)|P\d+D)$/.test(settlementWindow)) {
+      if (settlementWindow && !/^PT(\d+H|\d+M)$/.test(settlementWindow)) {
         result.push({
           valid: false,
           code: 20006,

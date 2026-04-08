@@ -4,3 +4,4 @@ save-data:
   order_id: "$.message.order.id"
   provider_id: "$.message.order.provider.id"
   loan_status: "$.message.order.fulfillments[0].state.descriptor.code"
+  second_fulfillment_id: "$.message.order.fulfillments[1].id"

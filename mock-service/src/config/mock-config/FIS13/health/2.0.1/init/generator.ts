@@ -27,7 +27,7 @@ export async function initDefaultGenerator(existingPayload: any, sessionData: an
   const ids = resolveSessionIds(sessionData);
 
   // Apply all resolved IDs (provider, child item + parent, fulfillment, quote) in one call
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
   // If flow is pre-order, set payment type to PRE-ORDER
   const preOrderFlows = ['Health_Insurance_Application(PRE-ORDER-Individual)', 'Health_Insurance_Application(PRE-ORDER-Family)'];

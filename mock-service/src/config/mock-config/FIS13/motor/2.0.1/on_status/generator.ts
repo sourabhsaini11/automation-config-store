@@ -1,4 +1,4 @@
-import { resolveSessionIds } from '../id-helper';
+import { resolveSessionIds, applyFlowTypeOverrides } from '../id-helper';
 
 export async function onStatusGenerator(existingPayload: any, sessionData: any) {
   if (existingPayload.context) {
@@ -38,6 +38,18 @@ export async function onStatusGenerator(existingPayload: any, sessionData: any) 
   // Apply fulfillment ID from resolved IDs
   if (ids.fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
     existingPayload.message.order.fulfillments[0].id = ids.fulfillmentId;
+  }
+
+  // Generate dynamic ID for 2nd fulfillment if present (claim/renewal flows)
+  if (existingPayload.message?.order?.fulfillments?.[1]) {
+    const secondFulfillmentId = sessionData.second_fulfillment_id || crypto.randomUUID();
+    existingPayload.message.order.fulfillments[1].id = secondFulfillmentId;
+    sessionData.second_fulfillment_id = secondFulfillmentId;
+    if (existingPayload.message?.order?.items?.[0]?.fulfillment_ids) {
+      if (!existingPayload.message.order.items[0].fulfillment_ids.includes(secondFulfillmentId)) {
+        existingPayload.message.order.items[0].fulfillment_ids.push(secondFulfillmentId);
+      }
+    }
   }
 
   // Apply quote.id from resolved IDs
@@ -86,6 +98,9 @@ export async function onStatusGenerator(existingPayload: any, sessionData: any) 
       console.log("Updated form_response:", item.xinput.form_response);
     }
   }
+
+  // Apply vehicle-type overrides (descriptor, category_ids, price) based on selected item
+  applyFlowTypeOverrides(existingPayload, sessionData);
 
   // Fix fulfillments: remove customer details and state
   if (existingPayload.message?.order?.fulfillments) {

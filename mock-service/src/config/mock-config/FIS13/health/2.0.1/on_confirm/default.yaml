@@ -17,6 +17,10 @@ order:
   fulfillments:
     - id: "F1"
       type: "POLICY"
+      state:
+        descriptor:
+          name: Insurance Initiated
+          code: INITIATED
       customer:
         contact:
           email: "joe.adam@abc.org"

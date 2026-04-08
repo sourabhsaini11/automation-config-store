@@ -17,7 +17,14 @@ export class MockSelectClass extends MockAction {
         );
     }
     get inputs(): any {
-        return {};
+        return {
+            insurance_select: {
+                name: "insurance_select",
+                label: "Select Insurance Product",
+                type: "insurance_select",
+                payloadField: ""
+            }
+        };
     }
     name(): string {
         return "select";

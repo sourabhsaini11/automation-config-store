@@ -40,7 +40,7 @@ export async function onConfirmDefaultGenerator(existingPayload: any, sessionDat
   const ids = resolveSessionIds(sessionData);
 
   // Apply all resolved IDs (provider, child item + parent, fulfillment, quote) in one call
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
   // Update quote breakup item references with dynamic child item ID
   updateQuoteBreakupItemIds(existingPayload, ids.childItemId);

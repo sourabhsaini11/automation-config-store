@@ -44,7 +44,7 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
   }
 
   // Apply resolved IDs (items, fulfillment, quote) to payload
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
 if (existingPayload.message?.order?.items?.[0]) {
     const item = existingPayload.message.order.items[0];

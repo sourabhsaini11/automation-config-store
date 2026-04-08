@@ -28,7 +28,7 @@ export async function confirmDefaultGenerator(existingPayload: any, sessionData:
   const ids = resolveSessionIds(sessionData);
 
   // Apply all resolved IDs to payload (provider, items, fulfillment, quote)
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
   if (ids.providerId) {
     console.log("Updated provider.id:", ids.providerId);
   }

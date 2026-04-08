@@ -34,7 +34,7 @@ export async function updateDefaultGenerator(existingPayload: any, sessionData: 
   }
 
   // Apply all resolved IDs (provider, items, fulfillments, quote) to payload
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
   return existingPayload;
 } 

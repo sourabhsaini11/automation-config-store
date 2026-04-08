@@ -23,7 +23,7 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
   }
 
   // Apply resolved IDs (provider, items, fulfillment, quote) to payload
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
   // If flow is pre-order, set payment type to PRE-ORDER
   if (sessionData.flow_id === 'Motor_Insurance_Application(PRE-ORDER)' && existingPayload.message?.order?.payments?.[0]) {

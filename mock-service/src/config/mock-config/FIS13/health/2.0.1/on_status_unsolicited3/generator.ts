@@ -104,6 +104,18 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
     existingPayload.message.order.fulfillments[0].id = ids.fulfillmentId;
   }
 
+  // Generate dynamic ID for 2nd fulfillment if present (claim/renewal flows)
+  if (existingPayload.message?.order?.fulfillments?.[1]) {
+    const secondFulfillmentId = sessionData.second_fulfillment_id || crypto.randomUUID();
+    existingPayload.message.order.fulfillments[1].id = secondFulfillmentId;
+    sessionData.second_fulfillment_id = secondFulfillmentId;
+    if (existingPayload.message?.order?.items?.[0]?.fulfillment_ids) {
+      if (!existingPayload.message.order.items[0].fulfillment_ids.includes(secondFulfillmentId)) {
+        existingPayload.message.order.items[0].fulfillment_ids.push(secondFulfillmentId);
+      }
+    }
+  }
+
   // Apply quote ID
   if (ids.quoteId && existingPayload.message?.order?.quote) {
     existingPayload.message.order.quote.id = ids.quoteId;

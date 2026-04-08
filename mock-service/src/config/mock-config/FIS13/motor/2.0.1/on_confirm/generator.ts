@@ -1,4 +1,4 @@
-import { resolveSessionIds, getBasePriceForVehicleType } from '../id-helper';
+import { resolveSessionIds, getBasePriceForVehicleType, applyFlowTypeOverrides } from '../id-helper';
 
 export async function onConfirmDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("sessionData for on_confirm", sessionData);
@@ -64,10 +64,25 @@ export async function onConfirmDefaultGenerator(existingPayload: any, sessionDat
     existingPayload.message.order.fulfillments[0].id = ids.fulfillmentId;
   }
 
+  // Generate dynamic ID for 2nd fulfillment if present (claim/renewal flows)
+  if (existingPayload.message?.order?.fulfillments?.[1]) {
+    const secondFulfillmentId = sessionData.second_fulfillment_id || crypto.randomUUID();
+    existingPayload.message.order.fulfillments[1].id = secondFulfillmentId;
+    sessionData.second_fulfillment_id = secondFulfillmentId;
+    if (existingPayload.message?.order?.items?.[0]?.fulfillment_ids) {
+      if (!existingPayload.message.order.items[0].fulfillment_ids.includes(secondFulfillmentId)) {
+        existingPayload.message.order.items[0].fulfillment_ids.push(secondFulfillmentId);
+      }
+    }
+  }
+
   // Apply quote.id from resolved IDs
   if (ids.quoteId && existingPayload.message?.order?.quote) {
     existingPayload.message.order.quote.id = ids.quoteId;
   }
+
+  // Apply vehicle-type overrides (descriptor, category_ids, price) based on selected item
+  applyFlowTypeOverrides(existingPayload, sessionData);
 
   // Update location_ids from session data (carry-forward from previous flows)
   const selectedLocationId = sessionData.selected_location_id;

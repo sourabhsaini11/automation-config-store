@@ -2,5 +2,6 @@ save-data:
   transaction_id: "$.context.transaction_id"
   message_id: "$.context.message_id"
   order: "$.message.order"
+  second_fulfillment_id: "$.message.order.fulfillments[1].id"
   claim_form_motor: "$.message.order.documents[?(@.descriptor.code=='CLAIM_DOC')].url"
   claim_doc_url_motor: "$.message.order.documents[?(@.descriptor.code=='CLAIM_DOC')].url"

@@ -48,7 +48,7 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
   }
 
   // Apply resolved IDs (items, fulfillment, quote) to payload
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
   if (existingPayload.message?.order?.items?.[0]?.xinput?.form) {
     existingPayload.message.order.items[0].xinput.form.id = sessionData.form_id || "FO3";

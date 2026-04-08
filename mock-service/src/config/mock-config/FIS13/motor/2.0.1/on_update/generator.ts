@@ -28,7 +28,7 @@ export async function onUpdateDefaultGenerator(existingPayload: any, sessionData
     }
 
     // Apply all resolved IDs (provider, items, fulfillments, quote) to payload
-    applyResolvedIdsToPayload(existingPayload, ids);
+    applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
       // Setupdated_at to current date
    if (existingPayload.message?.order) {

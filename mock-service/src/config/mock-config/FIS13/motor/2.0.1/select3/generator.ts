@@ -30,7 +30,10 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
   }
   
   // Apply resolved IDs (provider, items, fulfillment, quote) to payload
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
+
+  // category_ids are optional in select payloads — remove if added by applyResolvedIdsToPayload
+  delete existingPayload.message?.order?.items?.[0]?.category_ids;
 
   if (existingPayload.message?.order?.items?.[0]) {
     const item = existingPayload.message.order.items[0];

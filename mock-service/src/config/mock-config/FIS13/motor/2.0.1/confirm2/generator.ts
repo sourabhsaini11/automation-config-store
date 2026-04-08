@@ -26,7 +26,7 @@ export async function confirmDefaultGenerator(existingPayload: any, sessionData:
   }
 
   // Apply resolved IDs (provider, items, fulfillment, quote) to payload
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
   // Update quote breakup item references with dynamic child item ID
   updateQuoteBreakupItemIds(existingPayload, ids.childItemId);

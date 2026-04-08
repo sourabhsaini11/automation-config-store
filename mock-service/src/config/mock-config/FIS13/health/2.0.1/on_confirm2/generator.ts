@@ -40,7 +40,7 @@ export async function onConfirmDefaultGenerator(existingPayload: any, sessionDat
   const ids = resolveSessionIds(sessionData);
 
   // Apply all resolved IDs to payload (provider, items, fulfillment, quote)
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
   if (ids.childItemId) {
     console.log("Updated item.id:", ids.childItemId, "parent_item_id:", ids.parentItemId);
   }

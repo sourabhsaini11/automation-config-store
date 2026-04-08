@@ -27,7 +27,7 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
   }
 
   // Apply resolved IDs (provider, items, fulfillment, quote) to payload
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
   // Reuse quote_id from session data (generated in first on_select call)
   if (existingPayload.message?.order?.quote && ids.quoteId) {

@@ -1,5 +1,5 @@
 
-import { resolveSessionIds } from '../id-helper';
+import { resolveSessionIds, applyFlowTypeOverrides } from '../id-helper';
 
 export async function onSelectDefaultGenerator(existingPayload: any, sessionData: any) {
   console.log("On Select generator - Available session data:", {
@@ -32,7 +32,7 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
     console.log("Updated provider.id:", ids.providerId);
   }
 
-  // Reuse child_item_id and parent_item_id from session data (saved during select step)
+  // Reuse child_item_id, parent_item_id, and category_ids from session data (saved during select step)
   if (existingPayload.message?.order?.items?.[0]) {
     if (ids.childItemId) {
       existingPayload.message.order.items[0].id = ids.childItemId;
@@ -42,7 +42,16 @@ export async function onSelectDefaultGenerator(existingPayload: any, sessionData
       existingPayload.message.order.items[0].parent_item_id = ids.parentItemId;
       console.log("Reused parent_item_id from session:", ids.parentItemId);
     }
+    if (ids.categoryIds?.length) {
+      existingPayload.message.order.items[0].category_ids = ids.categoryIds;
+    }
+    if (ids.fulfillmentId) {
+      existingPayload.message.order.items[0].fulfillment_ids = [ids.fulfillmentId];
+    }
   }
+
+  // Apply vehicle-type overrides (descriptor, price) based on selected item's category
+  applyFlowTypeOverrides(existingPayload, sessionData);
 
   // Generate dynamic quote ID (replace hardcoded OFFER_ID/PROPOSAL_ID)
   if (existingPayload.message?.order?.quote) {

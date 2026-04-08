@@ -69,6 +69,18 @@ export async function onCancelDefaultGenerator(existingPayload: any, sessionData
       order.fulfillments[0].id = ids.fulfillmentId;
     }
 
+    // Generate dynamic ID for 2nd fulfillment if present (claim/renewal flows)
+    if (order.fulfillments?.[1]) {
+      const secondFulfillmentId = sessionData.second_fulfillment_id || crypto.randomUUID();
+      order.fulfillments[1].id = secondFulfillmentId;
+      sessionData.second_fulfillment_id = secondFulfillmentId;
+      if (order.items?.[0]?.fulfillment_ids) {
+        if (!order.items[0].fulfillment_ids.includes(secondFulfillmentId)) {
+          order.items[0].fulfillment_ids.push(secondFulfillmentId);
+        }
+      }
+    }
+
     // Apply flow-type overrides (Individual vs Family)
     applyFlowTypeOverrides(existingPayload, sessionData);
 

@@ -48,7 +48,7 @@ export async function onStatusUnsolicitedGenerator(existingPayload: any, session
   }
 
   // Apply resolved IDs (items, fulfillment, quote) to payload
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
   // Update PROPOSAL_ID tag value with dynamic quote ID from session
   updateProposalIdTag(existingPayload, ids.quoteId);

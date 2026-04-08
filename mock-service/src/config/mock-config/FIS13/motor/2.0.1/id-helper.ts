@@ -10,6 +10,7 @@ export interface ResolvedIds {
   childItemId: string | undefined;
   parentItemId: string | undefined;
   fulfillmentId: string | undefined;
+  secondFulfillmentId: string | undefined;
   quoteId: string | undefined;
   orderId: string | undefined;
   categoryIds: string[] | undefined;
@@ -71,6 +72,7 @@ export function resolveSessionIds(sessionData: any): ResolvedIds {
   return {
     providerId: sessionData.provider_id,
     fulfillmentId: sessionData.fulfillment_id,
+    secondFulfillmentId: sessionData.second_fulfillment_id,
     quoteId: sessionData.quote_id,
     childItemId: sessionData.child_item_id,
     parentItemId: sessionData.parent_item_id,
@@ -85,7 +87,8 @@ export function resolveSessionIds(sessionData: any): ResolvedIds {
  */
 export function applyResolvedIdsToPayload(
   existingPayload: any,
-  ids: ResolvedIds
+  ids: ResolvedIds,
+  sessionData?: any
 ): void {
   // Apply provider ID
   if (ids.providerId && existingPayload.message?.order?.provider) {
@@ -101,6 +104,7 @@ export function applyResolvedIdsToPayload(
     if (ids.categoryIds?.length) {
       existingPayload.message.order.items[0].category_ids = ids.categoryIds;
     }
+    
     if (ids.fulfillmentId) {
       existingPayload.message.order.items[0].fulfillment_ids = [ids.fulfillmentId];
     }
@@ -111,9 +115,32 @@ export function applyResolvedIdsToPayload(
     existingPayload.message.order.fulfillments[0].id = ids.fulfillmentId;
   }
 
+  // Apply or generate 2nd fulfillment ID if present (claim/renewal flows)
+  if (existingPayload.message?.order?.fulfillments?.[1]) {
+    const secondFulfillmentId = sessionData?.second_fulfillment_id || crypto.randomUUID();
+    existingPayload.message.order.fulfillments[1].id = secondFulfillmentId;
+
+    // Persist to session so it stays consistent across the entire flow
+    if (sessionData) {
+      sessionData.second_fulfillment_id = secondFulfillmentId;
+    }
+
+    // Append 2nd fulfillment ID to items' fulfillment_ids
+    if (existingPayload.message?.order?.items?.[0]?.fulfillment_ids) {
+      if (!existingPayload.message.order.items[0].fulfillment_ids.includes(secondFulfillmentId)) {
+        existingPayload.message.order.items[0].fulfillment_ids.push(secondFulfillmentId);
+      }
+    }
+  }
+
   // Apply quote ID
   if (ids.quoteId && existingPayload.message?.order?.quote) {
     existingPayload.message.order.quote.id = ids.quoteId;
+  }
+
+  // Apply vehicle-type overrides (category_ids, descriptor, price) based on selected item
+  if (sessionData) {
+    applyFlowTypeOverrides(existingPayload, sessionData);
   }
 }
 
@@ -148,11 +175,22 @@ function normalizeCategoryIds(categoryIds: any): string[] | undefined {
 
 /**
  * Checks if the selected vehicle type is 4-wheeler.
- * Reads from sessionData.vehicle_type (set by user in search modal) or user_inputs.
+ * Reads from sessionData.vehicle_type, user_inputs, or derives from selected_category_ids.
  */
 export function isFourWheeler(sessionData: any): boolean {
   const vehicleType = sessionData.vehicle_type || sessionData.user_inputs?.vehicle_type;
-  return vehicleType === '4-wheeler';
+  if (vehicleType) {
+    return vehicleType === '4-wheeler';
+  }
+
+  // Derive from selected_category_ids if vehicle_type not explicitly set
+  const categoryIds = sessionData.selected_category_ids;
+  if (Array.isArray(categoryIds) && categoryIds.length > 0) {
+    const fourWheelerCategories = ['C4', 'C5', 'C6'];
+    return categoryIds.some((c: string) => fourWheelerCategories.includes(c));
+  }
+
+  return false;
 }
 
 /**

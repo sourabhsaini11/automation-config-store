@@ -30,7 +30,7 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
   
   
   // Apply resolved IDs (provider, items, fulfillment, quote) to payload
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
    if (existingPayload.message?.order?.items?.[0]) {
     const item = existingPayload.message.order.items[0];

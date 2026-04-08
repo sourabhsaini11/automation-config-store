@@ -48,7 +48,7 @@ export async function onUpdateUnsolicitedDefaultGenerator(existingPayload: any, 
   }
 
   // Apply resolved IDs (provider, items, fulfillment, quote) to payload
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
   // Apply vehicle-type overrides (2-wheeler vs 4-wheeler) — updates category_ids, descriptor, price
   applyFlowTypeOverrides(existingPayload, sessionData);

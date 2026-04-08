@@ -40,7 +40,7 @@ export async function onConfirmDefaultGenerator(existingPayload: any, sessionDat
   }
 
   // Apply resolved IDs (provider, items, fulfillment, quote) to payload
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
   // Update location_ids from session data (carry-forward from previous flows)
   const selectedLocationId = sessionData.selected_location_id;

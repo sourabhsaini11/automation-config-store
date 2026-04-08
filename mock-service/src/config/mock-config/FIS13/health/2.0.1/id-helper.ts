@@ -10,6 +10,7 @@ export interface ResolvedIds {
   childItemId: string | undefined;
   parentItemId: string | undefined;
   fulfillmentId: string | undefined;
+  secondFulfillmentId: string | undefined;
   quoteId: string | undefined;
   orderId: string | undefined;
   categoryIds: string[] | undefined;
@@ -68,9 +69,15 @@ export function resolveSessionIds(sessionData: any): ResolvedIds {
     sessionData.selected_category_ids = normalizeCategoryIds(sessionData.selected_category_ids);
   }
 
+  // Resolve second_fulfillment_id: reuse from session if already generated
+  if (!sessionData.second_fulfillment_id) {
+    // Will be generated on first use in applyResolvedIdsToPayload
+  }
+
   return {
     providerId: sessionData.provider_id,
     fulfillmentId: sessionData.fulfillment_id,
+    secondFulfillmentId: sessionData.second_fulfillment_id,
     quoteId: sessionData.quote_id,
     childItemId: sessionData.child_item_id,
     parentItemId: sessionData.parent_item_id,
@@ -85,7 +92,8 @@ export function resolveSessionIds(sessionData: any): ResolvedIds {
  */
 export function applyResolvedIdsToPayload(
   existingPayload: any,
-  ids: ResolvedIds
+  ids: ResolvedIds,
+  sessionData?: any
 ): void {
   // Apply provider ID
   if (ids.providerId && existingPayload.message?.order?.provider) {
@@ -109,6 +117,24 @@ export function applyResolvedIdsToPayload(
   // Apply fulfillment ID
   if (ids.fulfillmentId && existingPayload.message?.order?.fulfillments?.[0]) {
     existingPayload.message.order.fulfillments[0].id = ids.fulfillmentId;
+  }
+
+  // Apply or generate 2nd fulfillment ID if present (claim/renewal flows)
+  if (existingPayload.message?.order?.fulfillments?.[1]) {
+    const secondFulfillmentId = sessionData?.second_fulfillment_id || crypto.randomUUID();
+    existingPayload.message.order.fulfillments[1].id = secondFulfillmentId;
+
+    // Persist to session so it stays consistent across the entire flow
+    if (sessionData) {
+      sessionData.second_fulfillment_id = secondFulfillmentId;
+    }
+
+    // Append 2nd fulfillment ID to items' fulfillment_ids
+    if (existingPayload.message?.order?.items?.[0]?.fulfillment_ids) {
+      if (!existingPayload.message.order.items[0].fulfillment_ids.includes(secondFulfillmentId)) {
+        existingPayload.message.order.items[0].fulfillment_ids.push(secondFulfillmentId);
+      }
+    }
   }
 
   // Apply quote ID

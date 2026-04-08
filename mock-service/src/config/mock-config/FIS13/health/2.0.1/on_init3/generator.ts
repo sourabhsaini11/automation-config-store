@@ -23,7 +23,7 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
   const ids = resolveSessionIds(sessionData);
 
   // Apply all resolved IDs to payload (provider, items, fulfillment, quote)
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
   // Update PROPOSAL_ID tag value with dynamic quote ID from session
   updateProposalIdTag(existingPayload, ids.quoteId);

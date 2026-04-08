@@ -28,7 +28,7 @@ export async function confirmDefaultGenerator(existingPayload: any, sessionData:
   const ids = resolveSessionIds(sessionData);
 
   // Apply all resolved IDs (provider, child item + parent, fulfillment, quote) in one call
-  applyResolvedIdsToPayload(existingPayload, ids);
+  applyResolvedIdsToPayload(existingPayload, ids, sessionData);
 
   // Update PROPOSAL_ID tag value with dynamic quote ID from session
   updateProposalIdTag(existingPayload, ids.quoteId);

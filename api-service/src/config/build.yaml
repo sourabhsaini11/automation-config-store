@@ -5,7 +5,8 @@ info:
     ONDC Protocol API specification, which includes statutory requirements for
     packaged commodities and pre-packaged food This is an adaptation of Beckn
     Core version 0.9.3
-  version: 1.2.5
+  version: 1.2.0
+  domain: ONDC:RET14
 security:
   - SubscriberAuth: []
   - GatewaySubscriberAuth: []
@@ -1339,67 +1340,6 @@ paths:
                     $ref: "#/components/schemas/Error"
                 required:
                   - message
-  /catalog_rejection:
-    post:
-      tags:
-        - ONDC Buyer App
-        - ONDC Seller App
-      description: >
-        Seller sends catalog rejection response indicating issues found in catalog upload.
-        This is a custom callback used by platforms to notify BAP/BPP about catalog validation failures.
-      requestBody:
-        description: Catalog rejection payload containing context and error details
-        content:
-          application/json:
-            schema:
-              additionalProperties: false
-              type: object
-              properties:
-                context:
-                  $ref: '#/components/schemas/Context'
-                errors:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      type:
-                        type: string
-                        description: Error category type
-                      code:
-                        type: string
-                        description: Error code identifying the failure reason
-                      path:
-                        type: string
-                        description: JSONPath pointing to the catalog element that failed validation
-                      message:
-                        type: string
-                        description: Human readable error explanation
-                    required:
-                      - type
-                      - code
-                      - message
-              required:
-                - context
-                - errors
-      responses:
-        '200':
-          description: Acknowledgement of message received
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: object
-                    properties:
-                      ack:
-                        $ref: '#/components/schemas/Ack'
-                    required:
-                      - ack
-                  error:
-                    $ref: '#/components/schemas/Error'
-                required:
-                  - message
 
 components:
   securitySchemes:
@@ -1926,7 +1866,7 @@ components:
           $ref: '#/components/schemas/Contact'
         state:
           type: string
-          description: Fulfillment state of an order   
+          description: Fulfillment state of an order  
       required:
         - id
         - type
@@ -2587,7 +2527,7 @@ components:
           additionalProperties: false
           properties:
             name:
-              type: string   
+              type: string  
     Payment:
       description: Describes a payment
       type: object
@@ -78835,7 +78775,7 @@ x-flows:
                       branch_name: xxxx
                 created_at: '2024-08-08T10:01:50.601Z'
                 updated_at: '2024-08-12T10:12:59.879Z'
-  - summary: Retail 1.2.5 (Offers Flow)
+  - summary: Retail 1.2.0 (Offers Flow)
     description: >-
       The Offers Flow in ONDC enables sellers to create and manage offers for
       their products and buyers to discover and redeem these offers.
@@ -78902,7 +78842,7 @@ x-flows:
               domain: ONDC:RET10
               action: search
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               transaction_id: 7c7aa709-a05e-4ad5-a49d-22bd64282e71
@@ -78927,7 +78867,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_search
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -79127,7 +79067,7 @@ x-flows:
             context:
               domain: ONDC:RET10
               action: select
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_id: sellerNP.com
@@ -79176,7 +79116,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_select
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -79277,7 +79217,7 @@ x-flows:
               domain: ONDC:RET10
               action: init
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -79342,7 +79282,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_init
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -79483,7 +79423,7 @@ x-flows:
               domain: ONDC:RET10
               action: confirm
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -79645,7 +79585,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_confirm
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -79833,7 +79773,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -80021,7 +79961,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -80209,7 +80149,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -80401,7 +80341,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -80593,7 +80533,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -80786,7 +80726,7 @@ x-flows:
               domain: ONDC:RET10
               action: update
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -80833,7 +80773,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_update
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -81055,7 +80995,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_update
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -81310,7 +81250,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_update
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -81589,7 +81529,7 @@ x-flows:
               domain: ONDC:RET10
               action: update
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -81623,7 +81563,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_update
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -82781,7 +82721,7 @@ x-flows:
                         value: gst_number_of_buyerNP
                 created_at: '2024-12-23T07:03:30.516Z'
                 updated_at: '2024-12-23T07:03:32.230Z'
-  - summary: Retail 1.2.5 (Commercial Model for BNP/SNP)
+  - summary: Retail 1.2.0 (Commercial Model for BNP/SNP)
     description: >-
       The Buyer NP (BNP) selects specific options for each item, including the
       convenience fee applied as a channel margin. The np_fees options are
@@ -82831,7 +82771,7 @@ x-flows:
               domain: ONDC:RET10
               action: search
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               transaction_id: 7c7aa709-a05e-4ad5-a49d-22bd64282e71
@@ -82856,7 +82796,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_search
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -83049,7 +82989,7 @@ x-flows:
               context:
                 domain: ONDC:RET10
                 action: select
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
@@ -83092,7 +83032,7 @@ x-flows:
                 domain: ONDC:RET10
                 action: on_select
                 country: IND
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: https://sellerNP.com/ondc
@@ -83202,7 +83142,7 @@ x-flows:
                 domain: ONDC:RET10
                 action: init
                 country: IND
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: https://sellerNP.com/ondc
@@ -83271,7 +83211,7 @@ x-flows:
                 domain: ONDC:RET10
                 action: on_init
                 country: IND
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: https://sellerNP.com/ondc
@@ -83432,7 +83372,7 @@ x-flows:
                 domain: ONDC:RET10
                 action: confirm
                 country: IND
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: https://sellerNP.com/ondc
@@ -83612,7 +83552,7 @@ x-flows:
                 domain: ONDC:RET10
                 action: on_confirm
                 country: IND
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: https://sellerNP.com/ondc
@@ -86350,7 +86290,7 @@ x-flows:
                         value: gst_number_of_buyerNP
                 created_at: '2024-12-23T07:03:30.516Z'
                 updated_at: '2024-12-23T07:03:32.230Z'
-  - summary: Retail 1.2.5 (Replacement Flow)
+  - summary: Retail 1.2.0 (Replacement Flow)
     description: >-
       The Replacement Flow begins with the Seller NP (SNP) defining the terms
       for replacements in their catalog, including whether a replacement is
@@ -86428,7 +86368,7 @@ x-flows:
                 domain: ONDC:RET10
                 action: search
                 country: IND
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 transaction_id: 7c7aa709-a05e-4ad5-a49d-22bd64282e71
@@ -86454,7 +86394,7 @@ x-flows:
                 domain: ONDC:RET10
                 action: on_search
                 country: IND
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: https://sellerNP.com/ondc
@@ -86659,7 +86599,7 @@ x-flows:
               context:
                 domain: ONDC:RET10
                 action: select
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_id: sellerNP.com
@@ -86709,7 +86649,7 @@ x-flows:
                 domain: ONDC:RET10
                 action: on_select
                 country: IND
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: https://sellerNP.com/ondc
@@ -86812,7 +86752,7 @@ x-flows:
                 domain: ONDC:RET10
                 action: init
                 country: IND
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: https://sellerNP.com/ondc
@@ -86878,7 +86818,7 @@ x-flows:
                 domain: ONDC:RET10
                 action: on_init
                 country: IND
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: https://sellerNP.com/ondc
@@ -87021,7 +86961,7 @@ x-flows:
                 domain: ONDC:RET10
                 action: confirm
                 country: IND
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: https://sellerNP.com/ondc
@@ -87184,7 +87124,7 @@ x-flows:
                 domain: ONDC:RET10
                 action: on_confirm
                 country: IND
-                core_version: 1.2.5
+                core_version: 1.2.0
                 bap_id: buyerNP.com
                 bap_uri: https://buyerNP.com/ondc
                 bpp_uri: https://sellerNP.com/ondc
@@ -87373,7 +87313,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -87562,7 +87502,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -87751,7 +87691,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -87944,7 +87884,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -88137,7 +88077,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -88331,7 +88271,7 @@ x-flows:
               domain: ONDC:RET10
               action: update
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -88380,7 +88320,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_update
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -88603,7 +88543,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_update
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -88859,7 +88799,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_update
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -89198,7 +89138,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_update
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -89534,7 +89474,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -89867,7 +89807,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -90204,7 +90144,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -90541,7 +90481,7 @@ x-flows:
               domain: ONDC:RET10
               action: on_status
               country: IND
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/ondc
               bpp_uri: https://sellerNP.com/ondc
@@ -90871,7 +90811,7 @@ x-flows:
                     label: Invoice
                 created_at: '2024-12-24T09:55:35.231Z'
                 updated_at: '2024-12-27T07:36:32.230Z'
-  - summary: Retail 1.2.5 (Exchange Flow)
+  - summary: Retail 1.2.0 (Exchange Flow)
     description: >-
       The exchange process starts with the Seller NP (SNP) listing exchange
       offers, which are published by the provider and displayed to buyers on the
@@ -90944,7 +90884,7 @@ x-flows:
               country: IND
               city: std:080
               action: search
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/protocol/v1
               transaction_id: ecdb8c0f-7038-4243-b8e7-8d3aef72bdcb
@@ -90971,7 +90911,7 @@ x-flows:
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
               city: std:080
-              core_version: 1.2.5
+              core_version: 1.2.0
               country: IND
               domain: ONDC:RET14
               message_id: 039ee0f2-4348-4c50-aa1c-5b94a7212760
@@ -92025,7 +91965,7 @@ x-flows:
               country: IND
               city: std:080
               action: select
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/protocol/v1
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
@@ -92070,7 +92010,7 @@ x-flows:
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
               city: std:080
-              core_version: 1.2.5
+              core_version: 1.2.0
               country: IND
               domain: ONDC:RET14
               message_id: bec0f3c4-ef53-4236-bd02-eefb5c57aecc
@@ -92136,7 +92076,7 @@ x-flows:
               country: IND
               city: std:080
               action: init
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/protocol/v1
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
@@ -92199,7 +92139,7 @@ x-flows:
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
               city: std:080
-              core_version: 1.2.5
+              core_version: 1.2.0
               country: IND
               domain: ONDC:RET14
               message_id: a83b634a-5502-483c-ac6f-952b30d1e101
@@ -92307,7 +92247,7 @@ x-flows:
               country: IND
               city: std:080
               action: confirm
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/protocol/v1
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
@@ -92439,7 +92379,7 @@ x-flows:
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
               city: std:080
-              core_version: 1.2.5
+              core_version: 1.2.0
               country: IND
               domain: ONDC:RET14
               message_id: 8fc75491-501c-406f-b0c4-07cd37d8d3cc
@@ -92597,7 +92537,7 @@ x-flows:
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
               city: std:080
-              core_version: 1.2.5
+              core_version: 1.2.0
               country: IND
               domain: ONDC:RET14
               message_id: 34c3feb4-cd79-42bc-964b-b197e4d2c81e
@@ -92745,7 +92685,7 @@ x-flows:
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
               city: std:080
-              core_version: 1.2.5
+              core_version: 1.2.0
               country: IND
               domain: ONDC:RET14
               message_id: e07310d2-4dd5-42fd-9f89-812498e11577
@@ -92893,7 +92833,7 @@ x-flows:
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
               city: std:080
-              core_version: 1.2.5
+              core_version: 1.2.0
               country: IND
               domain: ONDC:RET14
               message_id: 27500893-b1be-4e4d-bef2-8a68ba62eb30
@@ -93051,7 +92991,7 @@ x-flows:
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
               city: std:080
-              core_version: 1.2.5
+              core_version: 1.2.0
               country: IND
               domain: ONDC:RET14
               message_id: 40df875b-175c-4f9f-a949-c14f366c32e0
@@ -93209,7 +93149,7 @@ x-flows:
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
               city: std:080
-              core_version: 1.2.5
+              core_version: 1.2.0
               country: IND
               domain: ONDC:RET14
               message_id: 791fac1f-92e4-4898-b28b-c854fb6d89e0
@@ -93368,7 +93308,7 @@ x-flows:
               country: IND
               city: std:080
               action: update
-              core_version: 1.2.5
+              core_version: 1.2.0
               bap_id: buyerNP.com
               bap_uri: https://buyerNP.com/protocol/v1
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
@@ -93434,7 +93374,7 @@ x-flows:
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
               city: std:080
-              core_version: 1.2.5
+              core_version: 1.2.0
               country: IND
               domain: ONDC:RET14
               message_id: 31a1bed4-764a-4704-862d-873cf575d61d
@@ -93625,7 +93565,7 @@ x-flows:
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
               city: std:080
-              core_version: 1.2.5
+              core_version: 1.2.0
               country: IND
               domain: ONDC:RET14
               message_id: 288f104a-5e2b-48ad-88aa-c9620eceb444
@@ -93841,7 +93781,7 @@ x-flows:
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
               city: std:080
-              core_version: 1.2.5
+              core_version: 1.2.0
               country: IND
               domain: ONDC:RET14
               message_id: c2ae5a73-9017-4fae-a60d-25437045fa3f
@@ -94065,7 +94005,7 @@ x-flows:
               bpp_id: sellerNP.com
               bpp_uri: https://sellerNP.com/api/v1/ondc/retail
               city: std:080
-              core_version: 1.2.5
+              core_version: 1.2.0
               country: IND
               domain: ONDC:RET14
               message_id: 2fe07382-9f07-4e58-8dae-5724b8b75be7
@@ -97016,7 +96956,7 @@ x-attributes:
           core_version:
             description: Specifies the ONDC core version being used
             required: Required
-            usage: 1.2.5
+            usage: 1.2.0
             reference: if any
           bap_id:
             description: Specifies the ID of the Buyer App participating in the transaction
@@ -97115,7 +97055,7 @@ x-attributes:
           core_version:
             description: ONDC core version used
             required: Required
-            usage: 1.2.5
+            usage: 1.2.0
             reference: if any
           bap_id:
             description: Unique identifier of the buyer app
@@ -97596,7 +97536,7 @@ x-attributes:
           core_version:
             description: Specifies the ONDC protocol version being used
             required: Required
-            usage: 1.2.5
+            usage: 1.2.0
             reference: if any
           bap_id:
             description: Identifies the buyer application involved in the transaction
@@ -97727,7 +97667,7 @@ x-attributes:
           core_version:
             description: Specifies the ONDC protocol version being used
             required: Required
-            usage: 1.2.5
+            usage: 1.2.0
             reference: if any
           bap_id:
             description: Identifies the buyer application involved in the transaction
@@ -97920,7 +97860,7 @@ x-attributes:
           core_version:
             description: Specifies the ONDC protocol version being used
             required: Required
-            usage: 1.2.5
+            usage: 1.2.0
             reference: if any
           bap_id:
             description: Identifies the buyer application involved in the transaction
@@ -98176,7 +98116,7 @@ x-attributes:
           core_version:
             description: Version of the ONDC core protocol being used
             required: Required
-            usage: 1.2.5
+            usage: 1.2.0
             reference: any
           bap_id:
             description: Identifies the buyer application involved
@@ -98328,7 +98268,7 @@ x-attributes:
           core_version:
             description: ONDC protocol version
             required: Required
-            usage: 1.2.5
+            usage: 1.2.0
             reference: if any
           bap_id:
             description: Buyer App ID
@@ -98702,7 +98642,7 @@ x-attributes:
           core_version:
             description: The version of the ONDC core protocol being used
             required: Required
-            usage: 1.2.5
+            usage: 1.2.0
             reference: if any
           bap_id:
             description: The ID of the Buyer App participating in the transaction
@@ -99778,7 +99718,7 @@ x-attributes:
           core_version:
             description: ONDC protocol version used
             required: Required
-            usage: 1.2.5
+            usage: 1.2.0
             reference: if any
           bap_id:
             description: ID of the Buyer App
@@ -100446,7 +100386,7 @@ x-attributes:
           core_version:
             description: Specifies the ONDC protocol version being used
             required: Required
-            usage: 1.2.5
+            usage: 1.2.0
             reference: if any
           bap_id:
             description: Identifies the buyer-side application involved in the transaction
@@ -100655,7 +100595,7 @@ x-attributes:
           core_version:
             description: Specifies the ONDC core version used
             required: Required
-            usage: 1.2.5
+            usage: 1.2.0
             reference: if any
           bap_id:
             description: Unique identifier for the Buyer App (BAP)
@@ -101813,7 +101753,7 @@ x-validations:
             attr: "$.context.action"
             _RETURN_: attr equal to action
           - _NAME_: CONTEXT_ENUM_VERSION
-            version: ["1.2.0", "1.2.5"]
+            version: ["1.2.0", "1.2.0"]
             attr: "$.context.core_version"
             _RETURN_: attr all in version
         - _NAME_: CONTEXT_REGEX
@@ -102375,9 +102315,11 @@ x-validations:
               _RETURN_: attr are present
             - _NAME_: ITEMS_ONDC_ORG_RETURNABLE
               attr: "$.message.catalog['bpp/providers'][*].items[*]['@ondc/org/returnable']"
+              _CONTINUE_: "!(attr are present)"
               _RETURN_: attr are present
             - _NAME_: ITEMS_ONDC_ORG_CANCELLABLE
               attr: "$.message.catalog['bpp/providers'][*].items[*]['@ondc/org/cancellable']"
+              _CONTINUE_: "!(attr are present)"
               _RETURN_: attr are present
             - _NAME_: ITEMS_ONDC_ORG_RETURN_WINDOW
               reg: ['^P(?=\\d|T)(\\d+Y)?(\\d+M)?(\\d+W)?(\\d+D)?(T(?=\\d)(\\d+H)?(\\d+M)?(\\d+S)?)?$']
@@ -102386,6 +102328,7 @@ x-validations:
               _RETURN_: attr follow regex reg
             - _NAME_: ITEMS_ONDC_ORG_SELLER_PICKUP_RETURN
               attr: "$.message.catalog['bpp/providers'][*].items[*]['@ondc/org/seller_pickup_return']"
+              _CONTINUE_: "!(attr are present)"
               _RETURN_: attr are present
             - _NAME_: ITEMS_ONDC_ORG_TIME_TO_SHIP
               attr: "$.message.catalog['bpp/providers'][*].items[*]['@ondc/org/time_to_ship']"
@@ -102667,7 +102610,7 @@ x-validations:
             _RETURN_: attr follow regex reg
           - _NAME_: ITEMS_FULFILLMENT_ID
             attr: "$.message.order.items[*].fulfillment_id"
-            reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+            reg: ['^[0-9a-zA-Z\_\-]{1,36}$']
             _RETURN_: attr follow regex reg
           - _NAME_: ITEMS_FULFILLMENT_ID_MAP_SPF
             attr: "$.message.order.items[*].fulfillment_id"
@@ -102677,7 +102620,7 @@ x-validations:
           _RETURN_:
           - _NAME_: FULFILLMENTS_ID
             attr: "$.message.order.fulfillments[*].id"
-            reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+            reg: ['^[0-9a-zA-Z\_\-]{1,36}$']
             _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_TYPE
             attr: "$.message.order.fulfillments[*].type"
@@ -102848,7 +102791,7 @@ x-validations:
           _RETURN_: &INIT_FULFILLMENTS
           - _NAME_: FULFILLMENTS_ID
             attr: "$.message.order.fulfillments[*].id"
-            reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+            reg: ['^[0-9a-zA-Z\_\-]{1,36}$']
             _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_TYPE
             attr: "$.message.order.fulfillments[*].type"
@@ -102950,7 +102893,7 @@ x-validations:
           _RETURN_:
           - _NAME_: FULFILLMENTS_ID
             attr: "$.message.order.fulfillments[*].id"
-            reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+            reg: ['^[0-9a-zA-Z\_\-]{1,36}$']
             _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_TYPE
             attr: "$.message.order.fulfillments[*].type"
@@ -103214,7 +103157,7 @@ x-validations:
           _RETURN_:
           - _NAME_: FULFILLMENTS_ID
             attr: "$.message.order.fulfillments[*].id"
-            reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+            reg: ['^[0-9a-zA-Z\_\-]{1,36}$']
             _RETURN_: attr are present
           - _NAME_: FULFILLMENTS_STATE_DESCRIPTOR_CODE
             attr: "$.message.order.fulfillments[*].state.descriptor.code"
@@ -103426,7 +103369,7 @@ x-validations:
                 - _NAME_: ROUTING_TYPE
                   _CONTINUE_: "!(attr are present)"
                   attr: "$.message.order.fulfillments[*].tags[?(@.code=='routing')].list[?(@.code=='type')].value"
-                  var_enum: ["P2P", "H2P2P"]
+                  var_enum: ["P2P", "P2H2P"]
                   _RETURN_: attr all in var_enum
 
             - _NAME_: TAGS_TRACKING
@@ -103528,7 +103471,7 @@ x-validations:
           _RETURN_:
           - _NAME_: FULFILLMENTS_ID
             attr: "$.message.order.fulfillments[*].id"
-            reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+            reg: ['^[0-9a-zA-Z\_\-]{1,36}$']
             _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_STATE_DESCRIPTOR_CODE
             attr: "$.message.order.fulfillments[*].state.descriptor.code"
@@ -103778,7 +103721,7 @@ x-validations:
           _RETURN_:
           - _NAME_: FULFILLMENTS_ID
             attr: "$.message.order.fulfillments[*].id"
-            reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+            reg: ['^[0-9a-zA-Z\_\-]{1,36}$']
             _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_TYPE
             attr: "$.message.order.fulfillments[*].type"
@@ -103821,7 +103764,7 @@ x-validations:
           _RETURN_:  
           - _NAME_: FULFILLMENTS_ID
             attr: "$.message.order.fulfillments[*].id"
-            reg: ['^[0-9a-zA-Z/-_]{1,36}$']
+            reg: ['^[0-9a-zA-Z\_\-]{1,36}$']
             _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_TYPE
             attr: "$.message.order.fulfillments[*].type"
@@ -103834,7 +103777,7 @@ x-validations:
             _RETURN_: attr follow regex reg
           - _NAME_: FULFILLMENTS_STATE_DESCRIPTOR_CODE
             attr: "$.message.order.fulfillments[*].state.descriptor.code"
-            var_enum: [ "Accepted", "Cancelled", "Pending", "Order-delivered", "Return_Initiated", "Return_Pick_Failed", "Return_Approved", "Return_Picked", "Return_Delivered", "Liquidated", "Return_Rejected"]
+            var_enum: [ "Accepted", "Cancelled", "Pending", "Order-delivered","Order-picked-up","Return_Initiated", "Return_Pick_Failed", "Return_Approved", "Return_Picked", "Return_Delivered", "Liquidated", "Return_Rejected"]
             _RETURN_: attr are present && attr all in var_enum
           - _NAME_: FULFILLMENTS_START
             _RETURN_:
@@ -104595,34 +104538,6 @@ x-validations:
           - _NAME_: REQUIRED_RESOLUTION_PROVIDER_PERSON_NAME
             attr: $.message.issue.resolution_provider.respondent_info.organization.person.name
             _RETURN_: attr are present
-
-    catalog_rejection:
-      - _NAME_: CATALOG_REJECTION_CONTEXT
-        _DESCRIPTION_: Validate context for catalog_rejection
-        action: ["catalog_rejection"]
-        _RETURN_: *CONTEXT_COMMON
-
-      - _NAME_: CATALOG_REJECTION_ERRORS
-        _DESCRIPTION_: Validate error objects in catalog_rejection response
-        _RETURN_:
-
-          - _NAME_: ERROR_TYPE_REQUIRED
-            attr: "$.errors[*].type"
-            var_enum: ["ITEM-ERROR", "PROVIDER-ERROR", "BPP-ERROR"]
-            _RETURN_: attr are present && attr all in var_enum
-
-          - _NAME_: ERROR_CODE_REQUIRED
-            attr: "$.errors[*].code"
-            reg: ['^[0-9]{4,6}$']
-            _RETURN_: attr are present && attr follow regex reg
-
-          - _NAME_: ERROR_PATH_REQUIRED
-            attr: "$.errors[*].path"
-            _RETURN_: attr are present
-
-          - _NAME_: ERROR_MESSAGE_REQUIRED
-            attr: "$.errors[*].message"
-            _RETURN_: attr are present
-    
+      
   _SESSION_DATA_: {}
   

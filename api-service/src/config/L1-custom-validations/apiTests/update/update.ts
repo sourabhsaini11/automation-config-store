@@ -75,9 +75,7 @@ export const checkUpdate = async (
     if (targetFf === "payment") {
       try {
         const payment = update.payment;
-        console.log("update payment object:", payment);
         if (payment) {
-          console.log("Fetching previous payment from Redis...");
           const prevPaymentRaw = await RedisService.getKey(
             `${context.transaction_id}_prevPayment`
           );
@@ -85,10 +83,7 @@ export const checkUpdate = async (
             ? JSON.parse(prevPaymentRaw)
             : null;
 
-          console.log("Update call Parsed prevPayment:", prevPayment);
-
           const settlement_details = payment["@ondc/org/settlement_details"];
-          console.log("Update call settlement_details:", settlement_details);
           if (
             settlement_details[0] &&
             !isPresentInRedisSet(settlementDetailSet, settlement_details[0])
@@ -100,18 +95,12 @@ export const checkUpdate = async (
             ...settlementDetailSet,
           ];
 
-          console.log(
-            "Updated prevPayment settlement details:",
-            prevPayment["@ondc/org/settlement_details"]
-          );
           
           await RedisService.setKey(
             `${context.transaction_id}_prevPayment`,
             JSON.stringify(prevPayment),
             TTL_IN_SECONDS
           );
-
-          console.log("UPDATE CALL - Updated prevPayment", prevPayment);
 
           await RedisService.setKey(
             `${context.transaction_id}_settlementDetailSet`,

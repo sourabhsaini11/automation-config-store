@@ -915,8 +915,7 @@ async function validatePayment(
     `${transaction_id}_prevPayment`
   );
   const prevPayment = prevPaymentRaw ? JSON.parse(prevPaymentRaw) : null;
-  console.log("prev payment on_status_pending", prevPayment);
-  console.log("order.payment on_status_pending", order.payment);
+  console.log("order.payment", order.payment);
   if (prevPayment && !_.isEqual(prevPayment, order.payment)) {
     result.push(
       addError(

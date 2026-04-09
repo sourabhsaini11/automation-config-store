@@ -21353,7 +21353,7 @@ x-validations:
               - _NAME_: VALIDATE_GPS_FORMAT
                 _SCOPE_: "$.message.intent.fulfillment.stops[*].location"
                 subTags: "$.gps"
-                match1: ["^-?\\d{1,3}\\.\\d{6,},-?\\d{1,3}\\.\\d{6,}$"]
+                match1: ["^-?\\d{1,3}\\.\\d{6,},\\s*-?\\d{1,3}\\.\\d{6,}$"]
                 _RETURN_: subTags follow regex match1
           - _NAME_: fulfillment_Enums_Tests
             _RETURN_:

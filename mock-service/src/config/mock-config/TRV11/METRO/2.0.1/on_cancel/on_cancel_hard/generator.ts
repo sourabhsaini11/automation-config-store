@@ -75,7 +75,7 @@ function applyCancellation(quote: Quote, cancellationCharges: number): Quote {
     breakup: [...quote.breakup, ...refundBreakups, cancellationBreakup],
   };
 }
-const modifyPayments = (payments: any) => {
+const modifyPaymentsothers = (payments: any) => {
   payments.forEach((payment: any) => {
     payment.tags.forEach((tag: any) => {
       if (tag.descriptor?.code === "SETTLEMENT_TERMS") {
@@ -89,17 +89,42 @@ const modifyPayments = (payments: any) => {
   });
   return payments;
 };
+const modifyPayments = (payments: any, quote: any) => {
+  payments.forEach((payment: any) => {
+    const buyerFinderTag = payment.tags?.find(
+      (tag: any) => tag.descriptor?.code === "BUYER_FINDER_FEES"
+    );
+
+    const percentageEntry = buyerFinderTag?.list.find(
+      (item: any) => item.descriptor?.code === "BUYER_FINDER_FEES_PERCENTAGE"
+    );
+    const settlementTerms = payment.tags?.find(
+      (tag: any) => tag.descriptor?.code === "SETTLEMENT_TERMS"
+    );
+    if (settlementTerms && settlementTerms.list) {
+      const settlementAmountEntry = settlementTerms.list.find(
+        (entry: any) => entry.descriptor?.code === "SETTLEMENT_AMOUNT"
+      );
+
+      const price = parseFloat(quote?.price?.value) || 0;
+      const feePercentage = parseFloat(percentageEntry.value) || 0;
+      const feeAmount = (price * feePercentage) / 100;
+      const finalAmount =
+        payment.collected_by === "BAP" ? price - feeAmount : feeAmount;
+
+      if (settlementAmountEntry) {
+        settlementAmountEntry.value = finalAmount.toFixed(2);
+      }
+    }
+  });
+  return payments;
+};
 export async function onCancelHardGenerator(
   existingPayload: any,
   sessionData: any
 ) {
   const now = new Date().toISOString();
 
-  if (sessionData.updated_payments.length > 0) {
-    existingPayload.message.order.payments = modifyPayments(
-      sessionData.updated_payments
-    );
-  }
 
   if (sessionData.items.length > 0) {
     existingPayload.message.order.items = sessionData.items;
@@ -138,7 +163,12 @@ export async function onCancelHardGenerator(
     // );
     existingPayload.message.order.quote = sessionData.quote;
   }
-
+  if (sessionData.updated_payments.length > 0) {
+    existingPayload.message.order.payments = modifyPayments(
+      sessionData.updated_payments,
+      sessionData.quote
+    );
+  }
   if (sessionData.flow_id === "TECHNICAL_CANCELLATION_FLOW" || sessionData.flow_id === "TECHNICAL_CANCELLATION_FLOW (W/O Select)") {
     const originalBreakup =
       existingPayload?.message?.order?.quote?.breakup ?? [];
@@ -183,6 +213,7 @@ export async function onCancelHardGenerator(
       },
       breakup,
     };
+    existingPayload.message.order.payments = modifyPaymentsothers(existingPayload.message.order.payments);
   }
 
   existingPayload.message.order.cancellation = {
@@ -201,3 +232,4 @@ export async function onCancelHardGenerator(
   existingPayload.message.order.updated_at = now;
   return existingPayload;
 }
+

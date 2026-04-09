@@ -24,17 +24,34 @@ type Quote = {
   breakup: Breakup[];
 };
 
-const modifyPayments = (payments: any) => {
+const modifyPayments = (payments: any, order: any) => {
   payments.forEach((payment: any) => {
-    payment.tags.forEach((tag: any) => {
-      if (tag.descriptor?.code === "SETTLEMENT_TERMS") {
-        tag.list.forEach((item: any) => {
-          if (item.descriptor?.code === "SETTLEMENT_AMOUNT") {
-            item.value = "0";
-          }
-        });
+    const buyerFinderTag = payment.tags?.find(
+      (tag: any) => tag.descriptor?.code === "BUYER_FINDER_FEES"
+    );
+
+    const percentageEntry = buyerFinderTag?.list.find(
+      (item: any) => item.descriptor?.code === "BUYER_FINDER_FEES_PERCENTAGE"
+    );
+
+    const settlementTerms = payment.tags?.find(
+      (tag: any) => tag.descriptor?.code === "SETTLEMENT_TERMS"
+    );
+    if (settlementTerms && settlementTerms.list) {
+      const settlementAmountEntry = settlementTerms.list.find(
+        (entry: any) => entry.descriptor?.code === "SETTLEMENT_AMOUNT"
+      );
+
+      const price = parseFloat(order?.quote?.price?.value) || 0;
+      const feePercentage = parseFloat(percentageEntry.value) || 0;
+      const feeAmount = (price * feePercentage) / 100;
+      const finalAmount =
+        payment.collected_by === "BAP" ? price - feeAmount : feeAmount;
+
+      if (settlementAmountEntry) {
+        settlementAmountEntry.value = finalAmount.toFixed(2);
       }
-    });
+    }
   });
   return payments;
 };
@@ -111,11 +128,6 @@ export async function onCancelSoftGenerator(
 ) {
   const now = new Date().toISOString();
 
-  if (sessionData.updated_payments.length > 0) {
-    existingPayload.message.order.payments = modifyPayments(
-      sessionData.updated_payments
-    );
-  }
 
   if (sessionData.items.length > 0) {
     existingPayload.message.order.items = sessionData.items;
@@ -141,9 +153,16 @@ export async function onCancelSoftGenerator(
   if (sessionData.quote != null) {
     existingPayload.message.order.quote = applyCancellation(
       sessionData.quote,
-      0
+      15
     );
   }
+  if (sessionData.updated_payments.length > 0) {
+    existingPayload.message.order.payments = modifyPayments(
+      sessionData.updated_payments,
+      existingPayload.message.order
+    );
+  }
+
   existingPayload.message.order.status = "SOFT_CANCEL";
   existingPayload.message.order.cancellation = {
     cancelled_by: "CONSUMER",

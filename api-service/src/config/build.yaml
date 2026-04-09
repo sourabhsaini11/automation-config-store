@@ -102175,7 +102175,6 @@ x-validations:
             _RETURN_: attr are present
           - _NAME_: PROVIDERS_RATING
             attr: "$.message.catalog['bpp/providers'][*].rating"
-            _CONTINUE_: "!(attr are present)"
             rating_reg: ['^(?:[1-4](?:\\.\\d+)?|5(?:\\.0+)?|\\s*)$']
             _RETURN_: attr follow regex rating_reg
           - _NAME_: PROVIDERS_TIME_LABEL
@@ -102356,7 +102355,6 @@ x-validations:
               _RETURN_: attr are present
             - _NAME_: ITEMS_RATING
               attr: "$.message.catalog['bpp/providers'][*].items[*].rating"
-              _CONTINUE_: "!(attr are present)"
               rating_reg: ['^(?:[1-4](?:\\.\\d+)?|5(?:\\.0+)?|\\s*)$']
               _RETURN_: attr follow regex rating_reg
             - _NAME_: ITEMS_TIME_LABEL

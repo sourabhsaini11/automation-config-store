@@ -10,7 +10,10 @@
 export async function onInitGenerator(existingPayload: any, sessionData: any) {
   // Reuse data from session (same as on_select_2)
   if (sessionData.items) {
-    existingPayload.message.order.items = sessionData.items;
+    existingPayload.message.order.items = sessionData.items.map((item: any) => {
+      const { xinput, ...rest } = item;
+      return rest;
+    });
   }
 
   if (sessionData.fulfillments) {

@@ -102736,10 +102736,11 @@ x-validations:
                 #   _CONTINUE_: "!(attr are present)"
                 #   _RETURN_: attr are present
 
-                # - _NAME_: TAGS_QUALIFIER_ITEM_COUNT
-                #   attr: "$.message.catalog['bpp/providers'][*].offers[*].tags[?(@.code=='qualifier')].list[?(@.code=='item_count')].value"
-                #   _CONTINUE_: "!(attr are present)"
-                #   _RETURN_: attr are present
+                - _NAME_: TAGS_QUALIFIER_ITEM_COUNT
+                  attr: "$.message.catalog['bpp/providers'][*].offers[*].tags[?(@.code=='qualifier')].list[?(@.code=='item_count')].value"
+                  _CONTINUE_: "!(attr are present)"
+                  reg: ['^[0-9]+$']
+                  _RETURN_: attr follow regex reg
 
                 # - _NAME_: TAGS_QUALIFIER_ITEM_COUNT_UPPER
                 #   attr: "$.message.catalog['bpp/providers'][*].offers[*].tags[?(@.code=='qualifier')].list[?(@.code=='item_count_upper')].value"

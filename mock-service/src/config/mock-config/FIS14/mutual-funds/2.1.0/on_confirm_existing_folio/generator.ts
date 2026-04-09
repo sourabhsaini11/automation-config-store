@@ -120,6 +120,24 @@ export async function on_confirmDefaultGenerator(
     if (existingPayload.message?.order?.xinput?.form) {
         existingPayload.message.order.xinput.form.id = formId
     }
+    // Inject quantity.selected.measure from session (saved at select step)
+    const lumpsumMeasure = (sessionData as any).lumpsum_measure;
+    if (lumpsumMeasure && existingPayload.message?.order?.items?.[0]) {
+        if (!existingPayload.message.order.items[0].quantity) {
+            existingPayload.message.order.items[0].quantity = {};
+        }
+        existingPayload.message.order.items[0].quantity.selected = { measure: lumpsumMeasure };
+    }
+
+    // Inject fulfillment (with agent/customer creds) from session
+    const lumpsumFulfillment = (sessionData as any).lumpsum_fulfillment;
+    if (lumpsumFulfillment && existingPayload.message?.order?.fulfillments?.[0]) {
+        existingPayload.message.order.fulfillments[0] = {
+            ...existingPayload.message.order.fulfillments[0],
+            ...lumpsumFulfillment,
+        };
+    }
+
     console.log("=== on_confirm Generator End ===");
 
     const updates = {

@@ -39,11 +39,11 @@ export class MockSelectMetro201Class extends MockAction {
     const payloadFulfillmentIds = fulfillments.map((f: any) => f.id);
 
     for (const item of items) {
-      // 1. check item id in sessionData.selected_item_ids
-      if (!sessionData.selected_item_ids.includes(item.id)) {
+      // 1. check item id in sessionData.item_ids
+      if (!sessionData.item_ids.includes(item.id)) {
         return {
           valid: false,
-          message: `Item id ${item.id} not found in sessionData.selected_item_ids: ${sessionData.selected_item_ids}`,
+          message: `Item id ${item.id} not found in sessionData.item_ids : ${sessionData.item_ids} in select`,
         };
       }
 
@@ -85,24 +85,24 @@ export class MockSelectMetro201Class extends MockAction {
     return { valid: true };
   }
   async meetRequirements(sessionData: SessionData): Promise<MockOutput> {
-  // Check for items
-  if (!sessionData.items || sessionData.items.length === 0) {
-    return {
-      valid: false,
-      message: "No items available in session data",
-      code: "MISSING_ITEMS",
-    };
-  }
-  // Check for provider_id
-  if (!sessionData.provider_id) {
-    return {
-      valid: false,
-      message: "No provider_id available in session data",
-      code: "MISSING_PROVIDER_ID",
-    };
-  }
+    // Check for items
+    if (!sessionData.items || sessionData.items.length === 0) {
+      return {
+        valid: false,
+        message: "No items available in session data",
+        code: "MISSING_ITEMS",
+      };
+    }
+    // Check for provider_id
+    if (!sessionData.provider_id) {
+      return {
+        valid: false,
+        message: "No provider_id available in session data",
+        code: "MISSING_PROVIDER_ID",
+      };
+    }
 
-  // All requirements satisfied
-  return { valid: true };
-}
+    // All requirements satisfied
+    return { valid: true };
+  }
 }

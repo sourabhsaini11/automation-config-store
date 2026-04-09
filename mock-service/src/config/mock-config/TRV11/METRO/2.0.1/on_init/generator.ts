@@ -53,11 +53,11 @@ export async function onInitGenerator(
 	const payments = transformPayments(sessionData.payments);
 	existingPayload.message.order.payments = payments;
 
-	// if (sessionData.items && sessionData.items.length > 0) {
-	// 	existingPayload.message.order.items = sessionData.items;
-	// }
+	if (sessionData.items && sessionData.items.length > 0) {
+		existingPayload.message.order.items = sessionData.items;
+	}
 
-	existingPayload.message.order.items = [];
+
 
 	if (sessionData.fulfillments && sessionData.fulfillments.length > 0) {
 		existingPayload.message.order.fulfillments = sessionData.fulfillments;

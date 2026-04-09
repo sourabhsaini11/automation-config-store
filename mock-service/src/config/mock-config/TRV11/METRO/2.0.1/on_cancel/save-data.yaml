@@ -2,3 +2,4 @@ save-data:
   status: "$.message.order.status"
   quote: "$.message.order.quote"
   fulfillments: "$.message.order.fulfillments[*]"
+  updated_payments: "$.message.order.payments[*]"

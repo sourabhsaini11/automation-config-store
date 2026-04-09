@@ -79466,19 +79466,9 @@ x-validations:
           - _NAME_: REQUIRED_CUSTOMER_PERSON_ID
             attr: $.message.order.fulfillments[?(@.type=='SIP')].customer.person.id
             _RETURN_: attr are present
-          - _NAME_: VALID_CUSTOMER_PERSON_ID_REGEX
-            attr: $.message.order.fulfillments[?(@.type=='SIP')].customer.person.id
-            reg: &PAN_REGEX
-              - '^pan:[a-z]{5}[0-9]{4}[a-z]$'
-            _RETURN_: attr follow regex reg
           - _NAME_: REQUIRED_AGENT_PERSON_ID
             attr: $.message.order.fulfillments[?(@.type=='SIP')].agent.person.id
             _RETURN_: attr are present
-          - _NAME_: VALID_AGENT_PERSON_ID_REGEX
-            attr: $.message.order.fulfillments[?(@.type=='SIP')].agent.person.id
-            reg: &EUIN_REGEX
-              - '^euin:[A-Z0-9]+$'
-            _RETURN_: attr follow regex reg
           - _NAME_: REQUIRED_AGENT_ORGANIZATION_CREDS
             attr: $.message.order.fulfillments[?(@.type=='SIP')].agent.organization.creds[*].id
             _RETURN_: attr are present

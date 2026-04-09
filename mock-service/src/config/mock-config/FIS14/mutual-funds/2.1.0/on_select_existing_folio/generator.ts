@@ -45,6 +45,24 @@ export async function on_select_existing_folio(
         existingPayload.message.order.items[0].xinput.form_response.submission_id = submission_id;
     }
 
+    // Inject quantity.selected.measure from session (saved at select step)
+    const lumpsumMeasure = (sessionData as any).lumpsum_measure;
+    if (lumpsumMeasure && existingPayload.message?.order?.items?.[0]) {
+        if (!existingPayload.message.order.items[0].quantity) {
+            existingPayload.message.order.items[0].quantity = {};
+        }
+        existingPayload.message.order.items[0].quantity.selected = { measure: lumpsumMeasure };
+    }
+
+    // Inject fulfillment (with agent/customer creds) from session
+    const lumpsumFulfillment = (sessionData as any).lumpsum_fulfillment;
+    if (lumpsumFulfillment && existingPayload.message?.order?.fulfillments?.[0]) {
+        existingPayload.message.order.fulfillments[0] = {
+            ...existingPayload.message.order.fulfillments[0],
+            ...lumpsumFulfillment,
+        };
+    }
+
     console.log("=== on_select_2 Generator End ===");
 
     if (sessionData?.flow_id === "Lumpsum_Payment_By_Buyer_App") {

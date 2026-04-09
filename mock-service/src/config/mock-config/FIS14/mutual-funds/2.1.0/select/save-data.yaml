@@ -9,4 +9,6 @@ save-data:
   last_select_status: "$.message.order.items[0].xinput.form_response.status"
   submission_id : "$.message.order.items[0].xinput.form_response.submission_id"
   form_id: "$.message.order.items[0].xinput.form.id"
+  lumpsum_fulfillment: "$.message.order.fulfillments[0]"
+  lumpsum_measure: "$.message.order.items[0].quantity.selected.measure"
 

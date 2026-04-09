@@ -280,3 +280,55 @@ codes:
     action: on_update
     default: FIS14/mutual-funds/2.1.0/on_update_Cancelled/default.yaml
     message_id: true
+
+  # SIP Creation New Folio flows (550-559)
+  - code: 550
+    action_id: select_SIP
+    action: select
+    default: FIS14/mutual-funds/2.1.0/select_SIP/default.yaml
+    message_id: true
+  - code: 551
+    action_id: on_select_SIP
+    action: on_select
+    default: FIS14/mutual-funds/2.1.0/on_select_SIP/default.yaml
+    message_id: false
+  - code: 552
+    action_id: select_2_SIP
+    action: select
+    default: FIS14/mutual-funds/2.1.0/select_2_SIP/default.yaml
+    message_id: true
+  - code: 553
+    action_id: on_select_2_SIP
+    action: on_select
+    default: FIS14/mutual-funds/2.1.0/on_select_2_SIP/default.yaml
+    message_id: false
+  - code: 554
+    action_id: init_SIP
+    action: init
+    default: FIS14/mutual-funds/2.1.0/init_SIP/default.yaml
+    message_id: true
+  - code: 555
+    action_id: on_init_SIP
+    action: on_init
+    default: FIS14/mutual-funds/2.1.0/on_init_SIP/default.yaml
+    message_id: false
+  - code: 556
+    action_id: confirm_SIP
+    action: confirm
+    default: FIS14/mutual-funds/2.1.0/confirm_SIP/default.yaml
+    message_id: true
+  - code: 557
+    action_id: on_confirm_SIP
+    action: on_confirm
+    default: FIS14/mutual-funds/2.1.0/on_confirm_SIP/default.yaml
+    message_id: false
+  - code: 558
+    action_id: on_status_unsolicited_SIP
+    action: on_status
+    default: FIS14/mutual-funds/2.1.0/on_status_unsolicited_SIP/default.yaml
+    message_id: true
+  - code: 559
+    action_id: on_update_unsolicited_SIP
+    action: on_update
+    default: FIS14/mutual-funds/2.1.0/on_update_unsolicited_SIP/default.yaml
+    message_id: false

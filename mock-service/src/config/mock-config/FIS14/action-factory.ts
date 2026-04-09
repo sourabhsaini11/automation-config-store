@@ -13,7 +13,6 @@ import { MockOnConfirmClass } from "./mutual-funds/2.1.0/on_confirm/class";
 import { MockOnStatusUnsolicitedClass } from "./mutual-funds/2.1.0/on_status_unsolicited/class";
 import { MockOnUpdateUnsolicitedClass } from "./mutual-funds/2.1.0/on_update_unsolicited/class";
 import { MockOnStatusClass } from "./mutual-funds/2.1.0/on_status/class";
-import { MockOnUpdateClass } from "./mutual-funds/2.1.0/on_update/class";
 import { MockInvestorDetailsFormClass } from "./mutual-funds/2.1.0/investor_details_form/investor_details_form"
 import type { MockAction } from "../FIS14/classes/mock-action";
 import { MockOnSearchIncrementClass } from "./mutual-funds/2.1.0/on_search_incremental_pull/class";
@@ -53,6 +52,18 @@ import { MockSelectRedemptionClass } from "./mutual-funds/2.1.0/select_redemptio
 import { MockConfirmRedemptionClass } from "./mutual-funds/2.1.0/confirm_redemption/class";
 import { MockOnUpdatePaymentSuccessUnsolicitedClass } from "./mutual-funds/2.1.0/on_update_unsolicited_success/class";
 import { MockOnUpdateUnsolicitedFailedClass } from "./mutual-funds/2.1.0/on_update_unsolicited_failed/class";
+
+// SIP Creation New Folio imports
+import { MockSelectSIPClass } from "./mutual-funds/2.1.0/select_SIP/class";
+import { MockOnSelectSIPClass } from "./mutual-funds/2.1.0/on_select_SIP/class";
+import { MockSelect2SIPClass } from "./mutual-funds/2.1.0/select_2_SIP/class";
+import { MockOnSelect2SIPClass } from "./mutual-funds/2.1.0/on_select_2_SIP/class";
+import { MockInitSIPClass } from "./mutual-funds/2.1.0/init_SIP/class";
+import { MockOnInitSIPClass } from "./mutual-funds/2.1.0/on_init_SIP/class";
+import { MockConfirmSIPClass } from "./mutual-funds/2.1.0/confirm_SIP/class";
+import { MockOnConfirmSIPClass } from "./mutual-funds/2.1.0/on_confirm_SIP/class";
+import { MockOnStatusUnsolicitedSIPClass } from "./mutual-funds/2.1.0/on_status_unsolicited_SIP/class";
+import { MockOnUpdateUnsolicitedSIPClass } from "./mutual-funds/2.1.0/on_update_unsolicited_SIP/class";
 
 type Ctor<T> = new () => T;
 
@@ -135,6 +146,18 @@ const registry = {
     confirm_redemption: MockConfirmRedemptionClass,
     on_confirm_redemption: MockOnConfirmRedemptionClass,
     on_update_redemption: MockOnUpdateRedemptionClass,
+
+    // SIP Creation New Folio flows
+    select_SIP: MockSelectSIPClass,
+    on_select_SIP: MockOnSelectSIPClass,
+    select_2_SIP: MockSelect2SIPClass,
+    on_select_2_SIP: MockOnSelect2SIPClass,
+    init_SIP: MockInitSIPClass,
+    on_init_SIP: MockOnInitSIPClass,
+    confirm_SIP: MockConfirmSIPClass,
+    on_confirm_SIP: MockOnConfirmSIPClass,
+    on_status_unsolicited_SIP: MockOnStatusUnsolicitedSIPClass,
+    on_update_unsolicited_SIP: MockOnUpdateUnsolicitedSIPClass,
 
 } as const satisfies Record<string, Ctor<MockAction>>;
 

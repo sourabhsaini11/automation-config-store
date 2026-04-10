@@ -214,19 +214,15 @@ components:
       properties:
         currency:
           type: string
-          example: INR
         value:
           type: string
-          example: ''
     BankDetails:
       type: object
       properties:
         account_no:
           type: string
-          example: ''
         ifsc_code:
           type: string
-          example: ''
     Context:
       description: Describes a beckn message context
       type: object
@@ -241,13 +237,11 @@ components:
               properties:
                 code:
                   type: string
-                  example: IND
             city:
               type: object
               properties:
                 code:
                   type: string
-                  example: '*'
         action:
           type: string
           description: >-
@@ -365,10 +359,8 @@ components:
             properties:
               id:
                 type: string
-                example: ''
               name:
                 type: string
-                example: ''
               bank_details:
                 $ref: '#/components/schemas/BankDetails'
               status:

@@ -62,6 +62,7 @@ export interface SessionData {
 	updated_at: string | undefined;
 	order_status: string | undefined;
 	person_name: string | undefined;
+	select_item_ids: string[] | undefined
 
 }
 

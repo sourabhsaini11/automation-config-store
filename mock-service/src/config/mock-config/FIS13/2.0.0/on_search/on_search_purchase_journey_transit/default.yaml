@@ -38,7 +38,7 @@ catalog:
             duration: "P1Y"
             label: "TENURE"
 
-        - id: "CHILD_ITEM_ID_I1"
+        - id: "IC-1"
           parent_item_id: "I1"
           category_ids: 
             - "C2"
@@ -104,7 +104,7 @@ catalog:
             duration: "P1Y"
             label: "TENURE"
 
-        - id: "CHILD_ITEM_ID_I2"
+        - id: "IC-2"
           parent_item_id: "I1"
           category_ids: 
             - "C2"

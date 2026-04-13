@@ -33,6 +33,7 @@ session_data:
   ttl: null
   usecaseId: null
   stops: []
+  select_item_ids: []
   update_stop: []
   update_quote: []
   selected_fulfillments: []

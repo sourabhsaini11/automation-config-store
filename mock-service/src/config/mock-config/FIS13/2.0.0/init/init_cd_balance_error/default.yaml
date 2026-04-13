@@ -24,7 +24,7 @@ order:
                 code: "GOOD_HEALTH_DECLARATION"
               value: "Yes"
   items:
-    - id: "CHILD_ITEM_ID_I1"
+    - id: "IC-1"
       parent_item_id: "I1"
   provider:
     id: "P1"

@@ -101,7 +101,7 @@ export const onIssueStatusGenerator_100 = async (
         short_desc: "Refund to be initiated",
         long_desc: "For this complaint, refund is to be initiated",
         action_triggered: "REFUND",
-        refund_amount: "100",
+        refund_amount: (sessionData as any)?.quotePrice ?? "100",
       };
       existingPayload.message.issue.created_at = sessionData?.issue_created_at ?? newDate;
       existingPayload.message.issue.updated_at = newDate

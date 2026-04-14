@@ -72,6 +72,7 @@ export async function onConfirmMultipleStopsGenerator(
     existingPayload.message.order.fulfillments = updateFulfillments(
       existingPayload.message.order.fulfillments,
     );
+    existingPayload.message.order.fulfillments[0]["customer"] = sessionData?.fulfillments[0]?.customer ?? {}
     existingPayload.message.order.fulfillments[0]["agent"] =
       sessionData?.flow_id === "OnDemand_Female_driver_flow"
         ? {

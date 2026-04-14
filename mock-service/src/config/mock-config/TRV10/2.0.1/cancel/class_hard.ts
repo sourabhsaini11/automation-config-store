@@ -29,6 +29,12 @@ export class MockCancelHardClass extends MockAction {
     return cancelMultipleStopsHardGenerator(existingPayload, sessionData);
   }
   async validate(targetPayload: any): Promise<MockOutput> {
+    if (targetPayload.message.descriptor.code !== "CONFIRM_CANCEL") {
+      return {
+        valid: false,
+        message: `Cancel status descriptor code sould be CONFIRM_CANCEL but got ${targetPayload.message.descriptor.code}.`,
+      };
+    }
     return { valid: true };
   }
   async meetRequirements(sessionData: SessionData): Promise<MockOutput> {

@@ -31,6 +31,8 @@ export async function onSearchMultipleStopsGenerator(
   sessionData: SessionData,
   isFemaleRide?: boolean,
 ) {
+  existingPayload.context.bap_id = sessionData?.bap_id
+  existingPayload.context.bap_uri = sessionData?.bap_uri
   if (isFemaleRide) {
     existingPayload.message.catalog.providers[0].fulfillments.push({
       id: "F3",

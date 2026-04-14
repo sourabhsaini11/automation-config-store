@@ -129004,7 +129004,7 @@ x-validations:
               - _NAME_: REGEX_CONTEXT_BAP_URI
                 attr: $.context.bap_uri
                 reg:
-                  - ^https:\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+(/)?$
+                  - ^https:\/\/[a-zA-Z0-9.-]+(\/[a-zA-Z0-9\-._~:\/?#\[\]@!$&'()*+,;=%]*)?\/?$
                 _CONTINUE_: '!(attr are present)'
                 _RETURN_: attr follow regex reg
               - _NAME_: REQUIRED_CONTEXT_TTL
@@ -129025,7 +129025,7 @@ x-validations:
               - _NAME_: REGEX_CONTEXT_BPP_URI
                 attr: $.context.bpp_uri
                 reg:
-                  - ^https:\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+(/)?$
+                  - ^https:\/\/[a-zA-Z0-9.-]+(\/[a-zA-Z0-9\-._~:\/?#\[\]@!$&'()*+,;=%]*)?\/?$
                 usecasepath: $.message.intent.provider.id
                 _CONTINUE_: '!(attr are present && usecasepath are present)'
                 _RETURN_: attr follow regex reg
@@ -129445,7 +129445,7 @@ x-validations:
               - _NAME_: REGEX_CONTEXT_BAP_URI
                 attr: $.context.bap_uri
                 reg:
-                  - ^https:\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+(/)?$
+                  - ^https:\/\/[a-zA-Z0-9.-]+(\/[a-zA-Z0-9\-._~:\/?#\[\]@!$&'()*+,;=%]*)?\/?$
                 _CONTINUE_: '!(attr are present)'
                 _RETURN_: attr follow regex reg
               - _NAME_: REQUIRED_CONTEXT_TTL
@@ -129465,7 +129465,7 @@ x-validations:
               - _NAME_: REGEX_CONTEXT_BPP_URI
                 attr: $.context.bpp_uri
                 reg:
-                  - ^https:\/\/(www\.)?[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+(/)?$
+                  - ^https:\/\/[a-zA-Z0-9.-]+(\/[a-zA-Z0-9\-._~:\/?#\[\]@!$&'()*+,;=%]*)?\/?$
                 _CONTINUE_: '!(attr are present)'
                 _RETURN_: attr follow regex reg
     

@@ -19,15 +19,15 @@ export const issueStatusGenerator_100 = async (
   switch (sessionData.igm_action) {
     case "issue_open":
       existingPayload.message.issue.id = "ISSUE-1";
-      existingPayload.message.issue.category = "ITEM";
-      existingPayload.message.issue.sub_category = "ITM04";
+      existingPayload.message.issue.category = "FULFILLMENT";
+      existingPayload.message.issue.sub_category = "FLM101";
       existingPayload.message.issue.complainant_info = {
         person: {
-          name: "Sam Manuel",
+          name: sessionData?.billing?.name ?? "Sam Manuel",
         },
         contact: {
-          phone: "9879879870",
-          email: "sam@yahoo.com",
+          phone: sessionData?.billing?.name?.phone ?? "9879879870",
+          email: sessionData?.billing?.email ?? "sam@yahoo.com",
         },
       };
       existingPayload.message.issue.order_details = {
@@ -42,15 +42,15 @@ export const issueStatusGenerator_100 = async (
         fulfillments: [
           {
             id: fulfillment ?? "Fulfillment1",
-            state: "Order-delivered",
+            state: "CLAIMED",
           },
         ],
         provider_id: provider?.id ?? "P1",
       };
       existingPayload.message.issue.description = {
-        short_desc: "Issue with product quality",
+        short_desc: "Issue with Fare Policy",
         long_desc:
-          "product quality is not correct. facing issues while using the product",
+          "Fare Policy is to high it should be calculated based on distance",
         additional_desc: {
           url: "https://buyerapp.com/additonal-details/desc.txt",
           content_type: "text/plain",
@@ -61,7 +61,7 @@ export const issueStatusGenerator_100 = async (
         ],
       };
       existingPayload.message.issue.source = {
-        network_participant_id: "buyerapp.com/ondc",
+        network_participant_id: existingPayload?.context?.bap_id ?? "buyerapp.com/ondc",
         type: "CONSUMER",
       };
       existingPayload.message.issue.expected_response_time = {
@@ -81,11 +81,11 @@ export const issueStatusGenerator_100 = async (
                 name: `${existingPayload?.context?.bap_id}::${existingPayload?.context?.domain}`,
               },
               contact: {
-                phone: "9450394039",
-                email: "buyerapp@interface.com",
+                phone: sessionData?.billing?.name?.phone ?? "9879879870",
+                email: sessionData?.billing?.email ?? "sam@yahoo.com",
               },
               person: {
-                name: "John Doe",
+                name: sessionData?.billing?.name ?? "Sam Manuel",
               },
             },
           },
@@ -111,11 +111,11 @@ export const issueStatusGenerator_100 = async (
                 name: `${existingPayload?.context?.bap_id}::${existingPayload?.context?.domain}`,
               },
               contact: {
-                phone: "9450394039",
-                email: "interfacingapp@interface.com",
+                phone: sessionData?.billing?.name?.phone ?? "9879879870",
+                email: sessionData?.billing?.email ?? "sam@yahoo.com",
               },
               person: {
-                name: "John Doe",
+                name: sessionData?.billing?.name ?? "Sam Manuel",
               },
             },
           },

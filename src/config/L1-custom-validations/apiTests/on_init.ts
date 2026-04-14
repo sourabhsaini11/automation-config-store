@@ -536,11 +536,11 @@ const onInit = async (data: any) => {
               description: `/message/order/fulfillment of type 'delivery' should not have tags`,
             });
           }
-        } else if (type !== "Delivery") {
+        } else if (type !== "Delivery" && type !== "Self-Pickup") {
           result.push({
             valid: false,
             code: 20000,
-            description: `Fulfillment type should be 'Delivery' (case-sensitive)`,
+            description: `Fulfillment type should be 'Delivery' or 'Self-Pickup' (case-sensitive)`,
           });
         }
       });

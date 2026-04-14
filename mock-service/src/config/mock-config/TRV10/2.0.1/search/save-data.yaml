@@ -7,3 +7,5 @@ save-data:
   payment_collected_by: "$.message.intent.payment.collected_by"
   stops: "$.message.intent.fulfillment.stops[*]"
   collected_by: "$.message.intent.payment.collected_by"
+  bap_id: "$.context.bap_id"
+  bap_uri: "$.context.bap_uri"

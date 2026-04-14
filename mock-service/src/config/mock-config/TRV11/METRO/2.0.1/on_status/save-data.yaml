@@ -1,2 +1,3 @@
 save-data:
   status: "$.message.order.status"
+  quotePrice: "$.message.order.quote.price.value"

@@ -5,4 +5,5 @@ save-data:
   order_id: "$.message.order.id"
   quote_id: "$.message.order.quote.id"
   quote: "$.message.order.quote"
+  on_confirm_fulfillment: "$.message.order.fulfillments"
     

@@ -47,7 +47,7 @@ export class MockOnSelectClass extends MockAction {
             }
         }
 
-        const items = order.items;
+        const items = sessionData.items;
         if (items) {
             if (sessionData.selected_items) {
                 const selectedIds = sessionData.selected_items.map((i: any) => i.id);

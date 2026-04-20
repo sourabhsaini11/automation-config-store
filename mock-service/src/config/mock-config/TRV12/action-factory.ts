@@ -61,6 +61,14 @@ import { MockSelectStationCode2Class } from "./Intercity/2.0.0/select/select_sta
 import { MockStatusStationCodeClass } from "./Intercity/2.0.0/status/status_station_code/class";
 import { MockUpdatePartialCancellation1Class } from "./Intercity/2.0.0/update/update_partial_cancellation_flow_1/class";
 import { MockUpdatePartialCancellation2Class } from "./Intercity/2.0.0/update/update_partial_cancellation_flow_2/class";
+import { MockIssueOpenAirline_100_Class } from "./Airline/2.0.0/issue/issue_100/issue_open/class";
+import { MockIssueCloseAirline_100_Class } from "./Airline/2.0.0/issue/issue_100/issue_close/class";
+import { MockOnIssueProcessingAirline_100_Class } from "./Airline/2.0.0/on_issue/on_issue_100/on_issue_processing/class";
+import { MockOnIssueResolvedAirline_100_Class } from "./Airline/2.0.0/on_issue/on_issue_100/on_issue_resolved/class";
+import { MockIssueOpenBus_100_Class } from "./Intercity/2.0.0/issue/issue_100/issue_open/class";
+import { MockIssueCloseBus_100_Class } from "./Intercity/2.0.0/issue/issue_100/issue_close/class";
+import { MockOnIssueProcessingBus_100_Class } from "./Intercity/2.0.0/on_issue/on_issue_100/on_issue_processing/class";
+import { MockOnIssueResolvedBus_100_Class } from "./Intercity/2.0.0/on_issue/on_issue_100/on_issue_resolved/class";
 
 type Ctor<T> = new () => T;
 const registry = {
@@ -146,6 +154,18 @@ const registry = {
   rating_251: MockRatingSuccessClass,
   rating_261: MockRatingErrorClass,
   on_rating_261: MockOnRatingErrorClass,
+
+        // _____________IGM_1.0.0 Airline______________
+  issue_open_airline_100:  MockIssueOpenAirline_100_Class,
+  issue_close_airline_100: MockIssueCloseAirline_100_Class,
+  on_issue_processing_airline_100: MockOnIssueProcessingAirline_100_Class,
+  on_issue_resolved_airline_100: MockOnIssueResolvedAirline_100_Class,
+
+   // _____________IGM_1.0.0 Bus______________
+  issue_open_bus_100:  MockIssueOpenBus_100_Class,
+  issue_close_bus_100: MockIssueCloseBus_100_Class,
+  on_issue_processing_bus_100: MockOnIssueProcessingBus_100_Class,
+  on_issue_resolved_bus_100: MockOnIssueResolvedBus_100_Class
 } as const satisfies Record<string, Ctor<MockAction>>;
 
 type MockActionId = keyof typeof registry;

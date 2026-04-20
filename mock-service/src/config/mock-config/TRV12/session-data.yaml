@@ -71,4 +71,11 @@ session_data:
   on_confirm_payments: []
   on_confirm_cancellation_terms: []
   on_search_1_items: []
+  latest_issue_payload: null
+  igm_action: null
+  issue_action: []
+  issue_resolution: []
+  issue_id: null
+  on_issue_actions: null
+  issue_actions: null
 

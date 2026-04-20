@@ -1,0 +1,2 @@
+save-data:
+  on_issue_actions: $.message.issue.issue_actions

@@ -91,6 +91,23 @@ export interface SessionData {
 	on_select_2_quote: any
 	seats_available: string[];
 	on_select_item: any;
+	igm_action: any;
+    issue_resolution: any;
+    issue_action: any;
+    latest_issue_payload: any;
+	issue_level: any
+	flow_id: any
+	newPaymentId: any
+	issue_id: any
+	issue_actions:any
+	issue_created_at: any
+	on_issue_actions: any
+	on_confirm_items: any
+	on_confirm_orderID: any
+	on_confirm_fulfillments: any
+	on_confirm_provider: any
+	on_confirm_quote: any
+	on_confirm_billing: any
 }
 
 export type BecknContext = {
@@ -136,4 +153,6 @@ export interface Input {
 	child_ticket_count?: string;
 	journey_date?: string;
 	data: any
+	resolution_accept: any
+    rating: string
 }

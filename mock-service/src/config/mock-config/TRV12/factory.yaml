@@ -301,3 +301,47 @@ codes:
     action: select
     default: Intercity/2.0.0/select/select_error_response/default.yaml
     message_id: true
+
+    # __________________IGM 1.0.0 Airline___________________________
+  - code: 340
+    action_id: issue_open_airline_100
+    action: issue
+    default: Airline/2.0.0/issue/issue_100/issue_open/default.yaml
+    message_id: true
+  - code: 341
+    action_id: on_issue_processing_airline_100
+    action: on_issue
+    default: Airline/2.0.0/on_issue/on_issue_100/on_issue_processing/default.yaml
+    message_id: false  
+  - code: 342
+    action_id: on_issue_resolved_airline_100
+    action: on_issue_status
+    default: Airline/2.0.0/on_issue/on_issue_100/on_issue_resolved/default.yaml
+    message_id: true  
+  - code: 343
+    action_id: issue_close_airline_100
+    action: issue
+    default: Airline/2.0.0/issue/issue_100/issue_close/default.yaml
+    message_id: true
+
+    # __________________IGM 1.0.0 BUS___________________________
+  - code: 340
+    action_id: issue_open_bus_100
+    action: issue
+    default: Intercity/2.0.0/issue/issue_100/issue_open/default.yaml
+    message_id: true
+  - code: 341
+    action_id: on_issue_processing_bus_100
+    action: on_issue
+    default: Intercity/2.0.0/on_issue/on_issue_100/on_issue_processing/default.yaml
+    message_id: false  
+  - code: 342
+    action_id: on_issue_resolved_bus_100
+    action: on_issue_status
+    default: Intercity/2.0.0/on_issue/on_issue_100/on_issue_resolved/default.yaml
+    message_id: true  
+  - code: 343
+    action_id: issue_close_bus_100
+    action: issue
+    default: Intercity/2.0.0/issue/issue_100/issue_close/default.yaml
+    message_id: true 

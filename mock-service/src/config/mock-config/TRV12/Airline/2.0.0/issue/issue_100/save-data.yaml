@@ -1,0 +1,17 @@
+save-data:
+  issue_id: $.message.issue.id
+  issue_created_at: $.message.issue.created_at
+  issue_category: $.message.issue.category
+  issue_sub_category: $.message.issue.sub_category
+  issue_complaint_info: $.message.issue.complainant_info
+  issue_order_details: $.message.issue.order_details
+  issue_description: $.message.issue.description
+  issue_source: $.message.issue.source
+  issue_expected_response_time: $.message.issue.expected_response_time
+  issue_expected_resolution_time: $.message.issue.expected_resolution_time
+  issue_actions: $.message.issue.issue_actions
+  issue_status: $.message.issue.status
+  issue_issue_type: $.message.issue.issue_type
+
+
+

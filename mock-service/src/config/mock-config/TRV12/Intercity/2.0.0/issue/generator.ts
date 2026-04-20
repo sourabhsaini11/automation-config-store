@@ -2,7 +2,7 @@ import { Input, SessionData } from "../../../session-types";
 
 export const issueStatusGenerator = async (
   existingPayload: any,
-  sessionData: SessionData,
+  sessionData: any,
   inputs?: Input
 ) => {
   // console.log("existingPayload", JSON.stringify(existingPayload));

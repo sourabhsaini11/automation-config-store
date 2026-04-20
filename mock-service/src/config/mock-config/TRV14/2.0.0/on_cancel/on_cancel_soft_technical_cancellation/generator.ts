@@ -149,7 +149,8 @@ export async function onCancelSoftTechnicalCancellationGenerator(existingPayload
         title: "CANCELLATION_CHARGES",
         price: {
           currency: "INR",
-          value: Math.ceil(totalRefundAmount * 0.1).toString()
+          value: "0"
+          // value: Math.ceil(totalRefundAmount * 0.1).toString()
         }
       }
     ];
@@ -172,7 +173,14 @@ export async function onCancelSoftTechnicalCancellationGenerator(existingPayload
       }
     }
   }
-
+  let tagsList = existingPayload.message.order.tags.find((tag: any) => tag.descriptor.code === "BPP_TERMS")
+  if (tagsList) {
+    tagsList.list.forEach((tag: any) => {
+      if (tag.descriptor.code === "SETTLEMENT_AMOUNT") {
+        tag.value = "0";
+      }
+    })
+  }
   existingPayload.message.order.updated_at = existingPayload?.context?.timestamp ?? new Date().toISOString()
 
   return existingPayload;

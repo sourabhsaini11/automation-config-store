@@ -159,7 +159,7 @@ export async function onCancelSoftTechnicalCancellationGenerator(existingPayload
     quote.breakup = breakup;
     quote.price = {
       currency: "INR",
-      value: Math.ceil(totalRefundAmount * 0.1).toString()
+      value: '0'
     };
   }
 

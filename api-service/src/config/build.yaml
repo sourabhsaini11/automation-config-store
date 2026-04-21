@@ -43553,6 +43553,8 @@ x-validations:
             enumList: &FORM_RESPONSE_STATUS_ON_STATUS
               - COMPLETED
               - OFFLINE_PENDING
+              - APPROVED
+              - SUCCESS
             _RETURN_: attr all in enumList
 
       # Conditional: Payments (only present in post-confirm status)

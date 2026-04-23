@@ -374,39 +374,39 @@ const init = async (data: any) => {
             description: `items[${i}].parent_item_id mismatches for Item ${itemId} in /${constants.ON_SEARCH} and /${constants.INIT}`,
           });
         }
-        if (itemFlfllmnts && Object.prototype.hasOwnProperty.call(itemFlfllmnts, itemId)) {
-          const stored = itemFlfllmnts[itemId];
-          const initFid = item.fulfillment_id;
+        // if (itemFlfllmnts && Object.prototype.hasOwnProperty.call(itemFlfllmnts, itemId)) {
+        //   const stored = itemFlfllmnts[itemId];
+        //   const initFid = item.fulfillment_id;
 
-          if (typeof stored === "string") {
-            if (initFid !== stored) {
-              result.push({
-                valid: false,
-                code: 20000,
-                description: `items[${i}].fulfillment_id mismatches for Item ${itemId} in /${constants.ON_SELECT} and /${constants.INIT}`,
-              });
-            }
+        //   if (typeof stored === "string") {
+        //     if (initFid !== stored) {
+        //       result.push({
+        //         valid: false,
+        //         code: 20000,
+        //         description: `items[${i}].fulfillment_id mismatches for Item ${itemId} in /${constants.ON_SELECT} and /${constants.INIT}`,
+        //       });
+        //     }
 
-          } else if (Array.isArray(stored)) {
-            if (!stored.includes(initFid)) {
-              result.push({
-                valid: false,
-                code: 20000,
-                description: `items[${i}].fulfillment_id '${initFid}' for item ${itemId} does not belong to fulfillment_ids from /${constants.ON_SELECT}`,
-              });
-            }
+        //   } else if (Array.isArray(stored)) {
+        //     if (!stored.includes(initFid)) {
+        //       result.push({
+        //         valid: false,
+        //         code: 20000,
+        //         description: `items[${i}].fulfillment_id '${initFid}' for item ${itemId} does not belong to fulfillment_ids from /${constants.ON_SELECT}`,
+        //       });
+        //     }
 
-          } else {
-            console.warn(`Unexpected fulfillment format for ${itemId}`, stored);
-          }
+        //   } else {
+        //     console.warn(`Unexpected fulfillment format for ${itemId}`, stored);
+        //   }
 
-        } else {
-          result.push({
-            valid: false,
-            code: 20000,
-            description: `Item Id ${itemId} does not exist in /on_select`,
-          });
-        }
+        // } else {
+        //   result.push({
+        //     valid: false,
+        //     code: 20000,
+        //     description: `Item Id ${itemId} does not exist in /on_select`,
+        //   });
+        // }
         if (itemsIdList && Object.prototype.hasOwnProperty.call(itemsIdList, itemId)) {
           if (item.quantity.count != itemsIdList[itemId]) {
             result.push({

@@ -29,6 +29,12 @@ export class MockMultipleStopSoftCancelClass extends MockAction {
     return cancelMultipleStopsSoftGenerator(existingPayload, sessionData);
   }
   async validate(targetPayload: any): Promise<MockOutput> {
+    if (targetPayload.message.descriptor.code !== "SOFT_CANCEL") {
+      return {
+        valid: false,
+        message: `Cancel status descriptor code sould be SOFT_CANCEL but got ${targetPayload.message.descriptor.code}.`,
+      };
+    }
     return { valid: true };
   }
   async meetRequirements(sessionData: SessionData): Promise<MockOutput> {

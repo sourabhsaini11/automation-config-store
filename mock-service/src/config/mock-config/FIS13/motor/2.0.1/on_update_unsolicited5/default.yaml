@@ -174,7 +174,7 @@ order:
               value: percent-annualized
             - descriptor:
                 code: BUYER_FINDER_FEES_PERCENTAGE
-              value: '1'
+              value: '0'
         - descriptor:
             code: SETTLEMENT_TERMS
           display: false
@@ -182,9 +182,6 @@ order:
             - descriptor:
                 code: SETTLEMENT_WINDOW
               value: PT60M
-            - descriptor:
-                code: SETTLEMENT_BASIS
-              value: Delivery
             - descriptor:
                 code: SETTLEMENT_TYPE
               value: upi
@@ -200,9 +197,6 @@ order:
             - descriptor:
                 code: STATIC_TERMS
               value: 'https://www.icicibank.com/personal-banking/loans/personal-loan'
-            - descriptor:
-                code: SETTLEMENT_AMOUNT
-              value: '1000'
             - descriptor:
                 code: OFFLINE_CONTRACT
               value: 'true'

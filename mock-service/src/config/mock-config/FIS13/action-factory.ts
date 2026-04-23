@@ -97,6 +97,11 @@ import { MockClaimFormClass } from "./health/2.0.1/form9/claim_form";
 import { MockClaimFormMotorClass } from "./motor/2.0.1/form9/claim_form_motor";
 
 import { MockRenewFormClass } from "./health/2.0.1/form10/renew_form";
+import { MockOnConfirm3Class } from "./health/2.0.1/on_confirm3/class";
+import { MockOnUpdateUnsolicited8Class } from "./health/2.0.1/on_update_unsolicited8/class";
+import { MockUpdate2Class } from "./health/2.0.1/update2/class";
+import { MockOnUpdate2Class } from "./health/2.0.1/on_update2/class";
+import { MockPaymentFailureFormClass } from "./health/2.0.1/form11/payment_failure_form";
 
 
 // types/helpers
@@ -139,6 +144,7 @@ const registry = {
 	on_confirm: MockOnConfirmClass,
 	confirm2: MockConfirm2Class,
 	on_confirm2: MockOnConfirm2Class,
+	on_confirm3: MockOnConfirm3Class,
 
 	// status / on_status
 	status: MockStatusClass,
@@ -152,6 +158,8 @@ const registry = {
 	// update / on_update
 	update: MockUpdateClass,
 	on_update: MockOnUpdateClass,
+	update2: MockUpdate2Class,
+	on_update2: MockOnUpdate2Class,
 	on_update_unsolicited: MockOnUpdateUnsolicitedClass,
 	on_update_unsolicited2: MockOnUpdateUnsolicited2Class,
 	on_update_unsolicited3: MockOnUpdateUnsolicited3Class,
@@ -159,6 +167,7 @@ const registry = {
 	on_update_unsolicited5: MockOnUpdateUnsolicited5Class,
 	on_update_unsolicited6: MockOnUpdateUnsolicited6Class,
 	on_update_unsolicited7: MockOnUpdateUnsolicited7Class,
+	on_update_unsolicited8: MockOnUpdateUnsolicited8Class,
 
 	//cancel
     cancel:MockCancelClass,
@@ -174,6 +183,7 @@ const registry = {
 	payment_form:MockPaymentFormClass,
 	claim_form:MockClaimFormClass,
 	renew_form:MockRenewFormClass,
+	payment_failure_form:MockPaymentFailureFormClass,
 
 
 	//motor api calls//

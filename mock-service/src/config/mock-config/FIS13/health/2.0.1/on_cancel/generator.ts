@@ -125,17 +125,25 @@ export async function onCancelDefaultGenerator(existingPayload: any, sessionData
       }
     }
 
-    // Update SETTLEMENT_AMOUNT from session data
-    if (sessionData.settlement_amount && order.payments?.[0]?.tags) {
-      order.payments[0].tags.forEach((tag: any) => {
-        if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
-          tag.list.forEach((listItem: any) => {
-            if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
-              listItem.value = sessionData.settlement_amount;
-            }
+    // Handle offline_contract: when true, set BFF to 0 and remove SETTLEMENT_AMOUNT/SETTLEMENT_BASIS
+    if (order.payments?.[0]?.tags) {
+      const paymentTags = order.payments[0].tags;
+      const settlementTermsTag = paymentTags.find((t: any) => t.descriptor?.code === 'SETTLEMENT_TERMS');
+      const offlineContract = settlementTermsTag?.list?.find((item: any) => item.descriptor?.code === 'OFFLINE_CONTRACT');
+      if (offlineContract?.value === 'true') {
+        const bffTag = paymentTags.find((t: any) => t.descriptor?.code === 'BUYER_FINDER_FEES');
+        if (bffTag?.list) {
+          bffTag.list.forEach((item: any) => {
+            if (item.descriptor?.code === 'BUYER_FINDER_FEES_PERCENTAGE') item.value = '0';
+            if (item.descriptor?.code === 'BUYER_FINDER_FEES_AMOUNT') item.value = '0';
           });
         }
-      });
+        if (settlementTermsTag?.list) {
+          settlementTermsTag.list = settlementTermsTag.list.filter(
+            (item: any) => item.descriptor?.code !== 'SETTLEMENT_AMOUNT' && item.descriptor?.code !== 'SETTLEMENT_BASIS'
+          );
+        }
+      }
     }
   }
 

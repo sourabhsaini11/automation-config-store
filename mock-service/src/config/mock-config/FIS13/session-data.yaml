@@ -50,4 +50,3 @@ session_data:
   quote_id: null
   fulfillment_id: null
   selected_category_ids: []
-  settlement_amount: null

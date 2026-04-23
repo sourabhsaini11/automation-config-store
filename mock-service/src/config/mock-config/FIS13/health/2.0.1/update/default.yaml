@@ -3,4 +3,4 @@ order:
   id: "66B7AEDF45"
   payments:
     - time:
-        label: "FORECLOSURE" 
+        label: "PRE-FULFILLMENT" 

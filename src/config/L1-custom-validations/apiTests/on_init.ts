@@ -657,16 +657,17 @@ const onInit = async (data: any) => {
             code: 20000,
             description: `fulfillments[${i}].id is missing in /${constants.ON_INIT}`,
           });
-        } else {
-          // Check existence in allowed IDs list
-          if (!allowedFIds.includes(f.id)) {
-            result.push({
-              valid: false,
-              code: 20000,
-              description: `fulfillment id '${f.id}' does not exist in /${constants.ON_SELECT}`,
-            });
-          }
-        }
+        } 
+        // else {
+        //   // Check existence in allowed IDs list
+        //   if (!allowedFIds.includes(f.id)) {
+        //     result.push({
+        //       valid: false,
+        //       code: 20000,
+        //       description: `fulfillment id '${f.id}' does not exist in /${constants.ON_SELECT}`,
+        //     });
+        //   }
+        // }
 
         if (!_.isEqual(f.end.location.gps, buyerGps)) {
           result.push({

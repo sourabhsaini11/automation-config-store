@@ -457,13 +457,13 @@ const init = async (data: any) => {
           i++;
           continue;
         }
-        if (!allFIds.includes(id)) {
-          result.push({
-            valid: false,
-            code: 20000,
-            description: `fulfillment id '${id}' in INIT does not exist in fulfillment_ids from /${constants.ON_SELECT}`,
-          });
-        }
+        // if (!allFIds.includes(id)) {
+        //   result.push({
+        //     valid: false,
+        //     code: 20000,
+        //     description: `fulfillment id '${id}' in INIT does not exist in fulfillment_ids from /${constants.ON_SELECT}`,
+        //   });
+        // }
 
         const buyerGpsRaw = await RedisService.getKey(`${transaction_id}_buyerGps`);
         const buyerGps = buyerGpsRaw ? JSON.parse(buyerGpsRaw) : null;

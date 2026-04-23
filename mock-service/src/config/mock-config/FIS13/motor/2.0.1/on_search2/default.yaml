@@ -141,14 +141,13 @@ catalog:
               display: false
               list:
                 - { descriptor: { code: BUYER_FINDER_FEES_TYPE }, value: percent-annualized }
-                - { descriptor: { code: BUYER_FINDER_FEES_PERCENTAGE }, value: "1" }
+                - { descriptor: { code: BUYER_FINDER_FEES_PERCENTAGE }, value: "0" }
 
             - descriptor:
                 code: SETTLEMENT_TERMS
               display: false
               list:
                 - { descriptor: { code: SETTLEMENT_WINDOW }, value: PT60M }
-                - { descriptor: { code: SETTLEMENT_BASIS }, value: Delivery }
                 - { descriptor: { code: DELAY_INTEREST }, value: "2.5" }
                 - { descriptor: { code: MANDATORY_ARBITRATION }, value: "TRUE" }
                 - { descriptor: { code: COURT_JURISDICTION }, value: New Delhi }

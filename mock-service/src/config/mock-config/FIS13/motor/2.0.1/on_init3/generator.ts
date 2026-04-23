@@ -107,44 +107,27 @@ export async function onInitDefaultGenerator(existingPayload: any, sessionData: 
     }
   }
 
-  // Calculate and update SETTLEMENT_AMOUNT dynamically
-  if (existingPayload.message?.order?.payments?.[0]?.tags) {
-    let buyerFeeType = 'percent-annualized';
-    let buyerFeePercentage = 0;
-    let buyerFeeAmount = 0;
-    // Unwrap payment_tags from JSONPath array wrapper: [[tag1,tag2]] → [tag1,tag2]
-    const paymentTags = Array.isArray(sessionData.payment_tags?.[0]) ? sessionData.payment_tags[0] : sessionData.payment_tags;
-    if (Array.isArray(paymentTags)) {
-      const buyerFeesTag = paymentTags.find((t: any) => t.descriptor?.code === 'BUYER_FINDER_FEES');
-      if (buyerFeesTag?.list) {
-        buyerFeesTag.list.forEach((item: any) => {
-          if (item.descriptor?.code === 'BUYER_FINDER_FEES_TYPE') buyerFeeType = item.value;
-          if (item.descriptor?.code === 'BUYER_FINDER_FEES_PERCENTAGE') buyerFeePercentage = parseFloat(item.value) || 0;
-          if (item.descriptor?.code === 'BUYER_FINDER_FEES_AMOUNT') buyerFeeAmount = parseFloat(item.value) || 0;
-        });
+    // Handle offline_contract: when true, set BFF to 0 and remove SETTLEMENT_AMOUNT/SETTLEMENT_BASIS
+    if (existingPayload.message?.order?.payments?.[0]?.tags) {
+      const paymentTags = existingPayload.message.order.payments[0].tags;
+      const settlementTermsTag = paymentTags.find((t: any) => t.descriptor?.code === 'SETTLEMENT_TERMS');
+      const offlineContract = settlementTermsTag?.list?.find((item: any) => item.descriptor?.code === 'OFFLINE_CONTRACT');
+      if (offlineContract?.value === 'true') {
+        const bffTag = paymentTags.find((t: any) => t.descriptor?.code === 'BUYER_FINDER_FEES');
+        if (bffTag?.list) {
+          bffTag.list.forEach((item: any) => {
+            if (item.descriptor?.code === 'BUYER_FINDER_FEES_PERCENTAGE') item.value = '0';
+            if (item.descriptor?.code === 'BUYER_FINDER_FEES_AMOUNT') item.value = '0';
+          });
+        }
+        sessionData.settlement_amount = '0';
+        if (settlementTermsTag?.list) {
+          settlementTermsTag.list = settlementTermsTag.list.filter(
+            (item: any) => item.descriptor?.code !== 'SETTLEMENT_AMOUNT' && item.descriptor?.code !== 'SETTLEMENT_BASIS'
+          );
+        }
       }
     }
-    // Use total_price from session (saved in on_select); unwrap JSONPath array if needed
-    const rawTotalPrice = Array.isArray(sessionData.total_price) ? sessionData.total_price[0] : sessionData.total_price;
-    const settlementBasePrice = parseFloat(rawTotalPrice) || 0;
-    const buyerFee = buyerFeeType === 'amount' ? buyerFeeAmount : (buyerFeePercentage / 100) * settlementBasePrice;
-    // Unwrap collected_by from JSONPath array wrapper: ["BAP"] → "BAP"
-    const collectedBy = (Array.isArray(sessionData.collected_by) ? sessionData.collected_by[0] : sessionData.collected_by) || existingPayload.message.order.payments[0].collected_by;
-    const settlementAmount = sessionData.settlement_amount
-      ? parseFloat(sessionData.settlement_amount)
-      : (collectedBy === 'BAP' ? (settlementBasePrice - buyerFee) : buyerFee);
-    // Save settlement_amount to session for downstream generators
-    sessionData.settlement_amount = String(Math.round(settlementAmount * 100) / 100);
-    existingPayload.message.order.payments[0].tags.forEach((tag: any) => {
-      if (tag.descriptor?.code === 'SETTLEMENT_TERMS' && tag.list) {
-        tag.list.forEach((listItem: any) => {
-          if (listItem.descriptor?.code === 'SETTLEMENT_AMOUNT') {
-            listItem.value = String(Math.round(settlementAmount * 100) / 100);
-          }
-        });
-      }
-    });
-  }
 
   return existingPayload;
 }

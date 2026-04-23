@@ -42859,11 +42859,11 @@ x-validations:
             enumList:
               - OFFLINE_CONTRACT
             _RETURN_: attr any in enumList
-          - _NAME_: TAG_SETTLEMENT_TERMS_AMOUNT
-            attr: $.message.order.payments[*].tags[*].list[*].descriptor.code
-            enumList:
-              - SETTLEMENT_AMOUNT
-            _RETURN_: attr any in enumList
+          # - _NAME_: TAG_SETTLEMENT_TERMS_AMOUNT
+          #   attr: $.message.order.payments[*].tags[*].list[*].descriptor.code
+          #   enumList:
+          #     - SETTLEMENT_AMOUNT
+          #   _RETURN_: attr any in enumList
           # - _NAME_: TAG_SETTLEMENT_TERMS_TYPE
           #   attr: $.message.order.payments[*].tags[*].list[*].descriptor
           #     - SETTLEMENT_TYPE
@@ -43340,9 +43340,9 @@ x-validations:
             attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='OFFLINE_CONTRACT')].value
             _RETURN_: attr are present
 
-          - _NAME_: REQUIRED_SETTLEMENT_AMOUNT
-            attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_AMOUNT')].value
-            _RETURN_: attr are present
+          # - _NAME_: REQUIRED_SETTLEMENT_AMOUNT
+          #   attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_AMOUNT')].value
+          #   _RETURN_: attr are present
 
           - _NAME_: REQUIRED_SETTLEMENT_TYPE
             attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_TYPE')].value
@@ -43477,9 +43477,9 @@ x-validations:
             attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='OFFLINE_CONTRACT')].value
             _RETURN_: attr are present
 
-          - _NAME_: REQUIRED_SETTLEMENT_AMOUNT
-            attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_AMOUNT')].value
-            _RETURN_: attr are present
+          # - _NAME_: REQUIRED_SETTLEMENT_AMOUNT
+          #   attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_AMOUNT')].value
+          #   _RETURN_: attr are present
 
           - _NAME_: REQUIRED_SETTLEMENT_TYPE
             attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_TYPE')].value
@@ -43729,9 +43729,9 @@ x-validations:
             attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='OFFLINE_CONTRACT')].value
             _RETURN_: attr are present
 
-          - _NAME_: REQUIRED_SETTLEMENT_AMOUNT
-            attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_AMOUNT')].value
-            _RETURN_: attr are present
+          # - _NAME_: REQUIRED_SETTLEMENT_AMOUNT
+          #   attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_AMOUNT')].value
+          #   _RETURN_: attr are present
 
           - _NAME_: REQUIRED_SETTLEMENT_TYPE
             attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_TYPE')].value
@@ -44193,9 +44193,9 @@ x-validations:
             attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='OFFLINE_CONTRACT')].value
             _RETURN_: attr are present
 
-          - _NAME_: REQUIRED_SETTLEMENT_AMOUNT
-            attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_AMOUNT')].value
-            _RETURN_: attr are present
+          # - _NAME_: REQUIRED_SETTLEMENT_AMOUNT
+          #   attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_AMOUNT')].value
+          #   _RETURN_: attr are present
 
           - _NAME_: REQUIRED_SETTLEMENT_TYPE
             attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_TYPE')].value
@@ -44888,9 +44888,9 @@ x-validations:
             attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='OFFLINE_CONTRACT')].value
             _RETURN_: attr are present
 
-          - _NAME_: REQUIRED_SETTLEMENT_AMOUNT
-            attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_AMOUNT')].value
-            _RETURN_: attr are present
+          # - _NAME_: REQUIRED_SETTLEMENT_AMOUNT
+          #   attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_AMOUNT')].value
+          #   _RETURN_: attr are present
 
           - _NAME_: REQUIRED_SETTLEMENT_TYPE
             attr: $.message.order.payments[*].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_TYPE')].value

@@ -77,21 +77,21 @@ export async function selectDefaultGenerator(existingPayload: any, sessionData: 
     }
 
     // Update category_ids from user selection and derive vehicle_type
-    if (userInputs.category_ids) {
-      try {
-        const categoryIds = JSON.parse(userInputs.category_ids);
-        if (Array.isArray(categoryIds) && categoryIds.length > 0) {
-          item.category_ids = categoryIds;
-          sessionData.selected_category_ids = categoryIds;
+    // if (userInputs.category_ids) {
+    //   try {
+    //     const categoryIds = JSON.parse(userInputs.category_ids);
+    //     if (Array.isArray(categoryIds) && categoryIds.length > 0) {
+    //       item.category_ids = categoryIds;
+    //       sessionData.selected_category_ids = categoryIds;
 
-          // Derive vehicle_type from selected category_ids so downstream generators use correct overrides
-          const fourWheelerCategories = ['C4', 'C5', 'C6'];
-          const isFourWheeler = categoryIds.some((c: string) => fourWheelerCategories.includes(c));
-          sessionData.vehicle_type = isFourWheeler ? '4-wheeler' : '2-wheeler';
-          console.log("Derived vehicle_type from selection:", sessionData.vehicle_type);
-        }
-      } catch (e) { /* ignore parse errors */ }
-    }
+    //       // Derive vehicle_type from selected category_ids so downstream generators use correct overrides
+    //       const fourWheelerCategories = ['C4', 'C5', 'C6'];
+    //       const isFourWheeler = categoryIds.some((c: string) => fourWheelerCategories.includes(c));
+    //       sessionData.vehicle_type = isFourWheeler ? '4-wheeler' : '2-wheeler';
+    //       console.log("Derived vehicle_type from selection:", sessionData.vehicle_type);
+    //     }
+    //   } catch (e) { /* ignore parse errors */ }
+    // }
 
     // Persist IDs to sessionData for downstream generators
     sessionData.child_item_id = item.id;

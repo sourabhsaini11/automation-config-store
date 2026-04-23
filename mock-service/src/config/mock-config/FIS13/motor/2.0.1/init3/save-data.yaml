@@ -6,4 +6,3 @@ save-data:
   selected_provider: "$.message.order.provider"
   billing: "$.message.order.billing"
   tags: "$.message.order.tags[*]"
-  settlement_amount: "$.message.order.payments[0].tags[?(@.descriptor.code=='SETTLEMENT_TERMS')].list[?(@.descriptor.code=='SETTLEMENT_AMOUNT')].value"

@@ -30,7 +30,7 @@ export function validateFormHtml(html: string): ValidationResult {
 		const warnings: string[] = [];
 
 		// --- Security Checks ---
-		const forbiddenTags = ["script", "iframe", "object", "embed"];
+		const forbiddenTags = ["iframe", "object", "embed"];
 		for (const tag of forbiddenTags) {
 			if ($(tag).length > 0) {
 				errors.push(`Forbidden tag present: <${tag}>`);

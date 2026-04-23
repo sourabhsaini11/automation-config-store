@@ -81,6 +81,7 @@ export interface SessionData {
 	manual_review_form_motor?:string;
 	kyc_details_form?: string;
 	payment_form?:string;
+	payment_failure_form?:string;
 	payment_form_motor?:string;
 	parent_item_id?: string;
 	child_item_id?: string;

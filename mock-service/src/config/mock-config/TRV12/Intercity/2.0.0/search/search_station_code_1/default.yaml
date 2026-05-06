@@ -6,8 +6,8 @@ intent:
           descriptor:
             code: std:080
     # Note: Vehicle details will be left out from new contract
-    # vehicle:
-    #   category: BUS
+    vehicle:
+      category: BUS
     #   variant: AC
     #   capacity: 47
     #   wheels_count: "6"

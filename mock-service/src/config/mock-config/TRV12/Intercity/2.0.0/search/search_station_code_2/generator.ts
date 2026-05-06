@@ -8,6 +8,9 @@ export async function searchGenerator(
   delete existingPayload.context.bpp_id;
   existingPayload.context.location.city.code = sessionData.city_code;
   existingPayload.message.intent.fulfillment = sessionData.fulfillment;
+  existingPayload.message.intent.fulfillment.vehicle = {
+    category: "BUS",
+  };
   existingPayload.message.intent.fulfillment.stops.forEach((stop: any) => {
     let time = {
       label: "DATE_OF_JOURNEY",

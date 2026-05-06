@@ -23,7 +23,7 @@ function getRandomStations(data: any) {
 export async function search2Generator(existingPayload: any,sessionData: SessionData){
     existingPayload.context.bpp_uri = sessionData.subscriber_url
     existingPayload.context.bpp_id = sessionData.bpp_id
-    existingPayload.context.bpp_uri = sessionData.bpp_uri
+    // existingPayload.context.bpp_uri = sessionData.bpp_uri
     const stops = existingPayload.message.intent.fulfillment.stops;
     stops[0].location.descriptor.code = "start_station"
     stops[1].location.descriptor.code = "end_station"

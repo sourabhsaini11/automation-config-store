@@ -13,13 +13,13 @@ function updatePaymentDetails(payload: any, sessionData: SessionData) {
 
       // Update BUYER_FINDER_FEES_PERCENTAGE in tags
       const buyerFinderTag = payment.tags?.find(
-        (tag: any) => tag.descriptor?.code === "BUYER_FINDER_FEES"
+        (tag: any) => tag.descriptor?.code === "BUYER_FINDER_FEES",
       );
 
       if (buyerFinderTag?.list) {
         const feeEntry = buyerFinderTag.list.find(
           (item: any) =>
-            item.descriptor?.code === "BUYER_FINDER_FEES_PERCENTAGE"
+            item.descriptor?.code === "BUYER_FINDER_FEES_PERCENTAGE",
         );
 
         if (feeEntry) {
@@ -40,22 +40,30 @@ function updatePaymentDetails(payload: any, sessionData: SessionData) {
 const createCustomRoute = (
   routeData: any[],
   startStationCode: string,
-  endStationCode: string
+  endStationCode: string,
 ): any[] => {
   return routeData.map((route) => {
     const stops = route.stops;
 
+    const validStations = stops
+      .map((stop: any) => stop.location.descriptor.code)
+      .slice(0, 5);
+
     // Find the start and end indices based on the input station codes
     const startIndex = stops.findIndex(
-      (stop: any) => stop.location.descriptor.code === startStationCode
+      (stop: any) => stop.location.descriptor.code === startStationCode,
     );
     const endIndex = stops.findIndex(
-      (stop: any) => stop.location.descriptor.code === endStationCode
+      (stop: any) => stop.location.descriptor.code === endStationCode,
     );
 
     // Check if both stations exist in the stops list
     if (startIndex === -1 || endIndex === -1) {
-      throw new Error(`Start or End station not found in the route`);
+      throw new Error(
+        `Start or End station not found in the route. ` +
+          `Start: ${startStationCode}, End: ${endStationCode}. ` +
+          `Sample valid stations: ${validStations.join(", ")}`,
+      );
     }
 
     // Ensure start and end indices are different
@@ -98,12 +106,12 @@ const createCustomRoute = (
 };
 export async function onSearchGenerator(
   existingPayload: any,
-  sessionData: SessionData
+  sessionData: SessionData,
 ) {
   existingPayload = updatePaymentDetails(existingPayload, sessionData);
   try {
     const route = createFullfillment(
-      sessionData.city_code ?? "std:011"
+      sessionData.city_code ?? "std:011",
     ).fulfillments;
     const { start_code, end_code } = sessionData;
     if (!start_code || !end_code) {
@@ -138,7 +146,10 @@ export async function onSearchGenerator(
     delete existingPayload.message;
     const errorMessage = {
       code: `91201`,
-      message: "To & from location not serviceable by Mock Seller application",
+      message:
+        err instanceof Error
+          ? err.message
+          : "To & from location not serviceable by Mock Seller application",
     };
     existingPayload.error = errorMessage;
     return existingPayload;

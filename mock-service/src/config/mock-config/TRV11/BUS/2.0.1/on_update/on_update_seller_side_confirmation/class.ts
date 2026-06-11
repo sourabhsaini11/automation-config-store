@@ -39,7 +39,10 @@ export class MockOnUpdateBus201Class extends MockAction {
   const payloadFulfillmentIds = fulfillments.map((f: any) => f.id);
 
   for (const item of items) {
+    
     // 1. check item id in sessionData.selected_item_ids
+    // 2. check item id in sessionData.selected_item_ids
+    console.log("Mock for on_update_BUS_201")
     if (!sessionData.selected_item_ids.includes(item.id)) {
       return {
         valid: false,

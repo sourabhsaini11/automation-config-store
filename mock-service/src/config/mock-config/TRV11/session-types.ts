@@ -62,6 +62,7 @@ export interface SessionData {
   issue_created_at: any
   on_issue_actions: any
   pan_id: string | undefined;
+  tags:any
 }
 
 export type BecknContext = {

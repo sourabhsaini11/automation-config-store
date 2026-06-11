@@ -980,3 +980,8 @@ codes:
     action: on_init
     default: BUS/2.0.1/on_init/on_init_monthly_pass/default.yaml
     message_id: false
+  - code: 346
+    action_id: on_update_BUS_201
+    action: on_update
+    default: BUS/2.0.1/on_update/on_update_seller_side_confirmation/default.yaml
+    message_id: true

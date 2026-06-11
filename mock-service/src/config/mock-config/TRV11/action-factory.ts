@@ -113,6 +113,7 @@ import { MockOnInitMonthlyPassBus201Class } from "./BUS/2.0.1/on_init/on_init_mo
 import { MockInitUnlimitedPassBus201Class } from "./BUS/2.0.1/init/init_unlimited_pass/class";
 import { MockInitWithoutSelectMetro201Class } from "./METRO/2.0.1/init_without_select/class";
 import { MockOnInitwithoutSelectMetro201Class } from "./METRO/2.0.1/on_init_without_select/class";
+import { MockOnUpdateBus201Class } from "./BUS/2.0.1/on_update/on_update_seller_side_confirmation/class";
 
 // helpers
 type Ctor<T> = new () => T;
@@ -159,6 +160,7 @@ const registry = {
   status_BUS_201: MockStatusBus201Class,
   update_BUS_201: MockUpdateBus201Class,
   update_BUS_QR_201: MockUpdateQrBus201Class,
+  on_update_BUS_201: MockOnUpdateBus201Class,
   on_search0_BUS_201: MockOnSearch0Bus201Class,
   init_unlimited_pass_BUS_201: MockInitUnlimitedPassBus201Class,
   on_init_monthly_pass_BUS_201: MockOnInitMonthlyPassBus201Class,

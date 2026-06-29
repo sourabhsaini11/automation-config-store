@@ -165,15 +165,22 @@ export async function onCancelSoftUserCancellationGenerator(
     };
   }
 
-  if (sessionData.cancellation_reason_id) {
-    existingPayload.message.order.cancellation = {
-      cancelled_by: "CONSUMER",
-      reason: {
-        descriptor: {
-          code: sessionData.cancellation_reason_id,
+  // Ensure created_at, updated_at and cancellation are set for soft cancellation (on_cancel1) to pass validation
+  if (existingPayload.message.order) {
+    const createdAt = sessionData.created_at || sessionData.order?.created_at || existingPayload.context.timestamp;
+    existingPayload.message.order.created_at = createdAt;
+    existingPayload.message.order.updated_at = existingPayload.context.timestamp;
+
+    if (sessionData.cancellation_reason_id) {
+      existingPayload.message.order.cancellation = {
+        cancelled_by: "CONSUMER",
+        reason: {
+          descriptor: {
+            code: sessionData.cancellation_reason_id,
+          },
         },
-      },
-    };
+      };
+    }
   }
 
   return existingPayload;

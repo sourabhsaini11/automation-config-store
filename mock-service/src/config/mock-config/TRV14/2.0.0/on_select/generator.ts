@@ -105,6 +105,14 @@ function calculateQuote(items: any[]): any {
       value: "0"
     }
   });
+
+breakup.push({
+    title: "CONVENIENCE_FEE",
+    price: {
+      currency: "INR",
+      value: "0"
+    }
+  });
   // Calculate ADD_ONS for each priceable item (excluding parent items)
   // Loop through priceable items and their add_ons, calculate add-on prices
   priceableItems.forEach((item: any) => {

@@ -68,6 +68,14 @@ function calculateQuote(items: any[]): any {
     }
   });
 
+  breakup.push({
+    title: "CONVENIENCE_FEE",
+    price: {
+      currency: "INR",
+      value: "0"
+    }
+  });
+
   priceableItems.forEach((item: any) => {
     if (item.add_ons && Array.isArray(item.add_ons)) {
       item.add_ons.forEach((addOn: any) => {
